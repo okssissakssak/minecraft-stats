@@ -1,26 +1,42 @@
 [
   {
-    "nickname": "Steve",
+    "nickname": "Mr_AntTenna",
+    "kill": 10,
+    "death": 5,
+    "win": 1,
+    "character": "블랙홀",
+    "tier": "DIA I"
+  },
+  {
+    "nickname": "Mr_AntTenna",
+    "kill": 9,
+    "death": 5,
+    "win": 1,
+    "character": "악동",
+    "tier": "NETH III"
+  },
+  {
+    "nickname": "D6_DICE",
+    "kill": 4,
+    "death": 2,
+    "win": 1,
+    "character": "요원",
+    "tier": "DIA III"
+  },
+  {
+    "nickname": "dorondo",
     "kill": 5,
-    "death": 0,
-    "win": 1,
-    "character": "Soldier",
-    "tier": "BRON III"
-  },
-  {
-    "nickname": "Steve",
-    "kill": 3,
-    "death": 3,
+    "death": 7,
     "win": 0,
-    "character": "Soldier",
-    "tier": "SILV I"
+    "character": "악마",
+    "tier": "SILV III"
   },
   {
-    "nickname": "Steve",
-    "kill": 7,
-    "death": 1,
-    "win": 1,
-    "character": "Archer",
-    "tier": "GOLD II"
+    "nickname": "nickmodang4789",
+    "kill": 2,
+    "death": 7,
+    "win": 0,
+    "character": "블랙홀",
+    "tier": "BRON I"
   }
 ]
