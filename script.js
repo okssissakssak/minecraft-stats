@@ -16,7 +16,6 @@ function calculateStats(playerData) {
   const winRate = ((totalWins / totalGames) * 100).toFixed(2);
   const kdRatio = totalDeaths === 0 ? '∞' : (totalKills / totalDeaths).toFixed(2);
 
-  // 캐릭터 사용 빈도 계산
   const charCount = {};
   playerData.forEach(g => {
     const char = g.character;
@@ -24,6 +23,8 @@ function calculateStats(playerData) {
     charCount[char]++;
   });
   const mostPlayedCharacter = Object.entries(charCount).sort((a, b) => b[1] - a[1])[0]?.[0] || 'N/A';
+
+  const currentTier = playerData[playerData.length - 1]?.tier || 'N/A';
 
   return {
     totalGames,
@@ -34,7 +35,8 @@ function calculateStats(playerData) {
     totalWins,
     winRate,
     kdRatio,
-    mostPlayedCharacter
+    mostPlayedCharacter,
+    currentTier
   };
 }
 
@@ -44,6 +46,7 @@ function render(playerGames, stats, nickname) {
   return `
     <h2>${nickname}의 전적</h2>
     <div>
+      <p><strong>현재 티어:</strong> ${stats.currentTier}</p>
       <p><strong>총 게임 수:</strong> ${stats.totalGames}</p>
       <p><strong>총 킬:</strong> ${stats.totalKills} (평균 킬: ${stats.avgKills})</p>
       <p><strong>총 데스:</strong> ${stats.totalDeaths} (평균 데스: ${stats.avgDeaths})</p>
@@ -58,12 +61,14 @@ function render(playerGames, stats, nickname) {
           <strong>캐릭터:</strong> ${game.character} |
           <strong>킬:</strong> ${game.kill} |
           <strong>데스:</strong> ${game.death} |
-          <strong>승리:</strong> ${game.win ? '승리' : '패배'}
+          <strong>승리:</strong> ${game.win ? '승리' : '패배'} |
+          <strong>티어:</strong> ${game.tier}
         </p>
       </div>
     `).join('')}
   `;
 }
+
 
 
 // 검색 버튼 클릭 이벤트
