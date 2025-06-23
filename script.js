@@ -1,8 +1,10 @@
+// JSON 데이터 로드
 async function loadData() {
   const res = await fetch('./data/stats.json');
   return res.json();
 }
 
+// 통계 계산 함수
 function calculateStats(playerData) {
   const totalGames = playerData.length;
   const totalKills = playerData.reduce((sum, game) => sum + game.kill, 0);
@@ -24,6 +26,7 @@ function calculateStats(playerData) {
   };
 }
 
+// 렌더링 함수 (닉네임 추가됨)
 function render(playerGames, stats, nickname) {
   return `
     <h2>${nickname}의 전적</h2>
@@ -42,24 +45,27 @@ function render(playerGames, stats, nickname) {
   `;
 }
 
+// 검색 버튼 클릭 이벤트
 document.getElementById('searchBtn').addEventListener('click', async () => {
   const query = document.getElementById('searchInput').value.trim().toLowerCase();
   if (!query) return;
 
   const data = await loadData();
   
-  // 같은 닉네임으로 게임 데이터를 그룹화
+  // 같은 닉네임의 전적들만 필터링
   const playerGames = data.filter(p => p.nickname.toLowerCase() === query);
-  const stats = calculateStats(playerGames);
-  
+
   const resultDiv = document.getElementById('result');
+
   if (playerGames.length > 0) {
-    resultDiv.innerHTML = render(playerGames, stats);
+    const stats = calculateStats(playerGames);
+    resultDiv.innerHTML = render(playerGames, stats, query);
   } else {
     resultDiv.innerHTML = `<p>“${query}” 닉네임을 찾을 수 없습니다.</p>`;
   }
 });
 
+// 엔터 키 눌러도 검색되게
 document.getElementById('searchInput').addEventListener('keypress', (e) => {
   if (e.key === 'Enter') document.getElementById('searchBtn').click();
 });
