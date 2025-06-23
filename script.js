@@ -15,6 +15,8 @@ function calculateStats(playerData) {
   const avgDeaths = (totalDeaths / totalGames).toFixed(2);
   const winRate = ((totalWins / totalGames) * 100).toFixed(2);
 
+  const kdRatio = totalDeaths === 0 ? '∞' : (totalKills / totalDeaths).toFixed(2);
+
   return {
     totalGames,
     totalKills,
@@ -22,9 +24,11 @@ function calculateStats(playerData) {
     totalDeaths,
     avgDeaths,
     totalWins,
-    winRate
+    winRate,
+    kdRatio
   };
 }
+
 
 // 렌더링 함수 (닉네임 추가됨)
 function render(playerGames, stats, nickname) {
@@ -34,6 +38,7 @@ function render(playerGames, stats, nickname) {
       <p><strong>총 게임 수:</strong> ${stats.totalGames}</p>
       <p><strong>총 킬:</strong> ${stats.totalKills} (평균 킬: ${stats.avgKills})</p>
       <p><strong>총 데스:</strong> ${stats.totalDeaths} (평균 데스: ${stats.avgDeaths})</p>
+      <p><strong>K/D 비율:</strong> ${stats.kdRatio}</p>
       <p><strong>총 승리:</strong> ${stats.totalWins} (승률: ${stats.winRate}%)</p>
     </div>
     <h3>전적 상세</h3>
@@ -44,6 +49,7 @@ function render(playerGames, stats, nickname) {
     `).join('')}
   `;
 }
+
 
 // 검색 버튼 클릭 이벤트
 document.getElementById('searchBtn').addEventListener('click', async () => {
@@ -63,6 +69,56 @@ document.getElementById('searchBtn').addEventListener('click', async () => {
   } else {
     resultDiv.innerHTML = `<p>“${query}” 닉네임을 찾을 수 없습니다.</p>`;
   }
+});
+//랭킹
+document.getElementById('rankingBtn').addEventListener('click', async () => {
+  const data = await loadData();
+
+  // 닉네임별로 묶기
+  const playerMap = {};
+  for (const game of data) {
+    const name = game.nickname;
+    if (!playerMap[name]) playerMap[name] = [];
+    playerMap[name].push(game);
+  }
+
+  // 각 플레이어별 통계 계산
+  const statsArray = Object.entries(playerMap).map(([nickname, games]) => {
+    const stats = calculateStats(games);
+    return {
+      nickname,
+      winRate: parseFloat(stats.winRate),
+      kdRatio: stats.kdRatio,
+      totalGames: stats.totalGames
+    };
+  });
+
+  // 승률 내림차순 정렬
+  statsArray.sort((a, b) => b.winRate - a.winRate);
+
+  // 결과 렌더링
+  const resultDiv = document.getElementById('result');
+  resultDiv.innerHTML = `
+    <h2>🏆 승률 랭킹</h2>
+    <table border="1" cellspacing="0" cellpadding="6">
+      <tr>
+        <th>순위</th>
+        <th>닉네임</th>
+        <th>승률</th>
+        <th>K/D</th>
+        <th>게임 수</th>
+      </tr>
+      ${statsArray.map((s, i) => `
+        <tr>
+          <td>${i + 1}</td>
+          <td>${s.nickname}</td>
+          <td>${s.winRate}%</td>
+          <td>${s.kdRatio}</td>
+          <td>${s.totalGames}</td>
+        </tr>
+      `).join('')}
+    </table>
+  `;
 });
 
 // 엔터 키 눌러도 검색되게
