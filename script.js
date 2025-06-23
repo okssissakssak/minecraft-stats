@@ -24,9 +24,9 @@ function calculateStats(playerData) {
   };
 }
 
-function render(player, stats) {
+function render(playerGames, stats, nickname) {
   return `
-    <h2>${player}의 전적</h2>
+    <h2>${nickname}의 전적</h2>
     <div>
       <p><strong>총 게임 수:</strong> ${stats.totalGames}</p>
       <p><strong>총 킬:</strong> ${stats.totalKills} (평균 킬: ${stats.avgKills})</p>
@@ -34,7 +34,7 @@ function render(player, stats) {
       <p><strong>총 승리:</strong> ${stats.totalWins} (승률: ${stats.winRate}%)</p>
     </div>
     <h3>전적 상세</h3>
-    ${player.map(game => `
+    ${playerGames.map(game => `
       <div>
         <p><strong>킬:</strong> ${game.kill} | <strong>데스:</strong> ${game.death} | <strong>승리:</strong> ${game.win ? '승리' : '패배'}</p>
       </div>
