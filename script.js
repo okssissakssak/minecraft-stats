@@ -46,7 +46,7 @@ function render(playerGames, stats, nickname) {
   return `
     <h2>${nickname}의 전적</h2>
     <div>
-      <p><strong>현재 티어:</strong> ${stats.currentTier}</p>
+      <p><strong>현재 티어:</strong> ${renderTier(stats.currentTier)}</p>
       <p><strong>총 게임 수:</strong> ${stats.totalGames}</p>
       <p><strong>총 킬:</strong> ${stats.totalKills} (평균 킬: ${stats.avgKills})</p>
       <p><strong>총 데스:</strong> ${stats.totalDeaths} (평균 데스: ${stats.avgDeaths})</p>
@@ -62,11 +62,30 @@ function render(playerGames, stats, nickname) {
           <strong>킬:</strong> ${game.kill} |
           <strong>데스:</strong> ${game.death} |
           <strong>승리:</strong> ${game.win ? '승리' : '패배'} |
-          <strong>티어:</strong> ${game.tier}
+          <strong>티어:</strong> ${renderTier(game.tier)}
         </p>
       </div>
     `).join('')}
   `;
+}
+
+function renderTier(tierText) {
+  const [tierCode, grade] = tierText.split(' ');
+
+  const tierInfo = {
+    BRON: { icon: '🟫', color: '#A0522D' },
+    SILV: { icon: '⬜', color: '#C0C0C0' },
+    GOLD: { icon: '🟨', color: '#FFD700' },
+    AME:  { icon: '🟪', color: '#9966CC' },
+    DIA:  { icon: '🔷', color: '#00BFFF' },
+    NETH: { icon: '⬛', color: '#414141' },
+    STAR: { icon: '⭐', color: '#FFFFFF' }
+  };
+
+  const info = tierInfo[tierCode];
+  if (!info) return tierText;
+
+  return `<span style="color: ${info.color}; font-weight: bold;">${info.icon} ${tierCode} ${grade}</span>`;
 }
 
 
