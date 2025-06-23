@@ -1,0 +1,28 @@
+body {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 0 20px;
+  font-family: sans-serif;
+}
+
+.search-box {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+#searchInput {
+  flex: 1;
+  padding: 8px;
+  font-size: 16px;
+}
+
+#searchBtn {
+  padding: 8px 12px;
+  font-size: 16px;
+}
+
+#result p {
+  margin: 6px 0;
+  font-size: 18px;
+}
