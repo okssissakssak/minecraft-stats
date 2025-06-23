@@ -55,17 +55,17 @@ function render(playerGames, stats, nickname) {
       <p><strong>가장 많이 사용한 캐릭터:</strong> ${stats.mostPlayedCharacter}</p>
     </div>
     <h3>전적 상세</h3>
-    ${playerGames.map(game => `
-      <div>
-        <p>
-          <strong>캐릭터:</strong> ${game.character} |
-          <strong>킬:</strong> ${game.kill} |
-          <strong>데스:</strong> ${game.death} |
-          <strong>승리:</strong> ${game.win ? '승리' : '패배'} |
-          <strong>티어:</strong> ${renderTier(game.tier)}
-        </p>
-      </div>
-    `).join('')}
+${playerGames.slice().reverse().map(game => `
+  <div>
+    <p>
+      <strong>캐릭터:</strong> ${game.character} |
+      <strong>킬:</strong> ${game.kill} |
+      <strong>데스:</strong> ${game.death} |
+      <strong>승리:</strong> ${game.win ? '승리' : '패배'} |
+      <strong>티어:</strong> ${renderTier(game.tier)}
+    </p>
+  </div>
+`).join('')}
   `;
 }
 
