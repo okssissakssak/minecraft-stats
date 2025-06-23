@@ -26,3 +26,18 @@ body {
   margin: 6px 0;
   font-size: 18px;
 }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+th {
+  background: #f0f0f0;
+}
+
+td, th {
+  padding: 8px;
+  text-align: center;
+}
