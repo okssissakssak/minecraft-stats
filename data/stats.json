@@ -1,6 +1,26 @@
 [
-  { "nickname": "Steve", "kill": 5, "death": 2, "win": 1, "character": "블랙홀" },
-  { "nickname": "Steve", "kill": 2, "death": 3, "win": 0, "character": "블랙홀" },
-  { "nickname": "Steve", "kill": 6, "death": 1, "win": 1, "character": "서리술사" },
-  { "nickname": "Alex", "kill": 4, "death": 4, "win": 0, "character": "악동" }
+  {
+    "nickname": "Steve",
+    "kill": 5,
+    "death": 2,
+    "win": 1,
+    "character": "Soldier",
+    "tier": "BRON III"
+  },
+  {
+    "nickname": "Steve",
+    "kill": 3,
+    "death": 3,
+    "win": 0,
+    "character": "Soldier",
+    "tier": "SILV I"
+  },
+  {
+    "nickname": "Steve",
+    "kill": 7,
+    "death": 1,
+    "win": 1,
+    "character": "Archer",
+    "tier": "GOLD II"
+  }
 ]
