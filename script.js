@@ -61,7 +61,7 @@ ${playerGames.slice().reverse().map(game => `
       <strong>캐릭터:</strong> ${game.character} |
       <strong>킬:</strong> ${game.kill} |
       <strong>데스:</strong> ${game.death} |
-      <strong>승리:</strong> ${game.win ? '승리' : '패배'} |
+      <strong></strong> ${game.win ? '승리' : '패배'} |
       <strong>티어:</strong> ${renderTier(game.tier)}
     </p>
   </div>
