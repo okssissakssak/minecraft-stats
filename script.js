@@ -56,9 +56,9 @@ function render(playerGames, stats, nickname) {
     </div>
     <h3>전적 상세</h3>
 ${playerGames.slice().reverse().map(game => `
-  <div>
+  <div class="result-card">
+    <p><strong>캐릭터:</strong> ${game.character}</p>
     <p>
-      <strong>캐릭터:</strong> ${game.character} |
       <strong>킬:</strong> ${game.kill} |
       <strong>데스:</strong> ${game.death} |
       <strong></strong> 
