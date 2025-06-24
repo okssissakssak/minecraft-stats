@@ -62,7 +62,7 @@ ${playerGames.slice().reverse().map(game => `
       <strong>킬:</strong> ${game.kill} |
       <strong>데스:</strong> ${game.death} |
       <strong></strong> 
-      <span style="color: ${game.win ? '#66FF66' : 'FF4444'}; font-weight: bold;">
+      <span style="color: ${game.win ? '#66FF66' : '#FF4444'}; font-weight: bold;">
         ${game.win ? '승리' : '패배'}
       </span> |
       <strong>티어:</strong> ${renderTier(game.tier)}
