@@ -89,13 +89,18 @@ function renderCharacterStats(data, characterName) {
   const characterGames = data.filter(game => game.character === characterName);
   const totalGames = characterGames.length;
   const totalWins = characterGames.filter(g => g.win === 1).length;
+  const totalKills = characterGames.reduce((sum, g) => sum + g.kill, 0);
+  const totalDeaths = characterGames.reduce((sum, g) => sum + g.death, 0);
+  const avgKD = totalDeaths === 0 ? '∞' : (totalKills / totalDeaths).toFixed(2);
   const winRate = ((totalWins / totalGames) * 100).toFixed(2);
 
   const playerStats = {};
   for (const game of characterGames) {
     const name = game.nickname;
-    if (!playerStats[name]) playerStats[name] = { games: 0, wins: 0 };
+    if (!playerStats[name]) playerStats[name] = { games: 0, wins: 0, kills: 0, deaths: 0 };
     playerStats[name].games++;
+    playerStats[name].kills += game.kill;
+    playerStats[name].deaths += game.death;
     if (game.win === 1) playerStats[name].wins++;
   }
 
@@ -103,19 +108,20 @@ function renderCharacterStats(data, characterName) {
     .map(([nickname, stat]) => ({
       nickname,
       games: stat.games,
-      winRate: ((stat.wins / stat.games) * 100).toFixed(2)
+      winRate: ((stat.wins / stat.games) * 100).toFixed(2),
+      kdRatio: stat.deaths === 0 ? '∞' : (stat.kills / stat.deaths).toFixed(2)
     }))
     .sort((a, b) => b.games - a.games);
 
   const resultDiv = document.getElementById('result');
   resultDiv.innerHTML = `
     <h2>${characterName} 통계</h2>
-    <p><strong>${characterName} 사용 횟수:</strong> ${totalGames} | <strong>승률:</strong> ${winRate}%</p>
+    <p><strong>플레이 횟수:</strong> ${totalGames} | <strong>승률:</strong> ${winRate}% | <strong>평균 K/D:</strong> ${avgKD}</p>
     <h3>🏆 ${characterName} 장인 랭킹</h3>
     ${ranking.map(p => `
       <div class="result-card">
         <p><strong>닉네임:</strong> ${p.nickname}</p>
-        <p><strong>플레이 수:</strong> ${p.games} | <strong>승률:</strong> ${p.winRate}%</p>
+        <p><strong>플레이 수:</strong> ${p.games} | <strong>승률:</strong> ${p.winRate}% | <strong>K/D:</strong> ${p.kdRatio}</p>
       </div>
     `).join('')}
   `;
