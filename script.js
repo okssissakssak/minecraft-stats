@@ -110,8 +110,8 @@ function renderCharacterStats(data, characterName) {
   const resultDiv = document.getElementById('result');
   resultDiv.innerHTML = `
     <h2>캐릭터: ${characterName}</h2>
-    <p><strong>전체 사용 횟수:</strong> ${totalGames} | <strong>전체 승률:</strong> ${winRate}%</p>
-    <h3>장인 랭킹</h3>
+    <p><strong>캐릭터 사용 횟수:</strong> ${totalGames} | <strong>캐릭터 승률:</strong> ${winRate}%</p>
+    <h3>🏆 장인 랭킹</h3>
     ${ranking.map(p => `
       <div class="result-card">
         <p><strong>닉네임:</strong> ${p.nickname}</p>
