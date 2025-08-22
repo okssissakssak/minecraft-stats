@@ -36,13 +36,6 @@ button {
   cursor: pointer;
 }
 
-button.char-btn {
-  margin: 4px;
-  background-color: #444;
-  border-radius: 8px;
-}
-
-
 button:hover {
   background-color: #5c6bc0;
 }
@@ -96,6 +89,25 @@ td, th {
   border: 1px solid #555;
 }
 
+/* 캐릭터 목록 버튼을 보기 좋게 */
+.char-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.char-grid button {
+  background-color: #444;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.char-grid button:hover {
+  background-color: #666;
+}
+
+/* 모달 */
 .modal {
   display: none;
   position: fixed;
@@ -107,11 +119,13 @@ td, th {
 
 .modal-content {
   background-color: #2e2e3e;
-  margin: 10% auto;
+  margin: 5% auto;
   padding: 20px;
   border-radius: 10px;
   width: 80%;
   max-width: 600px;
+  max-height: 80vh;  /* 화면 높이 제한 */
+  overflow-y: auto;  /* 스크롤 가능 */
 }
 
 .close {
