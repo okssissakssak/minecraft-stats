@@ -238,14 +238,16 @@ document.getElementById('rankingBtn').addEventListener('click', async () => {
 
 // 캐릭터 설명 목록
 document.getElementById('charBtn').addEventListener('click', async () => {
-  // 캐릭터 목록 가져오기 (폴더 목록 대신, stats.json에서 등장한 캐릭터로 추출)
   const data = await loadData();
-  const characters = [...new Set(data.map(g => g.character))];
+  let characters = [...new Set(data.map(g => g.character))];
+  characters.sort((a, b) => a.localeCompare(b, 'ko')); // 가나다 순 정렬
 
   const resultDiv = document.getElementById('result');
   resultDiv.innerHTML = `
     <h2>📖 캐릭터 목록</h2>
-    ${characters.map(c => `<button class="charSelect" data-char="${c}">${c}</button>`).join(' ')}
+    <div class="char-grid">
+      ${characters.map(c => `<button class="charSelect" data-char="${c}">${c}</button>`).join('')}
+    </div>
   `;
 
   document.querySelectorAll(".charSelect").forEach(btn => {
