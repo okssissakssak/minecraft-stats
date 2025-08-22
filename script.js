@@ -115,6 +115,8 @@ function renderCharacterStats(data, characterName) {
 
   const resultDiv = document.getElementById('result');
   resultDiv.innerHTML = `
+    <h2>${input} 캐릭터 통계</h2>
+    <button onclick="showCharacterExplain('${input}')">스킬 설명 보기</button>
     <h2>${characterName} 통계</h2>
     <p><strong>플레이 횟수:</strong> ${totalGames} | <strong>승률:</strong> ${winRate}% | <strong>평균 K/D:</strong> ${avgKD}</p>
     <h3>🏆 ${characterName} 장인 랭킹</h3>
