@@ -248,3 +248,39 @@ document.getElementById('searchInput').addEventListener('keypress', (e) => {
   if (e.key === 'Enter') document.getElementById('searchBtn').click();
 });
 
+async function showCharacterExplain(name) {
+  try {
+    const res = await fetch(`data/char/${name}.json`);
+    const data = await res.json();
+
+    document.getElementById("charName").textContent = data.name;
+    document.getElementById("charDifficulty").textContent = "난이도: " + data.difficulty;
+
+    // 스킬 렌더링
+    const skillsDiv = document.getElementById("skills");
+    skillsDiv.innerHTML = "";
+    data.skills.forEach(skill => {
+      const div = document.createElement("div");
+      div.className = "skillBox";
+      div.innerHTML = `
+        <h3>[${skill.type}] ${skill.name}</h3>
+        <p>${skill.desc}</p>
+        ${skill.detail ? `<p class="detail">- ${skill.detail}</p>` : ""}
+      `;
+      skillsDiv.appendChild(div);
+    });
+
+    // 가젯
+    const gadgetDiv = document.getElementById("gadget");
+    gadgetDiv.innerHTML = data.gadget ? `<h3>[가젯]</h3><p>${data.gadget}</p>` : "";
+
+    // 표시
+    document.getElementById("charExplain").classList.remove("hidden");
+  } catch (err) {
+    alert("캐릭터 설명을 불러올 수 없습니다: " + err);
+  }
+}
+
+function closeExplain() {
+  document.getElementById("charExplain").classList.add("hidden");
+}
