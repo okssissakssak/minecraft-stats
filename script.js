@@ -115,8 +115,6 @@ function renderCharacterStats(data, characterName) {
 
   const resultDiv = document.getElementById('result');
   resultDiv.innerHTML = `
-    <h2>${input} 캐릭터 통계</h2>
-    <button onclick="showCharacterExplain('${input}')">스킬 설명 보기</button>
     <h2>${characterName} 통계</h2>
     <p><strong>플레이 횟수:</strong> ${totalGames} | <strong>승률:</strong> ${winRate}% | <strong>평균 K/D:</strong> ${avgKD}</p>
     <h3>🏆 ${characterName} 장인 랭킹</h3>
@@ -198,51 +196,6 @@ document.getElementById('rankingBtn').addEventListener('click', async () => {
   `;
 });
 
-// 캐릭터 설명 로드
-async function loadCharExplain(name) {
-  const res = await fetch(`./data/char/${name}.json`);
-  if (!res.ok) return null;
-  return res.json();
-}
-
-// 캐릭터 설명 목록 로드
-async function listCharExplain() {
-  // 서버에서 목록을 따로 관리하거나 미리 characters.json을 생성해서 거기서 불러오기
-  const res = await fetch('./data/char/characters.json');
-  return res.json();
-}
-
-function renderCharExplain(char) {
-  return `
-    <h2>${char.name} (${char.difficulty})</h2>
-    ${char.skills.map(s => `
-      <div class="result-card">
-        <p><strong>${s.name}</strong>
-          <button onclick="alert('${s.desc}')">간단 설명</button>
-          <button onclick="alert('${s.detail}')">자세히</button>
-        </p>
-      </div>
-    `).join('')}
-  `;
-}
-
-document.getElementById('charExplainBtn').addEventListener('click', async () => {
-  const list = await listCharExplain();
-  const resultDiv = document.getElementById('result');
-  resultDiv.innerHTML = `
-    <h2>📖 캐릭터 목록</h2>
-    ${list.map(c => `<button onclick="showCharExplain('${c}')">${c}</button>`).join(' ')}
-  `;
-});
-
-async function showCharExplain(name) {
-  const data = await loadCharExplain(name);
-  if (!data) {
-    document.getElementById('result').innerHTML = `<p>${name} 설명이 없습니다.</p>`;
-    return;
-  }
-  document.getElementById('result').innerHTML = renderCharExplain(data);
-}
 
 
 // 엔터 키로 검색
@@ -250,39 +203,3 @@ document.getElementById('searchInput').addEventListener('keypress', (e) => {
   if (e.key === 'Enter') document.getElementById('searchBtn').click();
 });
 
-async function showCharacterExplain(name) {
-  try {
-    const res = await fetch(`data/char/${name}.json`);
-    const data = await res.json();
-
-    document.getElementById("charName").textContent = data.name;
-    document.getElementById("charDifficulty").textContent = "난이도: " + data.difficulty;
-
-    // 스킬 렌더링
-    const skillsDiv = document.getElementById("skills");
-    skillsDiv.innerHTML = "";
-    data.skills.forEach(skill => {
-      const div = document.createElement("div");
-      div.className = "skillBox";
-      div.innerHTML = `
-        <h3>[${skill.type}] ${skill.name}</h3>
-        <p>${skill.desc}</p>
-        ${skill.detail ? `<p class="detail">- ${skill.detail}</p>` : ""}
-      `;
-      skillsDiv.appendChild(div);
-    });
-
-    // 가젯
-    const gadgetDiv = document.getElementById("gadget");
-    gadgetDiv.innerHTML = data.gadget ? `<h3>[가젯]</h3><p>${data.gadget}</p>` : "";
-
-    // 표시
-    document.getElementById("charExplain").classList.remove("hidden");
-  } catch (err) {
-    alert("캐릭터 설명을 불러올 수 없습니다: " + err);
-  }
-}
-
-function closeExplain() {
-  document.getElementById("charExplain").classList.add("hidden");
-}
