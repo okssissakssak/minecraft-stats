@@ -4,6 +4,12 @@ async function loadData() {
   return res.json();
 }
 
+// 캐릭터 설명 JSON 불러오기
+async function loadCharacterData(name) {
+  const res = await fetch(`./data/char/${name}.json`);
+  return res.json();
+}
+
 // 통계 계산 함수
 function calculateStats(playerData) {
   const totalGames = playerData.length;
@@ -116,6 +122,7 @@ function renderCharacterStats(data, characterName) {
   const resultDiv = document.getElementById('result');
   resultDiv.innerHTML = `
     <h2>${characterName} 통계</h2>
+    <button class="skillBtn" data-char="${characterName}">📖 스킬 설명 보기</button>
     <p><strong>플레이 횟수:</strong> ${totalGames} | <strong>승률:</strong> ${winRate}% | <strong>평균 K/D:</strong> ${avgKD}</p>
     <h3>🏆 ${characterName} 장인 랭킹</h3>
     ${ranking.map(p => `
@@ -125,7 +132,40 @@ function renderCharacterStats(data, characterName) {
       </div>
     `).join('')}
   `;
+
+  document.querySelector(".skillBtn").addEventListener("click", async (e) => {
+    const charName = e.target.dataset.char;
+    const charData = await loadCharacterData(charName);
+    showCharacterDetail(charData);
+  });
 }
+
+// 캐릭터 설명 모달 표시
+function showCharacterDetail(data) {
+  const modal = document.getElementById("charModal");
+  const detail = document.getElementById("charDetail");
+
+  detail.innerHTML = `
+    <h2>${data.name} <small>${data.difficulty}</small></h2>
+    <h3>스킬</h3>
+    ${data.skills.map(s => `
+      <div class="result-card">
+        <p><strong>[${s.type}] ${s.name}</strong></p>
+        <p>${s.desc}</p>
+        <p style="color:#bbb">${s.detail}</p>
+      </div>
+    `).join('')}
+    <h3>가젯</h3>
+    <p>${data.gadget}</p>
+  `;
+
+  modal.style.display = "block";
+}
+
+// 모달 닫기 이벤트
+document.querySelector(".close").addEventListener("click", () => {
+  document.getElementById("charModal").style.display = "none";
+});
 
 // 검색 이벤트
 document.getElementById('searchBtn').addEventListener('click', async () => {
@@ -175,7 +215,7 @@ document.getElementById('rankingBtn').addEventListener('click', async () => {
   const resultDiv = document.getElementById('result');
   resultDiv.innerHTML = `
     <h2>🏆 승률 랭킹</h2>
-    <table border="1" cellspacing="0" cellpadding="6">
+    <table>
       <tr>
         <th>순위</th>
         <th>닉네임</th>
@@ -196,10 +236,32 @@ document.getElementById('rankingBtn').addEventListener('click', async () => {
   `;
 });
 
+// 캐릭터 설명 목록
+document.getElementById('charBtn').addEventListener('click', async () => {
+  // 캐릭터 목록 가져오기 (폴더 목록 대신, stats.json에서 등장한 캐릭터로 추출)
+  const data = await loadData();
+  const characters = [...new Set(data.map(g => g.character))];
 
+  const resultDiv = document.getElementById('result');
+  resultDiv.innerHTML = `
+    <h2>📖 캐릭터 목록</h2>
+    ${characters.map(c => `<button class="charSelect" data-char="${c}">${c}</button>`).join(' ')}
+  `;
+
+  document.querySelectorAll(".charSelect").forEach(btn => {
+    btn.addEventListener("click", async e => {
+      const charName = e.target.dataset.char;
+      try {
+        const charData = await loadCharacterData(charName);
+        showCharacterDetail(charData);
+      } catch {
+        alert(`${charName} 설명 JSON이 없습니다.`);
+      }
+    });
+  });
+});
 
 // 엔터 키로 검색
 document.getElementById('searchInput').addEventListener('keypress', (e) => {
   if (e.key === 'Enter') document.getElementById('searchBtn').click();
 });
-
