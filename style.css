@@ -11,6 +11,10 @@ h1, h2, h3 {
   color: #fff;
 }
 
+h1 {
+  text-align: center;
+}
+
 .search-box {
   display: flex;
   gap: 8px;
