@@ -14,8 +14,8 @@ function calculateStats(games) {
   const winRate = ((totalWins / totalGames) * 100).toFixed(2);
   const kdRatio = (totalDeaths === 0 ? totalKills : (totalKills / totalDeaths)).toFixed(2);
 
-  // 가장 최근 티어 (마지막 게임 기준)
-  const currentTier = games[games.length - 1].tier;
+  // 최근 티어 (없으면 빈 문자열)
+  const currentTier = games[games.length - 1]?.tier || "";
 
   return {
     totalKills,
@@ -32,7 +32,6 @@ function calculateStats(games) {
 
 function renderTier(tier) {
   if (!tier) return '';
-  // 이미 json에서 변환된 티어코드와 등급이 들어옴
   const [tierCode, grade] = tier.split(' ');
   let color = '';
   switch (tierCode) {
@@ -43,8 +42,9 @@ function renderTier(tier) {
     case 'GOLD': color = '#FFD700'; break;
     case 'SILV': color = '#C0C0C0'; break;
     case 'BRON': color = '#A0522D'; break;
+    default: color = '#FFFFFF'; break;
   }
-  return `<span style="color:${color}; font-weight:bold;">${tierCode} ${grade || ''}</span>`;
+  return `<span style="color:${color}; font-weight:bold;">${tierCode || ''} ${grade || ''}</span>`;
 }
 
 document.getElementById('searchBtn').addEventListener('click', async () => {
@@ -53,9 +53,8 @@ document.getElementById('searchBtn').addEventListener('click', async () => {
 
   if (!input) return;
 
-  // 영어면 플레이어 검색, 그 외엔 캐릭터 검색
   if (/^[a-zA-Z0-9_]+$/.test(input)) {
-    // 플레이어 전적
+    // 플레이어 검색
     const playerGames = data.filter(g => g.nickname.toLowerCase() === input.toLowerCase());
     if (playerGames.length === 0) {
       document.getElementById('result').innerHTML = `<p>플레이어 ${input}의 전적이 없습니다.</p>`;
@@ -109,7 +108,6 @@ document.getElementById('searchBtn').addEventListener('click', async () => {
     const wins = charGames.filter(g => g.win === 1).length;
     const winRate = ((wins / totalGames) * 100).toFixed(2);
 
-    // 플레이어별 사용 횟수 및 승률 계산
     const playerMap = {};
     charGames.forEach(g => {
       if (!playerMap[g.nickname]) playerMap[g.nickname] = { games: 0, wins: 0, kills: 0, deaths: 0 };
@@ -157,43 +155,41 @@ document.getElementById('searchBtn').addEventListener('click', async () => {
   }
 });
 
-
-// 티어 우선순위
-const tierOrder = {
-  STAR: 0,
-  NETH: 1,
-  DIA: 2,
-  AME: 3,
-  GOLD: 4,
-  SILV: 5,
-  BRON: 6
-};
+// ====== 티어 + 승률 랭킹 ======
+const tierOrder = { STAR: 0, NETH: 1, DIA: 2, AME: 3, GOLD: 4, SILV: 5, BRON: 6 };
 
 document.getElementById('rankingBtn').addEventListener('click', async () => {
   const data = await loadData();
 
   const playerMap = {};
   for (const game of data) {
-    const name = game.nickname;
-    if (!playerMap[name]) playerMap[name] = [];
-    playerMap[name].push(game);
+    if (!playerMap[game.nickname]) playerMap[game.nickname] = [];
+    playerMap[game.nickname].push(game);
   }
 
   const statsArray = Object.entries(playerMap).map(([nickname, games]) => {
     const stats = calculateStats(games);
-    const [tierCode, grade] = stats.currentTier.split(' ');
+
+    let tierCode = "UNRANK"; 
+    let grade = 999;
+    if (stats.currentTier) {
+      const parts = stats.currentTier.split(' ');
+      tierCode = parts[0] || "UNRANK";
+      grade = parseInt(parts[1]?.replace(/[^0-9]/g, '') || 999);
+    }
+
     return {
       nickname,
       winRate: parseFloat(stats.winRate),
       kdRatio: stats.kdRatio,
       totalGames: stats.totalGames,
-      tierCode: tierCode,
-      grade: parseInt(grade?.replace(/[^0-9]/g, '') || 999) // 숫자 없으면 큰 값으로
+      tierCode,
+      grade
     };
   });
 
   statsArray.sort((a, b) => {
-    const tierDiff = tierOrder[a.tierCode] - tierOrder[b.tierCode];
+    const tierDiff = (tierOrder[a.tierCode] ?? 99) - (tierOrder[b.tierCode] ?? 99);
     if (tierDiff !== 0) return tierDiff;
     const gradeDiff = a.grade - b.grade;
     if (gradeDiff !== 0) return gradeDiff;
@@ -202,7 +198,7 @@ document.getElementById('rankingBtn').addEventListener('click', async () => {
 
   const resultDiv = document.getElementById('result');
   resultDiv.innerHTML = `
-    <h2>🏆 활카스 랭킹</h2>
+    <h2>🏆 티어+승률 랭킹</h2>
     <table>
       <tr>
         <th>순위</th>
