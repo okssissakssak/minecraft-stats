@@ -157,7 +157,6 @@ document.getElementById('searchBtn').addEventListener('click', async () => {
   }
 });
 
-//랭크 수정//
 
 // 티어 우선순위
 const tierOrder = {
