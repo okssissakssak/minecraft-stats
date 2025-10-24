@@ -1,0 +1,37 @@
+{
+  "name": "마탄사수",
+  "difficulty": "★★★★",
+  "skills": [
+    {
+      "type": "패시브",
+      "name": "마법부여 소총",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "패시브",
+      "name": "【환시】",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "무기스킬",
+      "name": "마탄",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일반스킬",
+      "name": "마법 선택",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일회용스킬",
+      "name": "단죄",
+      "desc": "",
+      "detail": ""
+    }
+  ],
+  "gadget": null
+}
