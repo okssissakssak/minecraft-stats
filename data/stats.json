@@ -14302,5 +14302,13 @@
     "win": 0,
     "character": "악마",
     "tier": "SILV III"
+  },
+    {
+    "nickname": "brontest",
+    "kill": 14,
+    "death": 9,
+    "win": 0,
+    "character": "악마",
+    "tier": "BRON V"
   }
 ]
