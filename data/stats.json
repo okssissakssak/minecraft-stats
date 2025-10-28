@@ -14302,5 +14302,1925 @@
     "win": 0,
     "character": "악마",
     "tier": "SILV III"
+  },
+  {
+    "nickname": "nekosign_0421",
+    "kill": 4,
+    "death": 4,
+    "win": 1,
+    "character": "미치광이",
+    "tier": "BRON II"
+  },
+  {
+    "nickname": "Cat_alyst",
+    "kill": 8,
+    "death": 6,
+    "win": 1,
+    "character": "기계천사",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "PoorPeoPles",
+    "kill": 12,
+    "death": 4,
+    "win": 1,
+    "character": "체임버",
+    "tier": "GOLD III"
+  },
+  {
+    "nickname": "_Tsih",
+    "kill": 4,
+    "death": 8,
+    "win": 0,
+    "character": "마탄사수",
+    "tier": "BRON IV"
+  },
+  {
+    "nickname": "OKSSISSAKSSAK",
+    "kill": 15,
+    "death": 7,
+    "win": 1,
+    "character": "간수",
+    "tier": "DIA III"
+  },
+  {
+    "nickname": "dbstjr3377",
+    "kill": 7,
+    "death": 7,
+    "win": 1,
+    "character": "화동",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "MPTBBOOSSSS2",
+    "kill": 5,
+    "death": 9,
+    "win": 0,
+    "character": "언더테이커",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "Hard2",
+    "kill": 4,
+    "death": 8,
+    "win": 0,
+    "character": "거장",
+    "tier": "BRON II"
+  },
+  {
+    "nickname": "umjunsikdd",
+    "kill": 8,
+    "death": 6,
+    "win": 1,
+    "character": "검은침묵",
+    "tier": "GOLD II"
+  },
+  {
+    "nickname": "Marisa_07",
+    "kill": 5,
+    "death": 8,
+    "win": 0,
+    "character": "공간이동자",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "D6_DICE",
+    "kill": 4,
+    "death": 9,
+    "win": 0,
+    "character": "엣지러너",
+    "tier": "AME I"
+  },
+  {
+    "nickname": "Mata_tabi",
+    "kill": 4,
+    "death": 7,
+    "win": 1,
+    "character": "처형인",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "jenami95",
+    "kill": 8,
+    "death": 3,
+    "win": 1,
+    "character": "에이드버스터",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "l3lueLabel",
+    "kill": 9,
+    "death": 8,
+    "win": 0,
+    "character": "월광사수",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "wkddoqudtls",
+    "kill": 5,
+    "death": 8,
+    "win": 0,
+    "character": "역병사수",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "baekjo_",
+    "kill": 6,
+    "death": 10,
+    "win": 0,
+    "character": "불멸자",
+    "tier": "DIA III"
+  },
+  {
+    "nickname": "ninomenu",
+    "kill": 15,
+    "death": 11,
+    "win": 1,
+    "character": "서리술사",
+    "tier": "GOLD II"
+  },
+  {
+    "nickname": "wkddoqudtls",
+    "kill": 1,
+    "death": 9,
+    "win": 1,
+    "character": "공간이동자",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "umjunsikdd",
+    "kill": 7,
+    "death": 11,
+    "win": 1,
+    "character": "검은침묵",
+    "tier": "GOLD I"
+  },
+  {
+    "nickname": "jenami95",
+    "kill": 9,
+    "death": 10,
+    "win": 0,
+    "character": "에이드버스터",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "nekosign_0421",
+    "kill": 3,
+    "death": 10,
+    "win": 1,
+    "character": "미치광이",
+    "tier": "BRON I"
+  },
+  {
+    "nickname": "PotatoChan11",
+    "kill": 10,
+    "death": 12,
+    "win": 1,
+    "character": "데빌헌터",
+    "tier": "GOLD III"
+  },
+  {
+    "nickname": "OKSSISSAKSSAK",
+    "kill": 14,
+    "death": 10,
+    "win": 0,
+    "character": "간수",
+    "tier": "DIA III"
+  },
+  {
+    "nickname": "PoorPeoPles",
+    "kill": 14,
+    "death": 7,
+    "win": 0,
+    "character": "닌자",
+    "tier": "GOLD III"
+  },
+  {
+    "nickname": "_Tsih",
+    "kill": 8,
+    "death": 10,
+    "win": 0,
+    "character": "명검사",
+    "tier": "BRON V"
+  },
+  {
+    "nickname": "dbstjr3377",
+    "kill": 7,
+    "death": 12,
+    "win": 0,
+    "character": "회귀자",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "Mata_tabi",
+    "kill": 9,
+    "death": 8,
+    "win": 1,
+    "character": "체이서",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "GhangDhang",
+    "kill": 16,
+    "death": 10,
+    "win": 1,
+    "character": "재단사",
+    "tier": "GOLD III"
+  },
+  {
+    "nickname": "l3lueLabel",
+    "kill": 11,
+    "death": 9,
+    "win": 0,
+    "character": "월광사수",
+    "tier": "BRON I"
+  },
+  {
+    "nickname": "MPTBBOOSSSS2",
+    "kill": 14,
+    "death": 8,
+    "win": 1,
+    "character": "교주",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "MovedBison36853",
+    "kill": 5,
+    "death": 9,
+    "win": 0,
+    "character": "저주의왕",
+    "tier": "GOLD III"
+  },
+  {
+    "nickname": "MinCho",
+    "kill": 11,
+    "death": 9,
+    "win": 0,
+    "character": "체임버",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "PoorPeoPles",
+    "kill": 14,
+    "death": 9,
+    "win": 1,
+    "character": "귀검사",
+    "tier": "GOLD III"
+  },
+  {
+    "nickname": "MPTBBOOSSSS2",
+    "kill": 11,
+    "death": 8,
+    "win": 1,
+    "character": "전격술사",
+    "tier": "SILV I"
+  },
+  {
+    "nickname": "Mata_tabi",
+    "kill": 11,
+    "death": 7,
+    "win": 1,
+    "character": "다크매터",
+    "tier": "SILV I"
+  },
+  {
+    "nickname": "l3lueLabel",
+    "kill": 3,
+    "death": 9,
+    "win": 1,
+    "character": "월광사수",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "D6_DICE",
+    "kill": 10,
+    "death": 8,
+    "win": 1,
+    "character": "엣지러너",
+    "tier": "DIA III"
+  },
+  {
+    "nickname": "umjunsikdd",
+    "kill": 13,
+    "death": 8,
+    "win": 1,
+    "character": "검은침묵",
+    "tier": "GOLD I"
+  },
+  {
+    "nickname": "GhangDhang",
+    "kill": 10,
+    "death": 8,
+    "win": 1,
+    "character": "재단사",
+    "tier": "GOLD II"
+  },
+  {
+    "nickname": "jenami95",
+    "kill": 6,
+    "death": 10,
+    "win": 0,
+    "character": "에이드버스터",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "baekjo_",
+    "kill": 16,
+    "death": 11,
+    "win": 0,
+    "character": "불멸자",
+    "tier": "AME I"
+  },
+  {
+    "nickname": "sor_jman",
+    "kill": 13,
+    "death": 11,
+    "win": 0,
+    "character": "푸른잔향",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "wkddoqudtls",
+    "kill": 1,
+    "death": 9,
+    "win": 1,
+    "character": "배틀퀸",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "ninomenu",
+    "kill": 9,
+    "death": 9,
+    "win": 0,
+    "character": "서리술사",
+    "tier": "GOLD II"
+  },
+  {
+    "nickname": "Marisa_07",
+    "kill": 5,
+    "death": 8,
+    "win": 0,
+    "character": "공간이동자",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "PotatoChan11",
+    "kill": 8,
+    "death": 9,
+    "win": 0,
+    "character": "쥬얼",
+    "tier": "GOLD III"
+  },
+  {
+    "nickname": "_Selian",
+    "kill": 3,
+    "death": 11,
+    "win": 0,
+    "character": "마탄사수",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "nekosign_0421",
+    "kill": 4,
+    "death": 8,
+    "win": 0,
+    "character": "미치광이",
+    "tier": "BRON II"
+  },
+  {
+    "nickname": "Marisa_07",
+    "kill": 9,
+    "death": 5,
+    "win": 1,
+    "character": "공간이동자",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "_Tsih",
+    "kill": 8,
+    "death": 7,
+    "win": 1,
+    "character": "명검사",
+    "tier": "BRON IV"
+  },
+  {
+    "nickname": "l3lueLabel",
+    "kill": 7,
+    "death": 7,
+    "win": 1,
+    "character": "월광사수",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "jenami95",
+    "kill": 5,
+    "death": 9,
+    "win": 0,
+    "character": "레일거너",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "MovedBison36853",
+    "kill": 10,
+    "death": 6,
+    "win": 1,
+    "character": "저주의왕",
+    "tier": "GOLD III"
+  },
+  {
+    "nickname": "nickmodang4789",
+    "kill": 6,
+    "death": 7,
+    "win": 1,
+    "character": "거장",
+    "tier": "GOLD II"
+  },
+  {
+    "nickname": "OKSSISSAKSSAK",
+    "kill": 7,
+    "death": 8,
+    "win": 1,
+    "character": "간수",
+    "tier": "DIA III"
+  },
+  {
+    "nickname": "wkddoqudtls",
+    "kill": 11,
+    "death": 7,
+    "win": 1,
+    "character": "안개검사",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "PotatoChan11",
+    "kill": 6,
+    "death": 9,
+    "win": 0,
+    "character": "데빌헌터",
+    "tier": "GOLD III"
+  },
+  {
+    "nickname": "MinCho",
+    "kill": 14,
+    "death": 8,
+    "win": 0,
+    "character": "체임버",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "umjunsikdd",
+    "kill": 12,
+    "death": 7,
+    "win": 0,
+    "character": "검은침묵",
+    "tier": "GOLD I"
+  },
+  {
+    "nickname": "dbstjr3377",
+    "kill": 7,
+    "death": 9,
+    "win": 1,
+    "character": "회귀자",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "nekosign_0421",
+    "kill": 2,
+    "death": 7,
+    "win": 0,
+    "character": "멜트다우너",
+    "tier": "BRON III"
+  },
+  {
+    "nickname": "MPTBBOOSSSS2",
+    "kill": 5,
+    "death": 8,
+    "win": 0,
+    "character": "전격술사",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "ninomenu",
+    "kill": 6,
+    "death": 10,
+    "win": 0,
+    "character": "마탄사수",
+    "tier": "GOLD III"
+  },
+  {
+    "nickname": "qkzhem",
+    "kill": 6,
+    "death": 8,
+    "win": 0,
+    "character": "퀸카",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "l3lueLabel",
+    "kill": 8,
+    "death": 4,
+    "win": 1,
+    "character": "월광사수",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "ninomenu",
+    "kill": 7,
+    "death": 5,
+    "win": 1,
+    "character": "암흑기사",
+    "tier": "GOLD II"
+  },
+  {
+    "nickname": "_Tsih",
+    "kill": 9,
+    "death": 4,
+    "win": 1,
+    "character": "명검사",
+    "tier": "BRON III"
+  },
+  {
+    "nickname": "MinCho",
+    "kill": 4,
+    "death": 5,
+    "win": 1,
+    "character": "체임버",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "D6_DICE",
+    "kill": 12,
+    "death": 8,
+    "win": 1,
+    "character": "엣지러너",
+    "tier": "DIA III"
+  },
+  {
+    "nickname": "nickmodang4789",
+    "kill": 9,
+    "death": 6,
+    "win": 1,
+    "character": "마녀",
+    "tier": "GOLD II"
+  },
+  {
+    "nickname": "sor_jman",
+    "kill": 15,
+    "death": 6,
+    "win": 1,
+    "character": "푸른잔향",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "dbstjr3377",
+    "kill": 2,
+    "death": 9,
+    "win": 0,
+    "character": "검은침묵",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "PoorPeoPles",
+    "kill": 11,
+    "death": 8,
+    "win": 0,
+    "character": "이매진브레이커",
+    "tier": "GOLD III"
+  },
+  {
+    "nickname": "_Selian",
+    "kill": 2,
+    "death": 10,
+    "win": 0,
+    "character": "간수",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "qkzhem",
+    "kill": 8,
+    "death": 8,
+    "win": 0,
+    "character": "카데나",
+    "tier": "BRON I"
+  },
+  {
+    "nickname": "GhangDhang",
+    "kill": 5,
+    "death": 10,
+    "win": 0,
+    "character": "재단사",
+    "tier": "GOLD III"
+  },
+  {
+    "nickname": "nekosign_0421",
+    "kill": 2,
+    "death": 9,
+    "win": 0,
+    "character": "멜트다우너",
+    "tier": "BRON IV"
+  },
+  {
+    "nickname": "MovedBison36853",
+    "kill": 2,
+    "death": 9,
+    "win": 0,
+    "character": "사제",
+    "tier": "GOLD III"
+  },
+  {
+    "nickname": "baekjo_",
+    "kill": 11,
+    "death": 8,
+    "win": 0,
+    "character": "마탄사수",
+    "tier": "AME I"
+  },
+  {
+    "nickname": "Mata_tabi",
+    "kill": 7,
+    "death": 6,
+    "win": 1,
+    "character": "처형인",
+    "tier": "SILV I"
+  },
+  {
+    "nickname": "PoorPeoPles",
+    "kill": 16,
+    "death": 4,
+    "win": 1,
+    "character": "섀도우",
+    "tier": "GOLD III"
+  },
+  {
+    "nickname": "Marisa_07",
+    "kill": 3,
+    "death": 5,
+    "win": 1,
+    "character": "화동",
+    "tier": "SILV I"
+  },
+  {
+    "nickname": "OKSSISSAKSSAK",
+    "kill": 5,
+    "death": 6,
+    "win": 1,
+    "character": "마탄사수",
+    "tier": "DIA II"
+  },
+  {
+    "nickname": "sor_jman",
+    "kill": 28,
+    "death": 4,
+    "win": 1,
+    "character": "푸른잔향",
+    "tier": "SILV I"
+  },
+  {
+    "nickname": "_Tsih",
+    "kill": 6,
+    "death": 4,
+    "win": 1,
+    "character": "명검사",
+    "tier": "BRON II"
+  },
+  {
+    "nickname": "dbstjr3377",
+    "kill": 3,
+    "death": 4,
+    "win": 1,
+    "character": "회귀자",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "umjunsikdd",
+    "kill": 5,
+    "death": 8,
+    "win": 0,
+    "character": "검은침묵",
+    "tier": "GOLD II"
+  },
+  {
+    "nickname": "MinCho",
+    "kill": 5,
+    "death": 5,
+    "win": 1,
+    "character": "체임버",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "MPTBBOOSSSS2",
+    "kill": 3,
+    "death": 9,
+    "win": 0,
+    "character": "멜트다우너",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "MovedBison36853",
+    "kill": 0,
+    "death": 9,
+    "win": 0,
+    "character": "저주의왕",
+    "tier": "GOLD III"
+  },
+  {
+    "nickname": "jenami95",
+    "kill": 4,
+    "death": 9,
+    "win": 0,
+    "character": "에이드버스터",
+    "tier": "BRON I"
+  },
+  {
+    "nickname": "l3lueLabel",
+    "kill": 6,
+    "death": 9,
+    "win": 0,
+    "character": "언더테이커",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "wkddoqudtls",
+    "kill": 10,
+    "death": 9,
+    "win": 0,
+    "character": "안개검사",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "PotatoChan11",
+    "kill": 3,
+    "death": 7,
+    "win": 1,
+    "character": "데빌헌터",
+    "tier": "GOLD III"
+  },
+  {
+    "nickname": "Mata_tabi",
+    "kill": 5,
+    "death": 9,
+    "win": 0,
+    "character": "살인마",
+    "tier": "SILV I"
+  },
+  {
+    "nickname": "qkzhem",
+    "kill": 3,
+    "death": 9,
+    "win": 0,
+    "character": "마녀",
+    "tier": "BRON II"
+  },
+  {
+    "nickname": "sor_jman",
+    "kill": 20,
+    "death": 6,
+    "win": 1,
+    "character": "몰락한왕",
+    "tier": "SILV I"
+  },
+  {
+    "nickname": "OKSSISSAKSSAK",
+    "kill": 12,
+    "death": 5,
+    "win": 1,
+    "character": "간수",
+    "tier": "DIA II"
+  },
+  {
+    "nickname": "wkddoqudtls",
+    "kill": 5,
+    "death": 6,
+    "win": 1,
+    "character": "공간이동자",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "nickmodang4789",
+    "kill": 6,
+    "death": 8,
+    "win": 1,
+    "character": "마녀",
+    "tier": "GOLD I"
+  },
+  {
+    "nickname": "l3lueLabel",
+    "kill": 4,
+    "death": 8,
+    "win": 1,
+    "character": "월광사수",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "ninomenu",
+    "kill": 13,
+    "death": 8,
+    "win": 1,
+    "character": "암흑기사",
+    "tier": "GOLD II"
+  },
+  {
+    "nickname": "PoorPeoPles",
+    "kill": 17,
+    "death": 9,
+    "win": 0,
+    "character": "번개검사",
+    "tier": "GOLD III"
+  },
+  {
+    "nickname": "PotatoChan11",
+    "kill": 7,
+    "death": 8,
+    "win": 1,
+    "character": "교주",
+    "tier": "GOLD II"
+  },
+  {
+    "nickname": "D6_DICE",
+    "kill": 8,
+    "death": 9,
+    "win": 0,
+    "character": "엣지러너",
+    "tier": "DIA III"
+  },
+  {
+    "nickname": "dbstjr3377",
+    "kill": 5,
+    "death": 9,
+    "win": 0,
+    "character": "명검사",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "MPTBBOOSSSS2",
+    "kill": 3,
+    "death": 11,
+    "win": 0,
+    "character": "전격술사",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "GhangDhang",
+    "kill": 8,
+    "death": 9,
+    "win": 0,
+    "character": "재단사",
+    "tier": "GOLD III"
+  },
+  {
+    "nickname": "jenami95",
+    "kill": 4,
+    "death": 10,
+    "win": 1,
+    "character": "주술사",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "baekjo_",
+    "kill": 6,
+    "death": 9,
+    "win": 0,
+    "character": "마탄사수",
+    "tier": "AME II"
+  },
+  {
+    "nickname": "Marisa_07",
+    "kill": 2,
+    "death": 10,
+    "win": 0,
+    "character": "화동",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "_Selian",
+    "kill": 10,
+    "death": 8,
+    "win": 0,
+    "character": "액셀러레이터",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "PotatoChan11",
+    "kill": 8,
+    "death": 2,
+    "win": 1,
+    "character": "쥬얼",
+    "tier": "GOLD II"
+  },
+  {
+    "nickname": "sor_jman",
+    "kill": 12,
+    "death": 3,
+    "win": 1,
+    "character": "푸른잔향",
+    "tier": "GOLD III"
+  },
+  {
+    "nickname": "nekosign_0421",
+    "kill": 2,
+    "death": 3,
+    "win": 1,
+    "character": "멜트다우너",
+    "tier": "BRON III"
+  },
+  {
+    "nickname": "l3lueLabel",
+    "kill": 1,
+    "death": 5,
+    "win": 1,
+    "character": "정찰병",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "PoorPeoPles",
+    "kill": 7,
+    "death": 2,
+    "win": 1,
+    "character": "인술사",
+    "tier": "GOLD III"
+  },
+  {
+    "nickname": "umjunsikdd",
+    "kill": 12,
+    "death": 4,
+    "win": 1,
+    "character": "검은침묵",
+    "tier": "GOLD I"
+  },
+  {
+    "nickname": "OKSSISSAKSSAK",
+    "kill": 7,
+    "death": 2,
+    "win": 1,
+    "character": "마탄사수",
+    "tier": "DIA II"
+  },
+  {
+    "nickname": "MinCho",
+    "kill": 5,
+    "death": 6,
+    "win": 0,
+    "character": "체임버",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "_Tsih",
+    "kill": 3,
+    "death": 7,
+    "win": 0,
+    "character": "명검사",
+    "tier": "BRON III"
+  },
+  {
+    "nickname": "baekjo_",
+    "kill": 5,
+    "death": 6,
+    "win": 0,
+    "character": "거장",
+    "tier": "AME II"
+  },
+  {
+    "nickname": "jenami95",
+    "kill": 4,
+    "death": 4,
+    "win": 1,
+    "character": "에이드버스터",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "qkzhem",
+    "kill": 0,
+    "death": 8,
+    "win": 0,
+    "character": "번개검사",
+    "tier": "BRON III"
+  },
+  {
+    "nickname": "GhangDhang",
+    "kill": 6,
+    "death": 7,
+    "win": 0,
+    "character": "재단사",
+    "tier": "GOLD III"
+  },
+  {
+    "nickname": "nickmodang4789",
+    "kill": 0,
+    "death": 6,
+    "win": 0,
+    "character": "배우",
+    "tier": "GOLD II"
+  },
+  {
+    "nickname": "Mata_tabi",
+    "kill": 3,
+    "death": 7,
+    "win": 0,
+    "character": "체이서",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "MovedBison36853",
+    "kill": 2,
+    "death": 7,
+    "win": 0,
+    "character": "이매진브레이커",
+    "tier": "SILV I"
+  },
+  {
+    "nickname": "qkzhem",
+    "kill": 11,
+    "death": 7,
+    "win": 1,
+    "character": "인술사",
+    "tier": "BRON II"
+  },
+  {
+    "nickname": "PotatoChan11",
+    "kill": 8,
+    "death": 7,
+    "win": 1,
+    "character": "데빌헌터",
+    "tier": "GOLD I"
+  },
+  {
+    "nickname": "l3lueLabel",
+    "kill": 8,
+    "death": 6,
+    "win": 1,
+    "character": "월광사수",
+    "tier": "SILV I"
+  },
+  {
+    "nickname": "umjunsikdd",
+    "kill": 4,
+    "death": 7,
+    "win": 1,
+    "character": "검은침묵",
+    "tier": "GOLD I"
+  },
+  {
+    "nickname": "_Tsih",
+    "kill": 11,
+    "death": 10,
+    "win": 1,
+    "character": "명검사",
+    "tier": "BRON II"
+  },
+  {
+    "nickname": "wkddoqudtls",
+    "kill": 1,
+    "death": 1,
+    "win": 0,
+    "character": "안개검사",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "D6_DICE",
+    "kill": 12,
+    "death": 8,
+    "win": 1,
+    "character": "엣지러너",
+    "tier": "DIA III"
+  },
+  {
+    "nickname": "ninomenu",
+    "kill": 6,
+    "death": 10,
+    "win": 0,
+    "character": "블랙홀",
+    "tier": "GOLD II"
+  },
+  {
+    "nickname": "OKSSISSAKSSAK",
+    "kill": 6,
+    "death": 8,
+    "win": 0,
+    "character": "등대지기",
+    "tier": "DIA II"
+  },
+  {
+    "nickname": "MPTBBOOSSSS2",
+    "kill": 7,
+    "death": 7,
+    "win": 1,
+    "character": "교주",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "sor_jman",
+    "kill": 11,
+    "death": 10,
+    "win": 1,
+    "character": "푸른잔향",
+    "tier": "GOLD III"
+  },
+  {
+    "nickname": "nekosign_0421",
+    "kill": 4,
+    "death": 12,
+    "win": 0,
+    "character": "멜트다우너",
+    "tier": "BRON IV"
+  },
+  {
+    "nickname": "MinCho",
+    "kill": 7,
+    "death": 8,
+    "win": 0,
+    "character": "체임버",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "_Selian",
+    "kill": 12,
+    "death": 8,
+    "win": 0,
+    "character": "배틀퀸",
+    "tier": "BRON I"
+  },
+  {
+    "nickname": "Marisa_07",
+    "kill": 7,
+    "death": 11,
+    "win": 0,
+    "character": "포식자",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "nickmodang4789",
+    "kill": 8,
+    "death": 9,
+    "win": 0,
+    "character": "거장",
+    "tier": "GOLD II"
+  },
+  {
+    "nickname": "ssariyong08",
+    "kill": 4,
+    "death": 5,
+    "win": 1,
+    "character": "블랙홀",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "PoorPeoPles",
+    "kill": 18,
+    "death": 6,
+    "win": 1,
+    "character": "닌자",
+    "tier": "GOLD II"
+  },
+  {
+    "nickname": "D6_DICE",
+    "kill": 0,
+    "death": 1,
+    "win": 0,
+    "character": "엣지러너",
+    "tier": "DIA III"
+  },
+  {
+    "nickname": "MPTBBOOSSSS2",
+    "kill": 4,
+    "death": 8,
+    "win": 0,
+    "character": "검객",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "_Tsih",
+    "kill": 6,
+    "death": 8,
+    "win": 0,
+    "character": "명검사",
+    "tier": "BRON III"
+  },
+  {
+    "nickname": "GhangDhang",
+    "kill": 5,
+    "death": 8,
+    "win": 1,
+    "character": "재단사",
+    "tier": "GOLD III"
+  },
+  {
+    "nickname": "baekjo_",
+    "kill": 9,
+    "death": 6,
+    "win": 0,
+    "character": "네뷸라",
+    "tier": "AME III"
+  },
+  {
+    "nickname": "nickmodang4789",
+    "kill": 5,
+    "death": 8,
+    "win": 0,
+    "character": "교주",
+    "tier": "GOLD III"
+  },
+  {
+    "nickname": "jenami95",
+    "kill": 3,
+    "death": 8,
+    "win": 0,
+    "character": "주술사",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "Mata_tabi",
+    "kill": 8,
+    "death": 9,
+    "win": 0,
+    "character": "저주의왕",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "qkzhem",
+    "kill": 5,
+    "death": 9,
+    "win": 0,
+    "character": "인술사",
+    "tier": "BRON III"
+  },
+  {
+    "nickname": "_Selian",
+    "kill": 10,
+    "death": 9,
+    "win": 1,
+    "character": "댄서",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "nekosign_0421",
+    "kill": 4,
+    "death": 5,
+    "win": 1,
+    "character": "멜트다우너",
+    "tier": "BRON III"
+  },
+  {
+    "nickname": "OKSSISSAKSSAK",
+    "kill": 10,
+    "death": 5,
+    "win": 1,
+    "character": "물결검사",
+    "tier": "DIA II"
+  },
+  {
+    "nickname": "MinCho",
+    "kill": 6,
+    "death": 6,
+    "win": 1,
+    "character": "체임버",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "Marisa_07",
+    "kill": 5,
+    "death": 9,
+    "win": 1,
+    "character": "공간이동자",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "ninomenu",
+    "kill": 7,
+    "death": 5,
+    "win": 1,
+    "character": "암흑기사",
+    "tier": "GOLD II"
+  },
+  {
+    "nickname": "nekosign_0421",
+    "kill": 5,
+    "death": 5,
+    "win": 1,
+    "character": "멜트다우너",
+    "tier": "BRON II"
+  },
+  {
+    "nickname": "Mata_tabi",
+    "kill": 10,
+    "death": 3,
+    "win": 1,
+    "character": "살인마",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "MPTBBOOSSSS2",
+    "kill": 6,
+    "death": 6,
+    "win": 1,
+    "character": "검객",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "sor_jman",
+    "kill": 16,
+    "death": 6,
+    "win": 1,
+    "character": "리와인더",
+    "tier": "GOLD II"
+  },
+  {
+    "nickname": "baekjo_",
+    "kill": 22,
+    "death": 3,
+    "win": 1,
+    "character": "서리술사",
+    "tier": "AME II"
+  },
+  {
+    "nickname": "_Selian",
+    "kill": 5,
+    "death": 10,
+    "win": 0,
+    "character": "댄서",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "_Tsih",
+    "kill": 1,
+    "death": 10,
+    "win": 0,
+    "character": "명검사",
+    "tier": "BRON IV"
+  },
+  {
+    "nickname": "ssariyong08",
+    "kill": 11,
+    "death": 8,
+    "win": 0,
+    "character": "자객",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "qkzhem",
+    "kill": 1,
+    "death": 8,
+    "win": 1,
+    "character": "인술사",
+    "tier": "BRON II"
+  },
+  {
+    "nickname": "PotatoChan11",
+    "kill": 0,
+    "death": 10,
+    "win": 0,
+    "character": "교주",
+    "tier": "GOLD II"
+  },
+  {
+    "nickname": "D6_DICE",
+    "kill": 7,
+    "death": 8,
+    "win": 1,
+    "character": "엣지러너",
+    "tier": "DIA III"
+  },
+  {
+    "nickname": "nickmodang4789",
+    "kill": 5,
+    "death": 8,
+    "win": 0,
+    "character": "거장",
+    "tier": "GOLD III"
+  },
+  {
+    "nickname": "OKSSISSAKSSAK",
+    "kill": 8,
+    "death": 9,
+    "win": 0,
+    "character": "간수",
+    "tier": "DIA II"
+  },
+  {
+    "nickname": "wkddoqudtls",
+    "kill": 0,
+    "death": 0,
+    "win": 0,
+    "character": "안개검사",
+    "tier": "BRON II"
+  },
+  {
+    "nickname": "PoorPeoPles",
+    "kill": 5,
+    "death": 10,
+    "win": 0,
+    "character": "체임버",
+    "tier": "GOLD III"
+  },
+  {
+    "nickname": "nickmodang4789",
+    "kill": 8,
+    "death": 3,
+    "win": 1,
+    "character": "마녀",
+    "tier": "GOLD III"
+  },
+  {
+    "nickname": "_Tsih",
+    "kill": 1,
+    "death": 3,
+    "win": 1,
+    "character": "유미",
+    "tier": "BRON III"
+  },
+  {
+    "nickname": "baekjo_",
+    "kill": 14,
+    "death": 2,
+    "win": 1,
+    "character": "마탄사수",
+    "tier": "AME II"
+  },
+  {
+    "nickname": "Chowol_0309",
+    "kill": 14,
+    "death": 5,
+    "win": 1,
+    "character": "리와인더",
+    "tier": "AME III"
+  },
+  {
+    "nickname": "OKSSISSAKSSAK",
+    "kill": 10,
+    "death": 5,
+    "win": 1,
+    "character": "간수",
+    "tier": "DIA II"
+  },
+  {
+    "nickname": "_Selian",
+    "kill": 12,
+    "death": 5,
+    "win": 1,
+    "character": "댄서",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "Ceci_Riwa",
+    "kill": 3,
+    "death": 5,
+    "win": 0,
+    "character": "귀검사",
+    "tier": "DIA III"
+  },
+  {
+    "nickname": "qkzhem",
+    "kill": 3,
+    "death": 9,
+    "win": 0,
+    "character": "인술사",
+    "tier": "BRON III"
+  },
+  {
+    "nickname": "PoorPeoPles",
+    "kill": 9,
+    "death": 8,
+    "win": 1,
+    "character": "체임버",
+    "tier": "GOLD II"
+  },
+  {
+    "nickname": "D6_DICE",
+    "kill": 7,
+    "death": 9,
+    "win": 0,
+    "character": "엣지러너",
+    "tier": "DIA III"
+  },
+  {
+    "nickname": "ninomenu",
+    "kill": 7,
+    "death": 9,
+    "win": 0,
+    "character": "주술사",
+    "tier": "GOLD II"
+  },
+  {
+    "nickname": "jenami95",
+    "kill": 0,
+    "death": 8,
+    "win": 1,
+    "character": "에이드버스터",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "umjunsikdd",
+    "kill": 6,
+    "death": 9,
+    "win": 0,
+    "character": "검은침묵",
+    "tier": "GOLD I"
+  },
+  {
+    "nickname": "MPTBBOOSSSS2",
+    "kill": 3,
+    "death": 6,
+    "win": 0,
+    "character": "전격술사",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "Mata_tabi",
+    "kill": 5,
+    "death": 8,
+    "win": 0,
+    "character": "저주의왕",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "DUEHADES9862",
+    "kill": 0,
+    "death": 9,
+    "win": 0,
+    "character": "살인마",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "Ceci_Riwa",
+    "kill": 8,
+    "death": 7,
+    "win": 0,
+    "character": "안개검사",
+    "tier": "DIA III"
+  },
+  {
+    "nickname": "D6_DICE",
+    "kill": 6,
+    "death": 7,
+    "win": 0,
+    "character": "엣지러너",
+    "tier": "DIA III"
+  },
+  {
+    "nickname": "PoorPeoPles",
+    "kill": 8,
+    "death": 7,
+    "win": 0,
+    "character": "닌자",
+    "tier": "GOLD III"
+  },
+  {
+    "nickname": "tikg",
+    "kill": 4,
+    "death": 6,
+    "win": 1,
+    "character": "자객",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "PotatoChan11",
+    "kill": 7,
+    "death": 9,
+    "win": 0,
+    "character": "데빌헌터",
+    "tier": "GOLD II"
+  },
+  {
+    "nickname": "DUEHADES9862",
+    "kill": 2,
+    "death": 8,
+    "win": 1,
+    "character": "블랙홀",
+    "tier": "SILV I"
+  },
+  {
+    "nickname": "AceCone63853105",
+    "kill": 1,
+    "death": 7,
+    "win": 0,
+    "character": "귀검사",
+    "tier": "BRON II"
+  },
+  {
+    "nickname": "qkzhem",
+    "kill": 10,
+    "death": 6,
+    "win": 1,
+    "character": "인술사",
+    "tier": "BRON II"
+  },
+  {
+    "nickname": "nickmodang4789",
+    "kill": 4,
+    "death": 6,
+    "win": 0,
+    "character": "거장",
+    "tier": "GOLD III"
+  },
+  {
+    "nickname": "ninomenu",
+    "kill": 4,
+    "death": 7,
+    "win": 1,
+    "character": "주술사",
+    "tier": "GOLD II"
+  },
+  {
+    "nickname": "umjunsikdd",
+    "kill": 3,
+    "death": 8,
+    "win": 1,
+    "character": "검은침묵",
+    "tier": "GOLD I"
+  },
+  {
+    "nickname": "kmtea",
+    "kill": 2,
+    "death": 5,
+    "win": 0,
+    "character": "화동",
+    "tier": "BRON I"
+  },
+  {
+    "nickname": "MPTBBOOSSSS2",
+    "kill": 16,
+    "death": 9,
+    "win": 0,
+    "character": "검객",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "OKSSISSAKSSAK",
+    "kill": 5,
+    "death": 6,
+    "win": 1,
+    "character": "간수",
+    "tier": "DIA I"
+  },
+  {
+    "nickname": "sor_jman",
+    "kill": 17,
+    "death": 6,
+    "win": 1,
+    "character": "푸른잔향",
+    "tier": "GOLD II"
+  },
+  {
+    "nickname": "Chowol_0309",
+    "kill": 14,
+    "death": 6,
+    "win": 1,
+    "character": "폭탄광",
+    "tier": "AME III"
+  },
+  {
+    "nickname": "nickmodang4789",
+    "kill": 10,
+    "death": 8,
+    "win": 1,
+    "character": "마녀",
+    "tier": "GOLD III"
+  },
+  {
+    "nickname": "ninomenu",
+    "kill": 7,
+    "death": 9,
+    "win": 1,
+    "character": "서리술사",
+    "tier": "GOLD I"
+  },
+  {
+    "nickname": "Chowol_0309",
+    "kill": 12,
+    "death": 9,
+    "win": 1,
+    "character": "텔레포터",
+    "tier": "AME II"
+  },
+  {
+    "nickname": "jenami95",
+    "kill": 3,
+    "death": 8,
+    "win": 1,
+    "character": "배틀퀸",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "_Tsih",
+    "kill": 14,
+    "death": 9,
+    "win": 1,
+    "character": "몰락한왕",
+    "tier": "BRON II"
+  },
+  {
+    "nickname": "D6_DICE",
+    "kill": 11,
+    "death": 11,
+    "win": 0,
+    "character": "엣지러너",
+    "tier": "AME I"
+  },
+  {
+    "nickname": "kmtea",
+    "kill": 11,
+    "death": 9,
+    "win": 0,
+    "character": "도사",
+    "tier": "BRON II"
+  },
+  {
+    "nickname": "Mata_tabi",
+    "kill": 5,
+    "death": 12,
+    "win": 0,
+    "character": "저주의왕",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "OKSSISSAKSSAK",
+    "kill": 22,
+    "death": 8,
+    "win": 1,
+    "character": "간수",
+    "tier": "DIA I"
+  },
+  {
+    "nickname": "_Selian",
+    "kill": 4,
+    "death": 10,
+    "win": 1,
+    "character": "아크로바틱",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "qkzhem",
+    "kill": 6,
+    "death": 11,
+    "win": 0,
+    "character": "체임버",
+    "tier": "BRON III"
+  },
+  {
+    "nickname": "DUEHADES9862",
+    "kill": 9,
+    "death": 10,
+    "win": 1,
+    "character": "주술사",
+    "tier": "SILV I"
+  },
+  {
+    "nickname": "tikg",
+    "kill": 8,
+    "death": 9,
+    "win": 0,
+    "character": "장난꾸러기",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "sor_jman",
+    "kill": 10,
+    "death": 10,
+    "win": 0,
+    "character": "푸른잔향",
+    "tier": "GOLD II"
+  },
+  {
+    "nickname": "PotatoChan11",
+    "kill": 5,
+    "death": 11,
+    "win": 0,
+    "character": "교주",
+    "tier": "GOLD III"
+  },
+  {
+    "nickname": "baekjo_",
+    "kill": 12,
+    "death": 11,
+    "win": 0,
+    "character": "마탄사수",
+    "tier": "AME II"
+  },
+  {
+    "nickname": "baekjo_",
+    "kill": 19,
+    "death": 4,
+    "win": 1,
+    "character": "롤러",
+    "tier": "AME II"
+  },
+  {
+    "nickname": "kmtea",
+    "kill": 5,
+    "death": 5,
+    "win": 1,
+    "character": "도사",
+    "tier": "BRON I"
+  },
+  {
+    "nickname": "PotatoChan11",
+    "kill": 17,
+    "death": 2,
+    "win": 1,
+    "character": "교주",
+    "tier": "GOLD II"
+  },
+  {
+    "nickname": "tikg",
+    "kill": 9,
+    "death": 8,
+    "win": 1,
+    "character": "자객",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "umjunsikdd",
+    "kill": 2,
+    "death": 10,
+    "win": 0,
+    "character": "검은침묵",
+    "tier": "GOLD I"
+  },
+  {
+    "nickname": "jenami95",
+    "kill": 4,
+    "death": 10,
+    "win": 0,
+    "character": "에이드버스터",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "Chowol_0309",
+    "kill": 5,
+    "death": 6,
+    "win": 1,
+    "character": "리와인더",
+    "tier": "AME II"
+  },
+  {
+    "nickname": "Mata_tabi",
+    "kill": 6,
+    "death": 6,
+    "win": 1,
+    "character": "다크매터",
+    "tier": "SILV II"
+  },
+  {
+    "nickname": "MPTBBOOSSSS2",
+    "kill": 6,
+    "death": 8,
+    "win": 0,
+    "character": "배틀퀸",
+    "tier": "SILV III"
+  },
+  {
+    "nickname": "nickmodang4789",
+    "kill": 2,
+    "death": 7,
+    "win": 1,
+    "character": "용병",
+    "tier": "GOLD II"
+  },
+  {
+    "nickname": "qkzhem",
+    "kill": 6,
+    "death": 9,
+    "win": 0,
+    "character": "인술사",
+    "tier": "BRON IV"
+  },
+  {
+    "nickname": "_Tsih",
+    "kill": 5,
+    "death": 8,
+    "win": 1,
+    "character": "몰락한왕",
+    "tier": "BRON I"
+  },
+  {
+    "nickname": "KILO__o",
+    "kill": 17,
+    "death": 8,
+    "win": 0,
+    "character": "명검사",
+    "tier": "BRON I"
+  },
+  {
+    "nickname": "ninomenu",
+    "kill": 5,
+    "death": 8,
+    "win": 0,
+    "character": "암흑기사",
+    "tier": "GOLD II"
+  },
+  {
+    "nickname": "Ceci_Riwa",
+    "kill": 2,
+    "death": 9,
+    "win": 0,
+    "character": "월광사수",
+    "tier": "AME I"
+  },
+  {
+    "nickname": "DUEHADES9862",
+    "kill": 4,
+    "death": 8,
+    "win": 0,
+    "character": "주술사",
+    "tier": "SILV I"
   }
 ]
