@@ -140,3 +140,41 @@ td, th {
   font-weight: bold;
   cursor: pointer;
 }
+
+.popup {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.6);
+  display: flex; justify-content: center; align-items: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background: #1b1b1b;
+  color: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 0 10px #000;
+}
+
+.popup-card {
+  background: #2b2b2b;
+  border-radius: 8px;
+  padding: 8px;
+  margin: 5px 0;
+}
+
+#closePopup {
+  margin-top: 10px;
+  padding: 6px 12px;
+  background: #444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+#closePopup:hover { background: #666; }
