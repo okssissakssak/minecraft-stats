@@ -88,9 +88,9 @@ function showGamePopup(gamenumber, allData) {
   popup.classList.add('popup');
   popup.innerHTML = `
     <div class="popup-content">
-      <h2>게임 #${gamenumber} 상세 전적</h2>
+      <h2>전체 게임 전적</h2>
       <div class="team">
-        <h3 style="color:#66FF66;">승리팀</h3>
+        <h3 style="color:#66FF66;">승리</h3>
         ${winners.map(g => `
           <div class="popup-card">
             <p><strong>${g.nickname}</strong> (${g.character})</p>
@@ -100,7 +100,7 @@ function showGamePopup(gamenumber, allData) {
       </div>
       <hr>
       <div class="team">
-        <h3 style="color:#FF6666;">패배팀</h3>
+        <h3 style="color:#FF6666;">패배</h3>
         ${losers.map(g => `
           <div class="popup-card">
             <p><strong>${g.nickname}</strong> (${g.character})</p>
