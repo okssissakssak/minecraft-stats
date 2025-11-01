@@ -17446,9 +17446,6 @@
     "win": 1,
     "character": "악동",
     "tier": "GOLD III",
-    "finalscore": "1/7",
-    "map": "바인드",
-    "gamenumber": 1
   },
   {
     "nickname": "dbuild",
@@ -17465,9 +17462,6 @@
     "win": 0,
     "character": "유미",
     "tier": "GOLD III",
-    "finalscore": "1/7",
-    "map": "바인드",
-    "gamenumber": 1
   },
   {
     "nickname": "D6_DICE",
@@ -17476,9 +17470,6 @@
     "win": 0,
     "character": "몰락한왕",
     "tier": "AME I",
-    "finalscore": "1/7",
-    "map": "바인드",
-    "gamenumber": 1
   },
   {
     "nickname": "baekjo_",
@@ -17487,9 +17478,6 @@
     "win": 0,
     "character": "검은침묵",
     "tier": "DIA III",
-    "finalscore": "1/7",
-    "map": "바인드",
-    "gamenumber": 1
   },
   {
     "nickname": "umjunsikdd",
@@ -17498,9 +17486,6 @@
     "win": 1,
     "character": "이매진브레이커",
     "tier": "GOLD I",
-    "finalscore": "1/7",
-    "map": "바인드",
-    "gamenumber": 1
   },
   {
     "nickname": "MinCho",
@@ -17509,8 +17494,5 @@
     "win": 0,
     "character": "체임버",
     "tier": "SILV III",
-    "finalscore": "1/7",
-    "map": "바인드",
-    "gamenumber": 1
   }
 ]
