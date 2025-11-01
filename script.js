@@ -46,7 +46,7 @@ function calculateStats(playerData) {
   };
 }
 
-function render(playerGames, stats, nickname) {
+function render(playerGames, stats, nickname, allData) {
   return `
     <h2>${nickname}의 전적</h2>
     <div>
@@ -60,19 +60,60 @@ function render(playerGames, stats, nickname) {
     </div>
     <h3>전적 상세</h3>
 ${playerGames.slice().reverse().map(game => `
-  <div class="result-card">
+  <div class="result-card" data-gamenumber="${game.gamenumber || ''}">
     <p><strong>캐릭터:</strong> ${game.character}</p>
     <p>
       <strong>킬:</strong> ${game.kill} |
       <strong>데스:</strong> ${game.death} |
-      <span style="color: ${game.win ? '#66FF66' : '#FF4444'}; font-weight: bold;">
+      <span style="color:${game.win ? '#66FF66' : '#FF4444'}; font-weight:bold;">
         ${game.win ? '승리' : '패배'}
       </span> |
       <strong>티어:</strong> ${renderTier(game.tier)}
     </p>
+    ${game.finalscore ? `<p><strong>최종 스코어:</strong> ${game.finalscore}</p>` : ''}
+    ${game.map ? `<p><strong>맵:</strong> ${game.map}</p>` : ''}
   </div>
 `).join('')}
   `;
+}
+
+function showGamePopup(gamenumber, allData) {
+  const sameGame = allData.filter(g => g.gamenumber === gamenumber);
+  if (!sameGame.length) return;
+
+  const winners = sameGame.filter(g => g.win === 1).sort((a,b)=>b.kill - a.kill);
+  const losers  = sameGame.filter(g => g.win === 0).sort((a,b)=>b.kill - a.kill);
+
+  const popup = document.createElement('div');
+  popup.classList.add('popup');
+  popup.innerHTML = `
+    <div class="popup-content">
+      <h2>게임 #${gamenumber} 상세 전적</h2>
+      <div class="team">
+        <h3 style="color:#66FF66;">승리팀</h3>
+        ${winners.map(g => `
+          <div class="popup-card">
+            <p><strong>${g.nickname}</strong> (${g.character})</p>
+            <p>킬: ${g.kill} | 데스: ${g.death} | ${renderTier(g.tier)}</p>
+          </div>
+        `).join('') || '<p>데이터 없음</p>'}
+      </div>
+      <hr>
+      <div class="team">
+        <h3 style="color:#FF6666;">패배팀</h3>
+        ${losers.map(g => `
+          <div class="popup-card">
+            <p><strong>${g.nickname}</strong> (${g.character})</p>
+            <p>킬: ${g.kill} | 데스: ${g.death} | ${renderTier(g.tier)}</p>
+          </div>
+        `).join('') || '<p>데이터 없음</p>'}
+      </div>
+      <button id="closePopup">닫기</button>
+    </div>
+  `;
+
+  document.body.appendChild(popup);
+  document.getElementById('closePopup').addEventListener('click', () => popup.remove());
 }
 
 function renderTier(tierText) {
@@ -182,6 +223,16 @@ document.getElementById('searchBtn').addEventListener('click', async () => {
   if (playerGames.length > 0) {
     const stats = calculateStats(playerGames);
     resultDiv.innerHTML = render(playerGames, stats, query);
+    document.querySelectorAll('.result-card').forEach(card => {
+    const num = parseInt(card.dataset.gamenumber);
+    if (!isNaN(num)) {
+      card.style.cursor = 'pointer';
+      card.addEventListener('click', async () => {
+        const data = await loadData();
+        showGamePopup(num, data);
+      });
+    }
+  });
   } else if (characterMatch) {
     renderCharacterStats(data, query);
   } else {
