@@ -88,7 +88,8 @@ function showGamePopup(gamenumber, allData) {
   popup.classList.add('popup');
   popup.innerHTML = `
     <div class="popup-content">
-      <h2>전체 게임 전적</h2>
+      <button id="popupCloseX" class="popup-close">✕</button>
+      <h2>전체게임 상세 전적</h2>
       <div class="team">
         <h3 style="color:#66FF66;">승리</h3>
         ${winners.map(g => `
@@ -113,7 +114,23 @@ function showGamePopup(gamenumber, allData) {
   `;
 
   document.body.appendChild(popup);
-  document.getElementById('closePopup').addEventListener('click', () => popup.remove());
+
+  const removePopup = () => popup.remove();
+
+  // 닫기 버튼
+  document.getElementById('closePopup').addEventListener('click', removePopup);
+
+  // 상단 X 버튼
+  document.getElementById('popupCloseX').addEventListener('click', removePopup);
+
+  // ESC 키로 닫기
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      removePopup();
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
 }
 
 function renderTier(tierText) {
