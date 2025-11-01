@@ -17445,7 +17445,10 @@
     "death": 7,
     "win": 1,
     "character": "악동",
-    "tier": "GOLD III"
+    "tier": "GOLD III",
+    "finalscore": "1/7",
+    "map": "바인드",
+    "gamenumber": 1
   },
   {
     "nickname": "dbuild",
@@ -17461,7 +17464,10 @@
     "death": 7,
     "win": 0,
     "character": "유미",
-    "tier": "GOLD III"
+    "tier": "GOLD III",
+    "finalscore": "1/7",
+    "map": "바인드",
+    "gamenumber": 1
   },
   {
     "nickname": "D6_DICE",
@@ -17469,7 +17475,10 @@
     "death": 10,
     "win": 0,
     "character": "몰락한왕",
-    "tier": "AME I"
+    "tier": "AME I",
+    "finalscore": "1/7",
+    "map": "바인드",
+    "gamenumber": 1
   },
   {
     "nickname": "baekjo_",
@@ -17477,7 +17486,10 @@
     "death": 9,
     "win": 0,
     "character": "검은침묵",
-    "tier": "DIA III"
+    "tier": "DIA III",
+    "finalscore": "1/7",
+    "map": "바인드",
+    "gamenumber": 1
   },
   {
     "nickname": "umjunsikdd",
@@ -17485,7 +17497,10 @@
     "death": 8,
     "win": 1,
     "character": "이매진브레이커",
-    "tier": "GOLD I"
+    "tier": "GOLD I",
+    "finalscore": "1/7",
+    "map": "바인드",
+    "gamenumber": 1
   },
   {
     "nickname": "MinCho",
@@ -17493,6 +17508,9 @@
     "death": 7,
     "win": 0,
     "character": "체임버",
-    "tier": "SILV III"
+    "tier": "SILV III",
+    "finalscore": "1/7",
+    "map": "바인드",
+    "gamenumber": 1
   }
 ]
