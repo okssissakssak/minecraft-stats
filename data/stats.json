@@ -18645,17 +18645,6 @@
     "gamenumber": 340
   },
   {
-    "nickname": "yasaso",
-    "kill": 0,
-    "death": 0,
-    "win": 0,
-    "character": "0",
-    "tier": "GOLD III",
-    "finalscore": "7/5",
-    "map": "로터스",
-    "gamenumber": 341
-  },
-  {
     "nickname": "PotatoChan11",
     "kill": 7,
     "death": 8,
@@ -30043,7 +30032,7 @@
   {
     "nickname": "OKSSISSAKSSAK",
     "kill": 3,
-    "death": 7,
+    "death": 10,
     "win": 1,
     "character": "정신지배자",
     "tier": "DIA II",
@@ -30086,7 +30075,7 @@
   },
   {
     "nickname": "sohxx",
-    "kill": 14,
+    "kill": 16,
     "death": 9,
     "win": 0,
     "character": "물결검사",
