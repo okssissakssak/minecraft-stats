@@ -1,0 +1,37 @@
+{
+  "name": "도사",
+  "difficulty": "★★",
+  "skills": [
+    {
+      "type": "패시브",
+      "name": "도력",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "무기스킬",
+      "name": "선풍",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일반스킬",
+      "name": "경운",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일반스킬",
+      "name": "풍인",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "특수스킬",
+      "name": "풍류운산(風流雲散)",
+      "desc": "",
+      "detail": ""
+    }
+  ],
+  "gadget": null
+}

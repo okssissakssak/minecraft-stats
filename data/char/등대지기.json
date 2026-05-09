@@ -1,0 +1,37 @@
+{
+  "name": "등대지기",
+  "difficulty": "★★★",
+  "skills": [
+    {
+      "type": "패시브",
+      "name": "등대",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "패시브",
+      "name": "만바론데나",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "무기스킬",
+      "name": "등대 : 이동",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일반스킬",
+      "name": "등대 : 보호",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일회용스킬",
+      "name": "엔나코어 : 미스테리 서클",
+      "desc": "",
+      "detail": ""
+    }
+  ],
+  "gadget": null
+}

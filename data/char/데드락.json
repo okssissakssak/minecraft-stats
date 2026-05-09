@@ -1,0 +1,31 @@
+{
+  "name": "데드락",
+  "difficulty": "★★★",
+  "skills": [
+    {
+      "type": "패시브",
+      "name": "봉쇄",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "무기스킬",
+      "name": "차지 샷",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일반스킬",
+      "name": "무력화",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일회용스킬",
+      "name": "오버킬",
+      "desc": "",
+      "detail": ""
+    }
+  ],
+  "gadget": null
+}

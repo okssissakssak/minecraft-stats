@@ -1,0 +1,25 @@
+{
+  "name": "멜트다우너",
+  "difficulty": "★★★",
+  "skills": [
+    {
+      "type": "무기스킬",
+      "name": "원자붕괴",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일반스킬",
+      "name": "배리어",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일회용스킬",
+      "name": "실리콘 번",
+      "desc": "",
+      "detail": ""
+    }
+  ],
+  "gadget": null
+}

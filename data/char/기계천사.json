@@ -1,0 +1,31 @@
+{
+  "name": "기계천사",
+  "difficulty": "★★",
+  "skills": [
+    {
+      "type": "패시브",
+      "name": "느린낙하",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "무기스킬",
+      "name": "에너지 블래스터",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일반스킬",
+      "name": "비행",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일회용스킬",
+      "name": "광자 블래스트",
+      "desc": "",
+      "detail": ""
+    }
+  ],
+  "gadget": null
+}

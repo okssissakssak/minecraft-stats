@@ -1,0 +1,31 @@
+{
+  "name": "뇌신",
+  "difficulty": "★★★",
+  "skills": [
+    {
+      "type": "패시브",
+      "name": "전기속성",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "무기스킬",
+      "name": "봉 던지기",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일반스킬",
+      "name": "유도전류",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일회용스킬",
+      "name": "술식해방 「환수호박」 (幻獸琥拍)",
+      "desc": "",
+      "detail": ""
+    }
+  ],
+  "gadget": null
+}

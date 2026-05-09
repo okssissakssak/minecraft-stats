@@ -1,0 +1,31 @@
+{
+  "name": "개그맨",
+  "difficulty": "★★",
+  "skills": [
+    {
+      "type": "패시브",
+      "name": "초인",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "무기스킬",
+      "name": "농담따먹기",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일반스킬",
+      "name": "36계 줄행랑",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일회용스킬",
+      "name": "슬랩스틱",
+      "desc": "",
+      "detail": ""
+    }
+  ],
+  "gadget": null
+}

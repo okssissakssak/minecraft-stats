@@ -1,0 +1,31 @@
+{
+  "name": "로맨틱매지션",
+  "difficulty": "★★",
+  "skills": [
+    {
+      "type": "패시브",
+      "name": "매직 탑햇",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "무기스킬",
+      "name": "마법 도구",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일반스킬",
+      "name": "하트 for 레이디",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일회용스킬",
+      "name": "마그네틱 러브/로즈 카르트 피날레",
+      "desc": "",
+      "detail": ""
+    }
+  ],
+  "gadget": null
+}

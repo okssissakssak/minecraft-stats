@@ -1,0 +1,31 @@
+{
+  "name": "간수",
+  "difficulty": "★★",
+  "skills": [
+    {
+      "type": "패시브",
+      "name": "말로",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "무기스킬",
+      "name": "살상돌격",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일반스킬",
+      "name": "급습",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일회용스킬",
+      "name": "처형 집행",
+      "desc": "",
+      "detail": ""
+    }
+  ],
+  "gadget": null
+}

@@ -1,0 +1,37 @@
+{
+  "name": "댄서",
+  "difficulty": "★★★",
+  "skills": [
+    {
+      "type": "패시브",
+      "name": "올레",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "무기스킬",
+      "name": "브엘따",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일반스킬",
+      "name": "알 꼼빠스",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일반스킬",
+      "name": "씨에레",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "특수스킬",
+      "name": "두엔데",
+      "desc": "",
+      "detail": ""
+    }
+  ],
+  "gadget": null
+}
