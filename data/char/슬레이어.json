@@ -1,0 +1,37 @@
+{
+  "name": "슬레이어",
+  "difficulty": "★★★",
+  "skills": [
+    {
+      "type": "패시브",
+      "name": "탐욕",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "특수스킬",
+      "name": "단검 던지기",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "무기스킬",
+      "name": "준비",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일반스킬",
+      "name": "순보",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일회용스킬",
+      "name": "무자비",
+      "desc": "",
+      "detail": ""
+    }
+  ],
+  "gadget": null
+}

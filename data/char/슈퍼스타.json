@@ -1,0 +1,31 @@
+{
+  "name": "슈퍼스타",
+  "difficulty": "★",
+  "skills": [
+    {
+      "type": "패시브",
+      "name": "무대 장악력",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "무기스킬",
+      "name": "고음",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일반스킬",
+      "name": "비트 발사",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일회용스킬",
+      "name": "앙코르",
+      "desc": "",
+      "detail": ""
+    }
+  ],
+  "gadget": null
+}

@@ -1,0 +1,31 @@
+{
+  "name": "모험가",
+  "difficulty": "★",
+  "skills": [
+    {
+      "type": "패시브",
+      "name": "끓어오르는 주문의 힘",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "무기스킬",
+      "name": "신비한 화살",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일반스킬",
+      "name": "비전이동",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일회용스킬",
+      "name": "주문의 흐름/정조준 일격",
+      "desc": "",
+      "detail": ""
+    }
+  ],
+  "gadget": null
+}

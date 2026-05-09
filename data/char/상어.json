@@ -1,0 +1,31 @@
+{
+  "name": "상어",
+  "difficulty": "★★",
+  "skills": [
+    {
+      "type": "패시브",
+      "name": "손쉬운 사냥",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "무기스킬",
+      "name": "찌르기",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일반스킬",
+      "name": "상어 점프",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일회용스킬",
+      "name": "포식",
+      "desc": "",
+      "detail": ""
+    }
+  ],
+  "gadget": null
+}

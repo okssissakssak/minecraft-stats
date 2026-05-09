@@ -1,0 +1,37 @@
+{
+  "name": "변호사",
+  "difficulty": "★★",
+  "skills": [
+    {
+      "type": "패시브",
+      "name": "증거 수집",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "무기스킬",
+      "name": "법봉 조작",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일반스킬",
+      "name": "법봉 던지기",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "일회용스킬",
+      "name": "「주복사사」(誅伏賜死)",
+      "desc": "",
+      "detail": ""
+    },
+    {
+      "type": "특수스킬",
+      "name": "처형인의 검",
+      "desc": "",
+      "detail": ""
+    }
+  ],
+  "gadget": null
+}
