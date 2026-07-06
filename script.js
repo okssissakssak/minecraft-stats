@@ -10,6 +10,17 @@ async function loadCharacterData(name) {
   return res.json();
 }
 
+// 캐릭터 설명 목록(index.json) 불러오기 — 플레이 기록과 무관하게 설명이 존재하는 전체 캐릭터
+async function loadCharIndex() {
+  try {
+    const res = await fetch('./data/char/index.json');
+    if (!res.ok) return [];
+    return await res.json();
+  } catch {
+    return [];
+  }
+}
+
 // 통계 계산 함수
 function calculateStats(playerData) {
   const totalGames = playerData.length;
@@ -156,7 +167,7 @@ function renderCharacterStats(data, characterName) {
   const totalKills = characterGames.reduce((sum, g) => sum + g.kill, 0);
   const totalDeaths = characterGames.reduce((sum, g) => sum + g.death, 0);
   const avgKD = totalDeaths === 0 ? '∞' : (totalKills / totalDeaths).toFixed(2);
-  const winRate = ((totalWins / totalGames) * 100).toFixed(2);
+  const winRate = totalGames === 0 ? '0.00' : ((totalWins / totalGames) * 100).toFixed(2);
 
   const playerStats = {};
   for (const game of characterGames) {
@@ -234,7 +245,8 @@ document.getElementById('searchBtn').addEventListener('click', async () => {
   const queryLower = query.toLowerCase();
 
   const playerGames = data.filter(p => p.nickname.toLowerCase() === queryLower);
-  const characterMatch = data.some(p => p.character === query);
+  const charIndex = await loadCharIndex();
+  const characterMatch = data.some(p => p.character === query) || charIndex.includes(query);
   const resultDiv = document.getElementById('result');
 
   if (playerGames.length > 0) {
@@ -340,7 +352,9 @@ document.getElementById('rankingBtn').addEventListener('click', async () => {
 // 캐릭터 설명 목록
 document.getElementById('charBtn').addEventListener('click', async () => {
   const data = await loadData();
-  let characters = [...new Set(data.map(g => g.character))];
+  const indexed = await loadCharIndex();
+  // 설명 JSON이 존재하는 모든 캐릭터 + 플레이 기록이 있는 캐릭터 합집합
+  let characters = [...new Set([...indexed, ...data.map(g => g.character)])];
   characters.sort((a, b) => a.localeCompare(b, 'ko')); // 가나다 순 정렬
 
   const resultDiv = document.getElementById('result');
