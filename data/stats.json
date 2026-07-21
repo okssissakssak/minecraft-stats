@@ -28719,5 +28719,49 @@
     "finalscore": "7/3",
     "map": "테스트맵",
     "gamenumber": 165
+  },
+  {
+    "nickname": "테스트플레이어A",
+    "kill": 7,
+    "death": 2,
+    "win": 1,
+    "character": "테스트캐릭",
+    "tier": "DIA III",
+    "finalscore": "7/3",
+    "map": "테스트맵",
+    "gamenumber": 166
+  },
+  {
+    "nickname": "테스트플레이어B",
+    "kill": 3,
+    "death": 8,
+    "win": 0,
+    "character": "테스트캐릭",
+    "tier": "DIA I",
+    "finalscore": "7/3",
+    "map": "테스트맵",
+    "gamenumber": 166
+  },
+  {
+    "nickname": "테스트플레이어A",
+    "kill": 7,
+    "death": 2,
+    "win": 1,
+    "character": "테스트캐릭",
+    "tier": "DIA III",
+    "finalscore": "7/3",
+    "map": "테스트맵",
+    "gamenumber": 167
+  },
+  {
+    "nickname": "테스트플레이어B",
+    "kill": 3,
+    "death": 8,
+    "win": 0,
+    "character": "테스트캐릭",
+    "tier": "DIA I",
+    "finalscore": "7/3",
+    "map": "테스트맵",
+    "gamenumber": 167
   }
 ]
