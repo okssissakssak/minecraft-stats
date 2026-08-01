@@ -10,6 +10,19 @@ async function loadCharacterData(name) {
   return res.json();
 }
 
+// 킬 로그 불러오기 — 용량이 커서 게임 상세 팝업을 열 때만 한 번 받아 캐시한다
+let killLogCache = null;
+async function loadKillLog() {
+  if (killLogCache) return killLogCache;
+  try {
+    const res = await fetch('./data/killlog.json');
+    killLogCache = res.ok ? await res.json() : [];
+  } catch {
+    killLogCache = [];
+  }
+  return killLogCache;
+}
+
 // 캐릭터 설명 목록(index.json) 불러오기 — 플레이 기록과 무관하게 설명이 존재하는 전체 캐릭터
 async function loadCharIndex() {
   try {
@@ -88,12 +101,58 @@ ${playerGames.slice().reverse().map(game => `
   `;
 }
 
-function showGamePopup(gamenumber, allData) {
+// 킬 타입 → 인게임 킬 메시지와 같은 기호 (killskill.mcfunction)
+const KILL_ICON = { m: '☠', a: '🏹', s: '✨' };
+
+// 한 게임의 킬 로그를 라운드별로 묶어 렌더링. 닉네임 → 캐릭터/승패는 전적 레코드에서 조인한다.
+function renderKillLog(killEntry, sameGame) {
+  if (!killEntry || !killEntry.kills || !killEntry.kills.length) {
+    return '<h3>라운드별 킬 로그</h3><p class="killlog-empty">이 게임의 킬 로그가 없습니다.</p>';
+  }
+
+  const info = {};
+  for (const g of sameGame) info[g.nickname] = { character: g.character, win: g.win };
+
+  const rounds = new Map();
+  for (const k of killEntry.kills) {
+    if (!rounds.has(k.r)) rounds.set(k.r, []);
+    rounds.get(k.r).push(k);
+  }
+
+  const nameHtml = (nick) => {
+    const meta = info[nick];
+    const cls = meta ? (meta.win === 1 ? 'kl-win' : 'kl-lose') : '';
+    const char = meta ? ` <span class="kl-char">(${meta.character})</span>` : '';
+    return `<span class="${cls}">${nick}</span>${char}`;
+  };
+
+  const sortedRounds = [...rounds.keys()].sort((a, b) => a - b);
+  return `
+    <h3>라운드별 킬 로그</h3>
+    ${sortedRounds.map(r => `
+      <div class="killlog-round">
+        <div class="killlog-round-title">라운드 ${r} <span class="killlog-count">${rounds.get(r).length}킬</span></div>
+        ${rounds.get(r).map(k => `
+          <div class="killlog-entry">
+            ${nameHtml(k.k)}
+            <span class="kl-icon">${KILL_ICON[k.t] || '☠'}</span>
+            ${nameHtml(k.v)}
+          </div>
+        `).join('')}
+      </div>
+    `).join('')}
+  `;
+}
+
+async function showGamePopup(gamenumber, allData) {
   const sameGame = allData.filter(g => g.gamenumber === gamenumber);
   if (!sameGame.length) return;
 
   const winners = sameGame.filter(g => g.win === 1).sort((a,b)=>b.kill - a.kill);
   const losers  = sameGame.filter(g => g.win === 0).sort((a,b)=>b.kill - a.kill);
+
+  const killLog = await loadKillLog();
+  const killEntry = killLog.find(e => e.gamenumber === gamenumber);
 
   const popup = document.createElement('div');
   popup.classList.add('popup');
@@ -119,6 +178,10 @@ function showGamePopup(gamenumber, allData) {
             <p>킬: ${g.kill} | 데스: ${g.death} | ${renderTier(g.tier)}</p>
           </div>
         `).join('') || '<p>데이터 없음</p>'}
+      </div>
+      <hr>
+      <div class="killlog">
+        ${renderKillLog(killEntry, sameGame)}
       </div>
       <button id="closePopup">닫기</button>
     </div>
@@ -258,7 +321,7 @@ document.getElementById('searchBtn').addEventListener('click', async () => {
       card.style.cursor = 'pointer';
       card.addEventListener('click', async () => {
         const data = await loadData();
-        showGamePopup(num, data);
+        await showGamePopup(num, data);
       });
     }
   });

@@ -155,10 +155,55 @@ td, th {
   color: #fff;
   padding: 20px;
   border-radius: 12px;
-  max-width: 500px;
+  max-width: 560px;
   max-height: 80vh;
   overflow-y: auto;
   box-shadow: 0 0 10px #000;
+}
+
+/* 라운드별 킬 로그 */
+.killlog-round {
+  margin: 10px 0;
+}
+
+.killlog-round-title {
+  font-weight: bold;
+  color: #9ad;
+  border-bottom: 1px solid #3a3a3a;
+  padding-bottom: 3px;
+  margin-bottom: 5px;
+}
+
+.killlog-count {
+  float: right;
+  font-weight: normal;
+  font-size: 0.85em;
+  color: #888;
+}
+
+.killlog-entry {
+  background: #232323;
+  border-radius: 6px;
+  padding: 5px 8px;
+  margin: 3px 0;
+  font-size: 0.95em;
+}
+
+.killlog-entry .kl-icon {
+  margin: 0 6px;
+  color: #ffd75e;
+}
+
+.killlog-entry .kl-char {
+  color: #888;
+  font-size: 0.85em;
+}
+
+.kl-win  { color: #66FF66; font-weight: bold; }
+.kl-lose { color: #FF6666; font-weight: bold; }
+
+.killlog-empty {
+  color: #888;
 }
 
 .popup-card {
