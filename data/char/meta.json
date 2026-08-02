@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-03 06:08:36",
+  "updated": "2026-08-03 06:08:46",
   "count": 142,
   "iconGrid": 12,
   "iconTile": 128,
@@ -1282,7 +1282,7 @@
       "name": "암흑기사",
       "id": 99,
       "difficulty": "★★★",
-      "color": null,
+      "color": "#000000",
       "keywords": [
         "공중 기동",
         "원거리",

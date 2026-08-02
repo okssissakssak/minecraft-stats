@@ -2,7 +2,7 @@
   "name": "암흑기사",
   "id": 99,
   "difficulty": "★★★",
-  "color": null,
+  "color": "#000000",
   "keywords": [
     "공중 기동",
     "원거리",
