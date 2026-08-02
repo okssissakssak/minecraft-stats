@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-03 06:07:57",
+  "updated": "2026-08-03 06:08:36",
   "count": 142,
   "iconGrid": 12,
   "iconTile": 128,
@@ -1842,9 +1842,13 @@
       "id": 142,
       "difficulty": "★★",
       "color": "#B8C6DB",
-      "keywords": [],
-      "summary": null,
-      "model": null
+      "keywords": [
+        "돌진",
+        "제압",
+        "탱커"
+      ],
+      "summary": "외교관은 적을 벽으로 몰아붙이고 균열로 전선을 갈라놓습니다",
+      "model": "dor:char/poppy/hammer"
     }
   ]
 }
