@@ -43,3 +43,7 @@
 
 /* 아틀라스 크기를 데이터에서 받는다 (캐릭터가 144개를 넘으면 13x13 로 커진다) */
 .character-icon-sprite{background-size:var(--icon-atlas-size,1200% 1200%)}
+
+/* 도감 카드 난이도 */
+.card-keywords b{color:var(--lime);letter-spacing:0;margin-right:7px;font-weight:900}
+@media (max-width:720px){.sort-box button{padding:0 8px;letter-spacing:.06em}}
