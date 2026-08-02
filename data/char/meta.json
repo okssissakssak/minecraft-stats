@@ -1,6 +1,8 @@
 {
-  "updated": "2026-08-03 05:41:31",
+  "updated": "2026-08-03 05:53:02",
   "count": 142,
+  "iconGrid": 12,
+  "iconTile": 128,
   "characters": [
     {
       "name": "네뷸라",
