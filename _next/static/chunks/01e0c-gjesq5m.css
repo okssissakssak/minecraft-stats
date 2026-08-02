@@ -25,3 +25,12 @@
 
 .match-index{text-shadow:0 1px 6px #000c}
 .map-block small,.history-map small,.history-map strong,.map-block strong{text-shadow:0 1px 8px #000000b3}
+
+/* ===== 캐릭터 도감 정렬 컨트롤 ===== */
+.codex-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.sort-box{display:flex;border:1px solid var(--line);background:var(--surface);height:42px}
+.sort-box button{border:0;background:0 0;color:#8a969b;font:800 9px/1 var(--display);letter-spacing:.12em;padding:0 13px;cursor:pointer;transition:color .2s,background .2s}
+.sort-box button+button{border-left:1px solid var(--line)}
+.sort-box button:hover{color:#fff}
+.sort-box button.is-active{background:var(--lime);color:#0a0f11}
+@media (max-width:720px){.codex-controls{width:100%;justify-content:space-between}.sort-box button{padding:0 10px}}
