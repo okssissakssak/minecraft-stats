@@ -107,3 +107,12 @@
 .mu-good{color:var(--mint)}
 .mu-bad{color:var(--loss)}
 @media (max-width:900px){.combat-grid{grid-template-columns:1fr}}
+
+/* ===== 집계 기간 선택 ===== */
+.span-box{display:flex;border:1px solid var(--line);background:var(--surface);height:42px}
+.span-box button{border:0;background:0 0;color:#8a969b;font:800 9px/1 var(--display);letter-spacing:.1em;padding:0 12px;cursor:pointer;white-space:nowrap;transition:color .2s,background .2s}
+.span-box button+button{border-left:1px solid var(--line)}
+.span-box button:hover{color:#fff}
+.span-box button.is-active{background:#243040;color:#dff2ff}
+.tier-list-meta{display:flex;align-items:center;gap:14px}
+@media (max-width:720px){.span-box button{padding:0 9px}}
