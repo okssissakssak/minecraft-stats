@@ -50,3 +50,13 @@
 
 /* 정렬 방향 화살표 */
 .sort-box button i{font-style:normal;margin-left:5px;font-size:10px;line-height:1}
+
+/* 이스터에그: 활 연습장 */
+.bow-game{position:fixed;inset:0;z-index:200;background:#050809f5;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);display:grid;grid-template-rows:auto minmax(0,1fr) auto}
+.bow-game canvas{width:100%;height:100%;min-height:0;min-width:0;display:block;cursor:crosshair;touch-action:none}
+.bow-hud{display:flex;align-items:center;gap:18px;padding:13px 18px;border-bottom:1px solid var(--line)}
+.bow-hud span{color:var(--lime);font:900 12px/1 var(--display);letter-spacing:.18em}
+.bow-hud b{color:#dfe6e9;font:800 11px/1 var(--display);letter-spacing:.12em}
+.bow-hud button{margin-left:auto;background:0 0;border:1px solid var(--line);color:#cfd6d9;width:30px;height:30px;cursor:pointer;font-size:16px;line-height:1}
+.bow-hud button:hover{border-color:var(--lime);color:var(--lime)}
+.bow-game>p{margin:0;padding:11px 18px;color:#8b979c;font-size:11px;text-align:center;border-top:1px solid var(--line)}
