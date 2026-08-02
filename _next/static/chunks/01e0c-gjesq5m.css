@@ -60,3 +60,29 @@
 .bow-hud button{margin-left:auto;background:0 0;border:1px solid var(--line);color:#cfd6d9;width:30px;height:30px;cursor:pointer;font-size:16px;line-height:1}
 .bow-hud button:hover{border-color:var(--lime);color:var(--lime)}
 .bow-game>p{margin:0;padding:11px 18px;color:#8b979c;font-size:11px;text-align:center;border-top:1px solid var(--line)}
+
+/* ===== 프로필: 캐릭터별 성적 / 맞대결 ===== */
+.char-table{border:1px solid var(--line);background:var(--surface);margin-bottom:26px}
+.char-row{display:grid;grid-template-columns:34px minmax(0,1fr) 70px 90px 80px 20px;align-items:center;gap:14px;width:100%;min-height:56px;padding:8px 18px;border:0;border-bottom:1px solid var(--line-soft);background:0 0;text-align:left;cursor:pointer;transition:background .2s}
+.char-row:last-child{border-bottom:0}
+.char-row:hover{background:var(--surface-2)}
+.char-row strong{font-size:14px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
+.char-row>span{display:grid;gap:4px;font:800 14px/1 var(--display)}
+.char-row small{color:#667378;font:700 8px/1 var(--display);letter-spacing:.11em}
+.char-row>b{color:#566368}
+.char-row:hover>b{color:var(--lime)}
+.char-more{color:var(--muted);font-size:11px;margin:-18px 0 26px;padding-left:2px}
+.h2h-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:26px}
+.h2h-col{border:1px solid var(--line);background:var(--surface);padding:14px}
+.h2h-label{display:block;font:900 9px/1 var(--display);letter-spacing:.18em;margin-bottom:12px}
+.h2h-bad .h2h-label{color:var(--loss)}
+.h2h-good .h2h-label{color:var(--mint)}
+.h2h-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;width:100%;padding:8px 6px;border:0;background:0 0;text-align:left;cursor:pointer;border-radius:0;transition:background .2s}
+.h2h-row:hover{background:var(--surface-2)}
+.h2h-name{display:grid;gap:4px;min-width:0}
+.h2h-name strong{font-size:13px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
+.h2h-name small{color:#667378;font:700 8px/1 var(--display);letter-spacing:.08em}
+.h2h-score{display:grid;gap:4px;justify-items:end}
+.h2h-score strong{font:800 12px/1 var(--display)}
+.h2h-score small{color:var(--muted);font:800 10px/1 var(--display)}
+@media (max-width:720px){.h2h-grid{grid-template-columns:1fr}.char-row{grid-template-columns:28px minmax(0,1fr) 54px 70px;gap:10px;padding:8px 12px}.char-row>span:nth-of-type(3),.char-row>b{display:none}}
