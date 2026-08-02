@@ -47,3 +47,6 @@
 /* 도감 카드 난이도 */
 .card-keywords b{color:var(--lime);letter-spacing:0;margin-right:7px;font-weight:900}
 @media (max-width:720px){.sort-box button{padding:0 8px;letter-spacing:.06em}}
+
+/* 정렬 방향 화살표 */
+.sort-box button i{font-style:normal;margin-left:5px;font-size:10px;line-height:1}
