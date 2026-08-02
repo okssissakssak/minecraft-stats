@@ -1,31 +1,49 @@
 {
   "name": "인덱스",
+  "id": 44,
   "difficulty": "★★★★",
+  "color": "#94D6FF",
+  "keywords": [
+    "다재다능",
+    "원거리",
+    "폭발적 피해"
+  ],
+  "summary": "인덱스는 다양한 스펠을 활용해 다양한 유틸과 폭발적인 화력을 지닙니다",
+  "model": null,
   "skills": [
     {
       "type": "패시브",
       "name": "스펠 인터셉트",
       "desc": "자신이 맞은 스킬공격을 무효화 시킨다.",
-      "detail": "쿨타임 8초"
+      "detail": "쿨타임 8초",
+      "typeColor": "#55FF55",
+      "nameColor": "#FFFFFF"
     },
     {
       "type": "무기스킬",
       "name": "주문",
       "desc": "3~9 번호키로 주문을 조합한 후 우클릭으로 주문을 사용할 수 있다. 잘못 입력했어도 우클릭하면 취소된다.",
-      "detail": "쿨타임 1초"
+      "detail": "쿨타임 1초",
+      "typeColor": "#FFFF55",
+      "nameColor": "#FFFFFF"
     },
     {
       "type": "일반스킬",
       "name": "금서목록",
       "desc": "무기칸을 열람 가능한 마도서로 바꾸어 주문 목록과 설명들을 볼 수 있다.",
-      "detail": "쿨타임 1초"
+      "detail": "쿨타임 1초",
+      "typeColor": "#FFFF55",
+      "nameColor": "#FFFFFF"
     },
     {
       "type": "일회용스킬",
       "name": "요한의 펜",
       "desc": "마지막으로 사용한 주문을 즉시 입력한다.",
-      "detail": ""
+      "detail": "",
+      "typeColor": "#FF5555",
+      "nameColor": "#FFFFFF"
     }
   ],
-  "gadget": "7초동안 성소를 생성해 주변 아군은 회복시키고 적군은 쿨타임이 50% 느리게 감소한다."
+  "gadget": "7초동안 성소를 생성해 주변 아군은 회복시키고 적군은 쿨타임이 50% 느리게 감소한다.",
+  "gadgetColor": "#55FF55"
 }
