@@ -34,3 +34,9 @@
 .sort-box button:hover{color:#fff}
 .sort-box button.is-active{background:var(--lime);color:#0a0f11}
 @media (max-width:720px){.codex-controls{width:100%;justify-content:space-between}.sort-box button{padding:0 10px}}
+
+/* ===== 캐릭터 고유색 / 키워드 / 한줄요약 ===== */
+.char-summary{display:block;color:#9aa7ad;font-size:12.5px;line-height:1.55;margin:10px 0 13px;max-width:620px}
+.kw-chip{border:1px solid var(--line);color:#b7c2c7;background:#0f161a;font:700 9px/1 var(--display);letter-spacing:.1em;padding:0 9px;min-height:25px;align-items:center;display:inline-flex}
+.card-keywords{display:block;color:#7c888d;font:700 9px/1.5 var(--display);letter-spacing:.06em;margin:-14px 0 16px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:720px){.char-summary{font-size:12px}}
