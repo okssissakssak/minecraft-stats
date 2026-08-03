@@ -116,3 +116,4 @@
 .span-box button.is-active{background:#243040;color:#dff2ff}
 .tier-list-meta{display:flex;align-items:center;gap:14px}
 @media (max-width:720px){.span-box button{padding:0 9px}}
+.hero{z-index:5}
