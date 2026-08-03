@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>VOICE RELAY</title>
+<style>
+:root{--bg:#050809;--surface:#0d1417;--surface2:#131c20;--line:#1e2a2f;--line-soft:#182226;
+--lime:#d7ff4f;--mint:#7dffb2;--loss:#ff5d6c;--ink:#e7eef0;--muted:#8b979c;
+--display:"Arial Black",system-ui,sans-serif;--body:system-ui,-apple-system,"Malgun Gothic",sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14px;line-height:1.5}
+.wrap{max-width:760px;margin:0 auto;padding:28px 18px 80px}
+h1{font:900 22px/1 var(--display);letter-spacing:-.02em;margin:0 0 4px}
+.eyebrow{color:var(--lime);font:800 9px/1 var(--display);letter-spacing:.22em;margin:0 0 8px}
+.sub{color:var(--muted);font-size:12px;margin:0 0 22px}
+.card{border:1px solid var(--line);background:var(--surface);padding:18px;margin-bottom:14px}
+label{display:block;color:var(--muted);font:700 8px/1 var(--display);letter-spacing:.12em;margin-bottom:7px}
+input,select{width:100%;background:#0a1013;border:1px solid var(--line);color:#fff;padding:10px 12px;font-size:13px;font-family:inherit}
+input:focus,select:focus{outline:0;border-color:var(--lime)}
+button{font-family:inherit;cursor:pointer;border:1px solid var(--line);background:#0a1013;color:var(--ink);
+padding:11px 16px;font:800 10px/1 var(--display);letter-spacing:.1em;transition:background .2s,border-color .2s,color .2s}
+button:hover{border-color:var(--lime);color:var(--lime)}
+button.primary{background:var(--lime);border-color:var(--lime);color:#0a0f11}
+button.primary:hover{filter:brightness(1.08);color:#0a0f11}
+button.danger{border-color:#4a2129;color:var(--loss)}
+button:disabled{opacity:.4;cursor:not-allowed}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.live{min-height:74px;border:1px solid var(--line-soft);background:#0a1013;padding:13px;font-size:14px;white-space:pre-wrap;word-break:break-word}
+.live .interim{color:var(--muted)}
+.q{display:grid;gap:8px;margin-top:12px}
+.qi{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:center;
+border:1px solid var(--line-soft);background:#0a1013;padding:9px 12px}
+.qi span{min-width:0;word-break:break-word;font-size:13px}
+.qi small{color:var(--muted);font:700 8px/1 var(--display)}
+.qi button{padding:7px 10px;font-size:9px}
+.qi.sent{border-color:#1e3a2a}
+.qi.sent span{color:var(--muted)}
+.qi.fail{border-color:#4a2129}
+.log{max-height:210px;overflow:auto;font:12px/1.6 ui-monospace,Consolas,monospace;color:var(--muted);
+border:1px solid var(--line-soft);background:#0a1013;padding:11px}
+.log b{color:var(--mint);font-weight:400}
+.log i{color:var(--loss);font-style:normal}
+.pill{display:inline-flex;align-items:center;gap:7px;font:800 9px/1 var(--display);letter-spacing:.1em;color:var(--muted)}
+.dot{width:8px;height:8px;border-radius:50%;background:#3a464b}
+.dot.on{background:var(--loss);animation:pulse 1.1s infinite}
+@keyframes pulse{50%{opacity:.35}}
+.gate{max-width:320px;margin:16vh auto;text-align:center}
+.gate input{text-align:center;font:800 20px/1 var(--display);letter-spacing:.3em;padding:14px}
+.note{color:var(--muted);font-size:11px;line-height:1.7;margin:10px 0 0}
+.hide{display:none!important}
+@media(max-width:600px){.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="wrap gate" id="gate">
+  <p class="eyebrow">RESTRICTED</p>
+  <h1>VOICE RELAY</h1>
+  <p class="sub">접근 코드를 입력하세요.</p>
+  <input id="pw" type="password" inputmode="numeric" autocomplete="off" maxlength="8" placeholder="••••">
+  <p class="note" id="gateMsg"></p>
+</div>
+
+<div class="wrap hide" id="app">
+  <p class="eyebrow">VOICE RELAY</p>
+  <h1>음성 → 서버 채팅</h1>
+  <p class="sub">마이크로 말하면 받아쓰고, 채팅 길이에 맞게 끊어서 서버로 보냅니다.</p>
+
+  <div class="card">
+    <div class="row" style="justify-content:space-between">
+      <span class="pill"><i class="dot" id="dot"></i><span id="state">대기</span></span>
+      <div class="row">
+        <button id="btnStart" class="primary">듣기 시작</button>
+        <button id="btnStop" disabled>정지</button>
+      </div>
+    </div>
+    <div class="live" id="live" style="margin-top:13px"><span class="muted"></span></div>
+    <div class="q" id="queue"></div>
+  </div>
+
+  <div class="card">
+    <label>전송 설정</label>
+    <div class="grid2">
+      <div>
+        <label>엔드포인트 URL</label>
+        <input id="ep" placeholder="https://... (비우면 복사 전용)" autocomplete="off">
+      </div>
+      <div>
+        <label>토큰</label>
+        <input id="tk" type="password" placeholder="서버와 약속한 값" autocomplete="off">
+      </div>
+      <div>
+        <label>보낼 이름</label>
+        <input id="nm" placeholder="Mata_tabi" autocomplete="off">
+      </div>
+      <div>
+        <label>한 줄 최대 길이</label>
+        <input id="len" type="number" min="20" max="240" value="100">
+      </div>
+    </div>
+    <div class="row" style="margin-top:13px">
+      <label style="margin:0"><input type="checkbox" id="auto" style="width:auto;margin-right:7px">확정되면 자동 전송</label>
+      <button id="btnTest" style="margin-left:auto">연결 테스트</button>
+      <button id="btnClear" class="danger">큐 비우기</button>
+    </div>
+    <p class="note">엔드포인트를 비워두면 전송 대신 클립보드 복사만 합니다. 설정은 이 브라우저에만 저장됩니다.</p>
+  </div>
+
+  <div class="card">
+    <label>로그</label>
+    <div class="log" id="log"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+var PW="5999", K="hwalcass-stt";
+
+/* ── 접근 코드 ─────────────────────────────────────────── */
+var gate=document.getElementById("gate"), app=document.getElementById("app");
+function unlock(){gate.classList.add("hide");app.classList.remove("hide");init()}
+if(sessionStorage.getItem(K+"-ok")==="1") unlock();
+document.getElementById("pw").addEventListener("keydown",function(e){
+  if(e.key!=="Enter")return;
+  if(this.value.trim()===PW){sessionStorage.setItem(K+"-ok","1");unlock()}
+  else{document.getElementById("gateMsg").textContent="코드가 맞지 않습니다.";this.value=""}
+});
+
+/* ── 본체 ─────────────────────────────────────────────── */
+function init(){
+  var $=function(id){return document.getElementById(id)};
+  var live=$("live"), queue=$("queue"), logEl=$("log");
+  var cfg=load();
+  $("ep").value=cfg.ep||""; $("tk").value=cfg.tk||"";
+  $("nm").value=cfg.nm||""; $("len").value=cfg.len||100; $("auto").checked=!!cfg.auto;
+  ["ep","tk","nm","len"].forEach(function(id){$(id).addEventListener("change",save)});
+  $("auto").addEventListener("change",save);
+
+  function load(){try{return JSON.parse(localStorage.getItem(K)||"{}")}catch(e){return{}}}
+  function save(){
+    cfg={ep:$("ep").value.trim(),tk:$("tk").value,nm:$("nm").value.trim(),
+         len:Math.max(20,Math.min(240,+$("len").value||100)),auto:$("auto").checked};
+    try{localStorage.setItem(K,JSON.stringify(cfg))}catch(e){}
+  }
+  function log(msg,kind){
+    var t=new Date().toTimeString().slice(0,8);
+    var tag=kind==="ok"?"b":kind==="err"?"i":"span";
+    logEl.insertAdjacentHTML("afterbegin","<div>"+t+" <"+tag+">"+esc(msg)+"</"+tag+"></div>");
+  }
+  function esc(s){return String(s).replace(/[&<>]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;"}[c]})}
+
+  /* ── 끊기 ────────────────────────────────────────────
+     마인크래프트 채팅은 한 줄이 길면 읽기 어렵다. 문장 끝에서 먼저 자르고,
+     그래도 길면 어절 단위로 자른다. 너무 짧은 꼬리는 앞 조각에 붙인다. */
+  function chunk(text,max){
+    text=text.replace(/\s+/g," ").trim();
+    if(!text)return [];
+    var parts=text.split(/(?<=[.!?。？！]|(?:다|요|죠|까|네|군요|세요|습니다|입니다))\s+/);
+    var out=[],cur="";
+    parts.forEach(function(p){
+      p=p.trim(); if(!p)return;
+      if(!cur){cur=p}
+      else if((cur+" "+p).length<=max){cur+=" "+p}
+      else{out.push(cur);cur=p}
+    });
+    if(cur)out.push(cur);
+    var fin=[];
+    out.forEach(function(p){
+      while(p.length>max){
+        var cut=p.lastIndexOf(" ",max);
+        if(cut<max*0.5)cut=max;
+        fin.push(p.slice(0,cut).trim());
+        p=p.slice(cut).trim();
+      }
+      if(p)fin.push(p);
+    });
+    for(var i=fin.length-1;i>0;i--){
+      if(fin[i].length<4&&(fin[i-1]+" "+fin[i]).length<=max){fin[i-1]+=" "+fin[i];fin.splice(i,1)}
+    }
+    return fin;
+  }
+
+  /* ── 큐 ─────────────────────────────────────────────── */
+  var items=[];
+  function render(){
+    queue.innerHTML="";
+    items.slice(-12).forEach(function(it){
+      var d=document.createElement("div");
+      d.className="qi"+(it.state==="sent"?" sent":it.state==="fail"?" fail":"");
+      var s=document.createElement("span"); s.textContent=it.text;
+      var n=document.createElement("small"); n.textContent=it.text.length+"자";
+      var b=document.createElement("button");
+      b.textContent=cfg.ep?(it.state==="sent"?"재전송":"전송"):"복사";
+      b.onclick=function(){cfg.ep?send(it):copy(it)};
+      d.appendChild(s);d.appendChild(n);d.appendChild(b);queue.appendChild(d);
+    });
+  }
+  function push(text){
+    chunk(text,cfg.len||100).forEach(function(t){
+      var it={text:t,state:"new"}; items.push(it);
+      if(cfg.auto){cfg.ep?send(it):copy(it)}
+    });
+    render();
+  }
+  function copy(it){
+    (navigator.clipboard?navigator.clipboard.writeText(it.text):Promise.reject())
+      .then(function(){it.state="sent";log("복사: "+it.text,"ok");render()})
+      .catch(function(){log("복사 실패 (브라우저가 막음)","err")});
+  }
+  function send(it){
+    if(!cfg.ep){copy(it);return}
+    it.state="send";render();
+    fetch(cfg.ep,{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({token:cfg.tk,name:cfg.nm,message:it.text})})
+    .then(function(r){
+      if(!r.ok)throw new Error("HTTP "+r.status);
+      it.state="sent";log("전송: "+it.text,"ok");
+    })
+    .catch(function(e){
+      it.state="fail";
+      log("전송 실패: "+e.message+" — 주소·CORS·토큰을 확인하세요","err");
+    })
+    .then(render);
+  }
+  $("btnClear").onclick=function(){items=[];render();log("큐를 비웠습니다")};
+  $("btnTest").onclick=function(){
+    if(!cfg.ep){log("엔드포인트가 비어 있습니다 (복사 전용 모드)","err");return}
+    send({text:"[연결 테스트]",state:"new"});
+  };
+
+  /* ── 음성 인식 ───────────────────────────────────────── */
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  var rec=null, want=false;
+  if(!SR){
+    $("btnStart").disabled=true;
+    log("이 브라우저는 음성 인식을 지원하지 않습니다. 크롬/엣지를 쓰세요.","err");
+  }
+  function setState(on,txt){
+    $("dot").className="dot"+(on?" on":"");
+    $("state").textContent=txt;
+    $("btnStart").disabled=on; $("btnStop").disabled=!on;
+  }
+  function start(){
+    if(!SR)return;
+    want=true;
+    rec=new SR();
+    rec.lang="ko-KR"; rec.continuous=true; rec.interimResults=true;
+    rec.onstart=function(){setState(true,"듣는 중");log("마이크 시작")};
+    rec.onerror=function(e){
+      log("인식 오류: "+e.error,"err");
+      if(e.error==="not-allowed"||e.error==="service-not-allowed"){want=false;setState(false,"권한 거부")}
+    };
+    rec.onend=function(){
+      /* 크롬은 잠깐 조용하면 알아서 끊는다. 정지를 누른 게 아니면 다시 켠다 */
+      if(want){try{rec.start()}catch(e){setTimeout(function(){if(want)start()},400)}}
+      else setState(false,"대기");
+    };
+    rec.onresult=function(e){
+      var interim="",done="";
+      for(var i=e.resultIndex;i<e.results.length;i++){
+        var t=e.results[i][0].transcript;
+        if(e.results[i].isFinal)done+=t; else interim+=t;
+      }
+      live.innerHTML=esc(done)+'<span class="interim">'+esc(interim)+"</span>";
+      if(done.trim()){push(done);live.innerHTML='<span class="interim">'+esc(interim)+"</span>"}
+    };
+    try{rec.start()}catch(e){log("시작 실패: "+e.message,"err")}
+  }
+  $("btnStart").onclick=start;
+  $("btnStop").onclick=function(){want=false;if(rec)rec.stop();setState(false,"대기")};
+
+  setState(false,"대기");
+  render();
+  log("준비됨. 마이크 권한을 허용해야 동작합니다.");
+}
+})();
+</script>
+</body>
+</html>
