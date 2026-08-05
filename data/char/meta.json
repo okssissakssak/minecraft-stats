@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-03 06:10:17",
-  "count": 142,
+  "updated": "2026-08-05 23:55:59",
+  "count": 143,
   "iconGrid": 12,
   "iconTile": 128,
   "characters": [
@@ -1849,6 +1849,19 @@
       ],
       "summary": "외교관은 적을 벽으로 몰아붙이고 균열로 전선을 갈라놓습니다",
       "model": "dor:char/poppy/hammer"
+    },
+    {
+      "name": "선생",
+      "id": 143,
+      "difficulty": "★★",
+      "color": "#FFFF55",
+      "keywords": [
+        "기동력",
+        "교란",
+        "진입"
+      ],
+      "summary": "선생은 빠른 이동속도를 기반으로 적을 혼란스럽게 합니다",
+      "model": "dor:char/sensei/head"
     }
   ]
 }
