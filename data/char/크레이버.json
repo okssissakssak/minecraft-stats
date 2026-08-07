@@ -3,9 +3,13 @@
   "id": 144,
   "difficulty": "★★★",
   "color": "#FF0000",
-  "keywords": [],
-  "summary": null,
-  "model": null,
+  "keywords": [
+    "결투가",
+    "폭발적 피해",
+    "다재다능"
+  ],
+  "summary": "크레이버는 근/원거리를 넘나들며 강한 화력을 선보입니다",
+  "model": "dor:char/craver/craver",
   "skills": [
     {
       "type": "패시브",
@@ -24,19 +28,11 @@
       "nameColor": "#FFFFFF"
     },
     {
-      "type": "무기스킬",
-      "name": "[강화스킬] (우클릭):",
-      "desc": "강화된 탄환을 발사한다. 탄환이 최대 사거리에 도달하거나 적에게 적중 시 대상과 그 뒤의 적에게 피해를 입히고 둔화시킨다",
-      "detail": "",
-      "typeColor": "#FFFF55",
-      "nameColor": "#FF0000"
-    },
-    {
-      "type": "무기스킬",
+      "type": "강화스킬",
       "name": "포커스 샷",
       "desc": "강화된 탄환을 발사한다. 탄환이 최대 사거리에 도달하거나 적에게 적중 시 대상과 그 뒤의 적에게 피해를 입히고 둔화시킨다",
       "detail": "강화 피해량 2초에 걸쳐 6, 2초간 둔화 1",
-      "typeColor": "#FFFF55",
+      "typeColor": "#FF0000",
       "nameColor": "#FFFFFF"
     },
     {
@@ -48,19 +44,11 @@
       "nameColor": "#FFFFFF"
     },
     {
-      "type": "일반스킬",
-      "name": "[강화스킬] (F):",
-      "desc": "범위 내 적들에게 피해를 입히고 공중에 띄운다.",
-      "detail": "",
-      "typeColor": "#FFFF55",
-      "nameColor": "#FF0000"
-    },
-    {
-      "type": "일반스킬",
+      "type": "강화스킬",
       "name": "백플립",
       "desc": "범위 내 적들에게 피해를 입히고 공중에 띄운다.",
-      "detail": "피해량 ,범위 2.5x5(직사각형)",
-      "typeColor": "#FFFF55",
+      "detail": "피해량 6, 범위 2.5x5(직사각형)",
+      "typeColor": "#FF0000",
       "nameColor": "#FFFFFF"
     },
     {
@@ -72,19 +60,11 @@
       "nameColor": "#FFFFFF"
     },
     {
-      "type": "일반스킬",
-      "name": "[강화스킬] (Q):",
-      "desc": "뒤로 후퇴하며 적을 관통하는 탄환을 발사한다.",
-      "detail": "",
-      "typeColor": "#FFFF55",
-      "nameColor": "#FF0000"
-    },
-    {
-      "type": "일반스킬",
+      "type": "강화스킬",
       "name": "퀵 스텝",
       "desc": "뒤로 후퇴하며 적을 관통하는 탄환을 발사한다.",
       "detail": "후퇴거리 6칸, 피해량 6.5",
-      "typeColor": "#FFFF55",
+      "typeColor": "#FF0000",
       "nameColor": "#FFFFFF"
     },
     {

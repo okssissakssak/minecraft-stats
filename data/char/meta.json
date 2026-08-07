@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-07 16:29:28",
+  "updated": "2026-08-07 17:05:25",
   "count": 144,
   "iconGrid": 13,
   "iconTile": 128,
@@ -1868,9 +1868,13 @@
       "id": 144,
       "difficulty": "★★★",
       "color": "#FF0000",
-      "keywords": [],
-      "summary": null,
-      "model": null
+      "keywords": [
+        "결투가",
+        "폭발적 피해",
+        "다재다능"
+      ],
+      "summary": "크레이버는 근/원거리를 넘나들며 강한 화력을 선보입니다",
+      "model": "dor:char/craver/craver"
     }
   ]
 }
