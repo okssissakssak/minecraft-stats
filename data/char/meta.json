@@ -1,7 +1,7 @@
 {
-  "updated": "2026-08-05 23:55:59",
-  "count": 143,
-  "iconGrid": 12,
+  "updated": "2026-08-07 16:29:28",
+  "count": 144,
+  "iconGrid": 13,
   "iconTile": 128,
   "characters": [
     {
@@ -1856,12 +1856,21 @@
       "difficulty": "★★",
       "color": "#FFFF55",
       "keywords": [
-        "기동력",
-        "교란",
-        "진입"
+        "다재다능",
+        "결투가",
+        "폭발적 피해"
       ],
-      "summary": "선생은 빠른 이동속도를 기반으로 적을 혼란스럽게 합니다",
+      "summary": "매화검수는 다양한 초식을 통해 여러 상황에 대처합니다",
       "model": "dor:char/sensei/head"
+    },
+    {
+      "name": "크레이버",
+      "id": 144,
+      "difficulty": "★★★",
+      "color": "#FF0000",
+      "keywords": [],
+      "summary": null,
+      "model": null
     }
   ]
 }
