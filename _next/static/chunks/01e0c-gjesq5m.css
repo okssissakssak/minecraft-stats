@@ -117,3 +117,30 @@
 .tier-list-meta{display:flex;align-items:center;gap:14px}
 @media (max-width:720px){.span-box button{padding:0 9px}}
 .hero{z-index:5}
+
+/* ===== 패치노트 ===== */
+.patch-meta{color:var(--muted);font:700 9px/1 var(--display);letter-spacing:.1em}
+.patch-meta a{color:var(--lime);text-decoration:none}
+.patch-post{border:1px solid var(--line);background:var(--surface);margin-bottom:14px}
+.patch-post>header{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;
+padding:15px 20px;border-bottom:1px solid var(--line-soft);background:linear-gradient(110deg,#d7ff4f0d,#0000 55%)}
+.patch-post time{color:var(--lime);font:800 10px/1 var(--display);letter-spacing:.12em}
+.patch-post h3{margin:0;font:900 17px/1.15 var(--display);flex:1;min-width:0}
+.patch-post>header a{color:#66757b;font:700 9px/1 var(--display);letter-spacing:.1em;text-decoration:none;white-space:nowrap}
+.patch-post>header a:hover{color:var(--lime)}
+.patch-body{padding:6px 20px 18px}
+.patch-block{padding:13px 0;border-bottom:1px solid var(--line-soft)}
+.patch-block:last-child{border-bottom:0}
+.patch-char{display:inline-flex;align-items:center;gap:10px;border:0;background:0 0;color:inherit;
+cursor:pointer;padding:0;margin-bottom:9px}
+.patch-char strong{font:900 15px/1 var(--display)}
+.patch-char:hover strong{color:var(--lime)}
+.patch-lines{display:grid;gap:5px}
+.patch-lines p{margin:0;font-size:13.5px;line-height:1.6;color:#c9d3d7}
+.patch-lines h4{margin:9px 0 3px;font:800 10px/1 var(--display);letter-spacing:.1em;color:var(--muted)}
+.patch-lines h4:first-child{margin-top:0}
+.patch-change span{color:#9aa7ad}
+.patch-change span:last-child{color:#fff;font-weight:700}
+.patch-change i{color:var(--lime);font-style:normal;margin:0 7px;font-weight:700}
+.patch-plain .patch-lines p{color:#dfe6e9}
+@media (max-width:720px){.patch-body{padding:4px 14px 14px}.patch-post>header{padding:13px 14px}.patch-post h3{font-size:15px}}
