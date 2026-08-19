@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-13 14:20:22",
-  "count": 144,
+  "updated": "2026-08-19 17:40:03",
+  "count": 146,
   "iconGrid": 13,
   "iconTile": 128,
   "characters": [
@@ -1875,6 +1875,32 @@
       ],
       "summary": "크레이버는 근/원거리를 넘나들며 강한 화력을 선보입니다",
       "model": "dor:char/craver/craver"
+    },
+    {
+      "name": "창술사",
+      "id": 145,
+      "difficulty": "★★",
+      "color": "#FFAA00",
+      "keywords": [
+        "결투가",
+        "지원",
+        "내구"
+      ],
+      "summary": "창술사는 선봉에서 적을 뚫어냅니다.",
+      "model": "dor:char/spear/spear"
+    },
+    {
+      "name": "룰루",
+      "id": 146,
+      "difficulty": "★",
+      "color": "#FF55FF",
+      "keywords": [
+        "지원",
+        "군중 제어",
+        "원거리"
+      ],
+      "summary": "룰루는 요정 픽스와 함께 아군을 지원하고 적을 성가시게 만듭니다",
+      "model": "dor:char/lulu/wand"
     }
   ]
 }
