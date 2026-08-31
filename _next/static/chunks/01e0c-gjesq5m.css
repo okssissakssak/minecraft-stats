@@ -146,6 +146,9 @@ cursor:pointer;padding:0;margin-bottom:9px}
 @media (max-width:720px){.patch-body{padding:4px 14px 14px}.patch-post>header{padding:13px 14px}.patch-post h3{font-size:15px}}.spike-strip{border-top:1px solid var(--line);grid-column:1/-1;flex-wrap:wrap;align-items:center;gap:9px 22px;margin-top:18px;padding-top:16px;display:flex}.spike-strip>span{color:var(--lime);font:900 8px/1 var(--display);letter-spacing:.16em}.spike-strip b{color:#e8edef;font:900 16px/1 var(--display);align-items:baseline;gap:7px;display:inline-flex}.spike-strip b i{color:var(--muted);font:800 8px/1 var(--display);letter-spacing:.13em;font-style:normal}.killfeed-round li.killfeed-spike{border-color:#d7ff4f2e;background:#d7ff4f0a}.spike-label{color:#9ba7ab;font:800 9px/1 var(--display);letter-spacing:.12em;font-style:normal}.spike-icon-p{color:#7fd7ff;border-color:#7fd7ff5c}.spike-icon-d{color:#8dffb0;border-color:#8dffb05c}.spike-icon-x{color:#ff8d6c;border-color:#ff8d6c5c}
 
 /* ── 팀운 스트립 · 지표 리포트 (프로필 화면) ── */
+.mx-more{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-height:44px;margin:-26px 0 26px;border:1px solid var(--line);border-top:0;background:var(--surface);color:var(--muted);font:800 10px/1 var(--display);letter-spacing:.14em;cursor:pointer;transition:background .2s,color .2s}
+.mx-more:hover{background:var(--surface-2);color:var(--lime)}
+.mx-more i{font-style:normal;font-size:11px}
 .mx-luck-strip{margin-top:14px}
 .mx-luck-strip b.mx-luck{font-size:15px;letter-spacing:.01em}
 .mx-vbad{color:var(--loss)}
