@@ -261,13 +261,18 @@ function hcAnalyze(stats, kills) {
 		});
 		// 참여 안 한 라운드도 '늦은 합류'로 센다
 		for (j = 0; j < R.recs.length; j++) if (!mine.has(R.recs[j].nickname)) get(R.recs[j].nickname).lateEntryRounds++;
-		// 클러치: 우리 팀에 한 명만 남은 상황. 그 시점의 생존자(로스터 - 사망자)에게 귀속.
+		// 클러치 — 원본 분석기의 정의를 역산해 맞춘 것이다.
+		//   기회: 우리 팀에 나 혼자 남고 상대가 "정확히 2명"인 순간(라운드·팀당 1회)
+		//   승리: 그 뒤 남은 둘을 내가 다 잡고 라운드도 이겼을 때
+		//   킬  : 이긴 클러치에서 낸 킬만
+		// 1v1 이나 1v3 이상을 넣거나 "팀이 이겼으면 승"으로 세면 원본과 승률이 2배 가까이 벌어진다.
+		// (스냅샷 대조: 기회 r=.93 승 r=.90 킬 r=.94, 승률 16.3% vs 원본 16.8%)
 		var al = { 0: R.size[0], 1: R.size[1] }, clutchSeen = {}, deadSet = {};
 		for (j = 0; j < n; j++) {
 			al[R.team.get(ev[j].v)]--;
 			deadSet[ev[j].v] = 1;
 			for (var t = 0; t < 2; t++) {
-				if (al[t] !== 1 || al[1 - t] < 1 || clutchSeen[t]) continue;
+				if (al[t] !== 1 || al[1 - t] !== 2 || clutchSeen[t]) continue;
 				var alive1 = null;
 				for (var q3 = 0; q3 < R.recs.length; q3++) {
 					var rc = R.recs[q3];
@@ -275,10 +280,11 @@ function hcAnalyze(stats, kills) {
 				}
 				if (!alive1) continue;
 				clutchSeen[t] = 1;
-				var cp = get(alive1), mm = mine.get(alive1);
+				var after = 0;
+				for (var q4 = j + 1; q4 < n; q4++) if (ev[q4].k === alive1) after++;
+				var cp = get(alive1);
 				cp.clutchOpp++;
-				if (R.winner === t) cp.clutchWins++;
-				if (mm) cp.clutchKills += mm.k;
+				if (after >= 2 && R.winner === t) { cp.clutchWins++; cp.clutchKills += after; }
 			}
 		}
 	}
@@ -464,22 +470,33 @@ function hcRpArchetype(L, g, md) {
 	return "혼합 순환형";
 }
 
-/* 플레이스타일 태그 */
+/* 플레이스타일 태그 — 경계값은 원본 스냅샷에서 보유자 구간을 뽑아 맞췄다.
+   원거리/광역후방/엔트리 셋은 원본에서도 교전 지표와 전혀 겹치지 않는다(보유자 구간이
+   비보유자를 통째로 덮는다) — 즉 플레이어 지표가 아니라 주력 캐릭터 유형에서 나온 라벨이다. */
 function hcRpTags(o, luck) {
-	var t = [];
-	if (o.score >= 90) t.push("하이퍼 캐리형"); else if (o.score >= 70) t.push("캐리형"); else if (o.score >= 40) t.push("균형형");
-	if (o.characterAdjustedOpeningRate > .02) t.push("엔트리형"); else if (o.openingDeathRate > .12) t.push("척후 교전형");
-	if (o.arrowKillShare >= .6) t.push("원거리 화력형");
-	if (o.skillKillShare >= .45) t.push("광역 후방 캐리형");
-	if (o.tradeKillShare >= .2) t.push("트레이드형");
+	var t = [], arch = (o.topCharacters || []).map(function (c) { return c.archetype; });
+	var hasArch = function (a) { return arch.indexOf(a) >= 0; };
+
+	if (o.score >= 90 && o.roleAdjusted >= 1.3) t.push("하이퍼 캐리형");
+	else if (o.score >= 70) t.push("캐리형");
+
+	if (hasArch("근접 교전형") || hasArch("근접 진입 연쇄형")) t.push("엔트리형");
+	if (hasArch("화살 순환형")) t.push("원거리 화력형");
+	if (hasArch("광역 스킬 혼합형") || hasArch("스킬 연쇄형")) t.push("광역 후방 캐리형");
+
+	if (o.openingRate >= .069) t.push("우선교전 우위");
+	if (o.openingConversionRate >= .65 && o.openingKills >= 15) t.push("선취 굳히기 우수");
+	if (o.lateEntryRate <= .33) t.push("척후 교전형");
+	if (o.tradeKillShare >= .21) t.push("트레이드형");
 	if (o.chainConversionRate >= .55) t.push("연속 처치형");
-	if (o.openingConversionRate >= .6 && o.openingKills >= 20) t.push("우선교전 우위");
-	if (o.openingReDeathRate <= .5 && o.openingKills >= 20) t.push("선취 굳히기 우수");
-	if (o.characterAdjustedRefillConversion >= .03) t.push("자원 연쇄 우수");
-	if (o.clutchRate >= .35 && o.clutchOpportunities >= 10) t.push("클러치력 높음");
-	if (o.highLeverageKillShare >= .5) t.push("고영향 교전형");
-	if (o.postSwitchKpr > o.preSwitchKpr * 1.25 && o.postSwitchKpr > 0) t.push("후반 스탯 편중");
-	if (luck) { if (luck.pct >= 90) t.push("매칭주작 수혜자"); else if (luck.pct <= 10) t.push("매칭주작 피해자"); }
+	if (o.refillPercentile >= 70) t.push("자원 연쇄 우수");
+	if (o.characterAdjustedWpa >= .01) t.push("고영향 교전형");
+	// 1v2 를 다 잡아내는 건 드물다 — 원본 분포도 중앙값 13%, 최대 37% 다.
+	if (o.clutchRate >= .25 && o.clutchOpportunities >= 10) t.push("클러치력 높음");
+	if (o.postSwitchKpr > o.preSwitchKpr * 1.25 && o.preSwitchKpr > 0) t.push("후반 스탯 편중");
+	if (luck) { if (luck.pct >= 70) t.push("매칭주작 수혜자"); else if (luck.pct <= 30) t.push("매칭주작 피해자"); }
+
+	if (!t.length) t.push("균형형");
 	return t;
 }
 
@@ -607,8 +624,8 @@ function hcReportOf(nick, stats, kills, meta, combat, luck) {
 	if (!o || o.logMatches < 5 || o.logRounds < 30) return null;
 	o.topCharacters = hcRpTopChars(o, meta, combat, all.chars, all.gmix);
 	o._topNames = o.topCharacters.map(function (c) { return c.name; }).join("·") || "-";
-	o.diagnosisItems = hcRpDiagnosis(o);
 	o.playstyleTags = hcRpTags(o, luck);
+	o.diagnosisItems = hcRpDiagnosis(o);
 	o.actualTier = hcRpTierName(o.actualPoint);
 	return o;
 }
