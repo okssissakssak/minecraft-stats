@@ -702,30 +702,69 @@ m.forEach(function(e){e.gap/=e.n;e.own/=e.n;e.opp/=e.n;e.ud/=e.n});
 _MXLUCK={n:a.length,m:m};
 return m}
 var _MXPOOL=null;
-/* 절대 gap 을 그대로 보여주면 "0.3 이 좋은 건가?"를 알 수 없다.
-   20판 이상 유저 전체 안에서의 백분위로 바꿔 5단계로 끊는다. */
+/* 전체 팀운 = 그 사람 경기별 팀운(매우 나쁨 1 ~ 매우 좋음 5)의 평균.
+   평균값 자체는 대부분 3 근처에 몰려서 "3.2 가 좋은 건가"를 알 수 없다 —
+   10판 이상 유저 전체 안의 백분위로 바꿔 원본 HTML 과 같은 영문 등급으로 보여준다.
+   (티어 기반 매칭 운은 hcLuckMM 이 따로 계산한다 — 매칭주작 태그가 그걸 쓴다.) */
 function hcLuckOf(nick,a){
-var m=hcLuckAll(a),e=m.get(nick);
-if(!e||e.n<10)return null;
+var st=hcMatchLuckAll(a),sum=0,n=0,good=0,bad=0,i,lv;
+var mine=st.each.get(nick);
+if(!mine||mine.length<5)return null;
+for(i=0;i<mine.length;i++){lv=mine[i];sum+=lv;n++;if(lv>=4)good++;if(lv<=2)bad++}
+var avg=sum/n;
 if(!_MXPOOL||_MXPOOL.n!==a.length){
 var v=[];
-m.forEach(function(x){if(x.n>=20)v.push(x.gap)});
+st.each.forEach(function(list){
+if(list.length<10)return;   // 기준선 풀은 10판 이상만
+var t=0;
+for(var j=0;j<list.length;j++)t+=list[j];
+v.push(t/list.length)});
 v.sort(function(p,q){return p-q});
 _MXPOOL={n:a.length,v:v}}
 var pv=_MXPOOL.v,lo=0,hi=pv.length;
-while(lo<hi){var mid=lo+hi>>1;pv[mid]<=e.gap?lo=mid+1:hi=mid}
+while(lo<hi){var mid=lo+hi>>1;pv[mid]<=avg?lo=mid+1:hi=mid}
 var pc=pv.length?lo/pv.length*100:50,
-lb=pc<10?["매우 나쁨","vbad"]:pc<30?["나쁨","bad"]:pc<70?["보통","mid"]:pc<90?["좋음","good"]:["매우 좋음","vgood"];
-return{gap:e.gap,games:e.n,own:e.own,opp:e.opp,ud:e.ud,pct:pc,label:lb[0],tone:lb[1]}}
+lb=_MXLV[pc<10?0:pc<30?1:pc<70?2:pc<90?3:4];
+return{avg:avg,games:n,good:good,bad:bad,pct:pc,label:lb.label,tone:lb.tone}}
+
+/* 티어 기반 매칭 운 — 매칭주작 수혜자/피해자 태그 전용.
+   "아군이 잘했나"(위)와 "매칭이 기울었나"(이쪽)는 다른 이야기라 따로 둔다. */
+var _MXMM=null,_MXMMP=null;
+function hcLuckMM(nick,a){
+if(!_MXMM||_MXMM.n!==a.length){
+var m=new Map(),i,j;
+for(i=0;i<a.length;i++){
+var rs=a[i][1],sum={},cnt={},v,w;
+for(j=0;j<rs.length;j++){v=hcTp(rs[j].tier);if(null==v)continue;w=rs[j].win;sum[w]=(sum[w]||0)+v;cnt[w]=(cnt[w]||0)+1}
+for(j=0;j<rs.length;j++){
+var r=rs[j];v=hcTp(r.tier);if(null==v)continue;
+w=r.win;var o=w?0:1;
+if(!(cnt[w]>1)||!(cnt[o]>0))continue;
+var d=(sum[w]-v)/(cnt[w]-1)-sum[o]/cnt[o],e=m.get(r.nickname)||{gap:0,n:0};
+e.gap+=d;e.n++;m.set(r.nickname,e)}}
+m.forEach(function(e){e.gap/=e.n});
+_MXMM={n:a.length,m:m};_MXMMP=null}
+var e2=_MXMM.m.get(nick);
+if(!e2||e2.n<10)return null;
+if(!_MXMMP){
+var pv2=[];
+_MXMM.m.forEach(function(x){if(x.n>=20)pv2.push(x.gap)});
+pv2.sort(function(p,q){return p-q});
+_MXMMP=pv2}
+var lo2=0,hi2=_MXMMP.length;
+while(lo2<hi2){var m2=lo2+hi2>>1;_MXMMP[m2]<=e2.gap?lo2=m2+1:hi2=m2}
+return{gap:e2.gap,games:e2.n,pct:_MXMMP.length?lo2/_MXMMP.length*100:50}}
+
 function hcLuckStrip(H,eg){
 var L=hcLuckOf(H.nickname,eg);
 if(!L)return null;
 return(0,s.jsxs)("div",{className:"spike-strip mx-luck-strip",children:[
 (0,s.jsx)("span",{children:"TEAM LUCK"}),
 (0,s.jsxs)("b",{className:"mx-luck mx-"+L.tone,children:[(0,s.jsx)("i",{children:"팀운"}),hcMxGrade(L.pct)]}),
-(0,s.jsxs)("b",{children:[(0,s.jsx)("i",{children:"점수"}),L.pct.toFixed(1)]}),
-(0,s.jsxs)("b",{children:[(0,s.jsx)("i",{children:"아군-상대 티어차"}),(L.gap>=0?"+":"")+L.gap.toFixed(2)]}),
-(0,s.jsxs)("b",{children:[(0,s.jsx)("i",{children:"불리"}),Math.round(100*L.ud)+"%"]}),
+(0,s.jsxs)("b",{className:"mx-"+L.tone,children:[(0,s.jsx)("i",{children:"평가"}),L.label]}),
+(0,s.jsxs)("b",{children:[(0,s.jsx)("i",{children:"경기 평균"}),L.avg.toFixed(2)+"/5"]}),
+(0,s.jsxs)("b",{children:[(0,s.jsx)("i",{children:"좋음 이상"}),Math.round(100*L.good/L.games)+"%"]}),
+(0,s.jsxs)("b",{children:[(0,s.jsx)("i",{children:"나쁨 이하"}),Math.round(100*L.bad/L.games)+"%"]}),
 (0,s.jsxs)("b",{className:"mx-luck-note",children:[(0,s.jsx)("i",{children:"표본"}),L.games+"판"]})]})}
 
 /* ── 경기별 팀운 ─────────────────────────────────────────────────
@@ -734,9 +773,9 @@ return(0,s.jsxs)("div",{className:"spike-strip mx-luck-strip",children:[
 var _MXMK=null;
 function hcMatchLuckAll(a){
 if(_MXMK&&_MXMK.n===a.length)return _MXMK;
-var m=new Map(),pool=[];
-for(var i=0;i<a.length;i++){
-var rs=a[i][1],K={},D={},C={},j,r,w;
+var m=new Map(),pool=[],i,j,r,w;
+for(i=0;i<a.length;i++){
+var rs=a[i][1],K={},D={},C={};
 for(j=0;j<rs.length;j++){r=rs[j];w=r.win;K[w]=(K[w]||0)+(r.kill||0);D[w]=(D[w]||0)+(r.death||0);C[w]=(C[w]||0)+1}
 for(j=0;j<rs.length;j++){
 r=rs[j];w=r.win;
@@ -744,15 +783,25 @@ if(!(C[w]>2))continue;
 var v=(K[w]-(r.kill||0))/Math.max(1,D[w]-(r.death||0));
 m.set(a[i][0]+"|"+r.nickname,v);pool.push(v)}}
 pool.sort(function(x,y){return x-y});
-_MXMK={n:a.length,m:m,pool:pool};
+// 값이 정해졌으니 각 경기의 등급(1~5)을 확정하고 사람별로 모은다. 전체 팀운이 이걸 평균낸다.
+var each=new Map();
+m.forEach(function(v,key){
+var lo=0,hi=pool.length;
+while(lo<hi){var mid=lo+hi>>1;pool[mid]<=v?lo=mid+1:hi=mid}
+var pc=lo/pool.length*100,lv=pc<10?1:pc<30?2:pc<70?3:pc<90?4:5,
+nick=key.slice(key.indexOf("|")+1),arr=each.get(nick);
+if(!arr){arr=[];each.set(nick,arr)}
+arr.push(lv)});
+_MXMK={n:a.length,m:m,pool:pool,each:each};
 return _MXMK}
+var _MXLV=[{label:"매우 나쁨",tone:"vbad",v:1},{label:"나쁨",tone:"bad",v:2},{label:"보통",tone:"mid",v:3},{label:"좋음",tone:"good",v:4},{label:"매우 좋음",tone:"vgood",v:5}];
 function hcMatchLuck(gn,nick,a){
 var st=hcMatchLuckAll(a),v=st.m.get(gn+"|"+nick);
 if(void 0===v)return null;
 var p=st.pool,lo=0,hi=p.length;
 while(lo<hi){var mid=lo+hi>>1;p[mid]<=v?lo=mid+1:hi=mid}
 var pc=lo/p.length*100;
-return pc<10?{label:"매우 나쁨",tone:"vbad"}:pc<30?{label:"나쁨",tone:"bad"}:pc<70?{label:"보통",tone:"mid"}:pc<90?{label:"좋음",tone:"good"}:{label:"매우 좋음",tone:"vgood"}}
+return _MXLV[pc<10?0:pc<30?1:pc<70?2:pc<90?3:4]}
 function hcMatchLuckChip(rec,eg){
 var L=hcMatchLuck(rec.gamenumber,rec.nickname,eg);
 if(!L)return null;
@@ -762,12 +811,18 @@ return(0,s.jsxs)("span",{className:"mx-mluck mx-"+L.tone,children:[(0,s.jsx)("i"
    전적(stats.json) + 킬로그(killlog.json)로 매 방문 직접 계산한다.
    계산은 hcReportAll 이 전 플레이어를 한 번에 처리하고 캐시한다(전체 150ms 안팎). */
 var _MXDEFS=[
-{k:"characterAdjustedWpa",l:"보정 영향",raw:"캐릭터 보정 영향",high:1,f:"delta"},
-{k:"roleAdjusted",l:"보정 화력",raw:"캐릭터 보정 화력",high:1,f:"ratio"},
-{k:"characterAdjustedRefillConversion",l:"리필 연쇄",raw:"리필 연쇄 보정",high:1,f:"delta"},
-{k:"openingConversionRate",l:"선취 전환",raw:"선취 승리 전환",high:1,f:"pct"},
-{k:"deathTradedRate",l:"데스 교환",raw:"데스 교환",high:1,f:"pct"},
-{k:"lateEntryRate",l:"합류 속도",raw:"교전 합류 속도",high:0,f:"pct"}];
+{k:"characterAdjustedWpa",l:"보정 영향",raw:"캐릭터 보정 영향",high:1,f:"delta",
+ d:"내 킬과 데스가 라운드 승률을 얼마나 움직였는지를 같은 캐릭터 평균과 견준 차이."},
+{k:"roleAdjusted",l:"보정 화력",raw:"캐릭터 보정 화력",high:1,f:"ratio",
+ d:"라운드당 킬 수를 같은 캐릭터 평균으로 나눈 배수. 1.00 이 평균."},
+{k:"characterAdjustedRefillConversion",l:"리필 연쇄",raw:"리필 연쇄 보정",high:1,f:"delta",
+ d:"킬로 화살·궁을 돌려받은 뒤 죽기 전에 또 킬한 비율을 같은 캐릭터 평균과 견준 차이."},
+{k:"openingConversionRate",l:"선취 전환",raw:"선취 승리 전환",high:1,f:"pct",
+ d:"라운드 첫 킬을 낸 뒤 그 라운드를 이긴 비율."},
+{k:"deathTradedRate",l:"데스 교환",raw:"데스 교환",high:1,f:"pct",
+ d:"내가 죽은 뒤 곧바로 팀원이 내 킬러를 잡아 준 비율."},
+{k:"lateEntryRate",l:"합류 속도",raw:"교전 합류 속도",high:0,f:"pct",
+ d:"아군 3명이 쓰러진 뒤에야 싸움에 낀 라운드 비율. 낮을수록 좋아 차트에서는 뒤집어 표시한다."}];
 function hcMxQ(all,o,d){
 var pool=all.pools[d.k];
 if(!pool||!pool.length)return 50;
@@ -808,7 +863,7 @@ function hcMxSection(H,eg,kills,meta){
 if(!eg||!eg.length||!kills)return null;
 var stats=hcFlatGames(eg),
 luck=hcLuckOf(H.nickname,eg),
-p=hcReportOf(H.nickname,stats,kills,meta,luck);
+p=hcReportOf(H.nickname,stats,kills,meta,hcLuckMM(H.nickname,eg));
 if(!p)return null;
 var head=(0,s.jsxs)("div",{className:"section-head profile-section-head",children:[
 (0,s.jsxs)("div",{children:[
@@ -846,19 +901,23 @@ return(0,s.jsxs)(s.Fragment,{children:[head,
 (0,s.jsxs)("div",{children:[
 (0,s.jsx)("small",{children:"개인 실력 지수"}),
 (0,s.jsx)("strong",{children:p.score.toFixed(1)}),
-(0,s.jsxs)("span",{children:["전체 상위 ",(100-p.score).toFixed(1),"%"]})]}),
+(0,s.jsxs)("span",{children:["전체 상위 ",(100-p.score).toFixed(1),"%"]}),
+(0,s.jsx)("em",{className:"mx-def",children:"승리 영향·킬 연쇄·화력 백분위를 3:5:2로 합쳐 전체 유저 중 순위로 매긴 값."})]}),
 (0,s.jsxs)("div",{children:[
 (0,s.jsx)("small",{children:"실제 / 추정 티어"}),
 hcMxTier(p.actualPoint,p.actualTier,!0),
-(0,s.jsxs)("span",{children:["추정 ",p.skillTier," · ",p.skillLowTier,"–",p.skillHighTier]})]}),
+(0,s.jsxs)("span",{children:["추정 ",p.skillTier," · ",p.skillLowTier,"–",p.skillHighTier]}),
+(0,s.jsx)("em",{className:"mx-def",children:"실제는 최근 경기의 티어, 추정은 교전 지표로 역산한 티어. 뒤 범위는 표본에 따른 오차 구간."})]}),
 (0,s.jsxs)("div",{children:[
 (0,s.jsx)("small",{children:"기대 승률"}),
 (0,s.jsxs)("strong",{children:[p.forecastWinRate.toFixed(1),"%"]}),
-(0,s.jsxs)("span",{children:[p.forecastLow.toFixed(1),"–",p.forecastHigh.toFixed(1),"% · 실제 ",p.winRate.toFixed(1),"%"]})]}),
+(0,s.jsxs)("span",{children:[p.forecastLow.toFixed(1),"–",p.forecastHigh.toFixed(1),"% · 실제 ",p.winRate.toFixed(1),"%"]}),
+(0,s.jsx)("em",{className:"mx-def",children:"개인 실력 지수로 환산한 장기 승률 예상치. 뒤는 오차 구간과 실제 승률."})]}),
 (0,s.jsxs)("div",{children:[
 (0,s.jsx)("small",{children:"킬 보상 연쇄"}),
 (0,s.jsxs)("strong",{children:[(100*p.refillConversionRate).toFixed(1),"%"]}),
-(0,s.jsxs)("span",{children:["캐릭터 대비 ",(p.characterAdjustedRefillConversion>=0?"+":"")+(100*p.characterAdjustedRefillConversion).toFixed(1),"%p"]})]})]}),
+(0,s.jsxs)("span",{children:["캐릭터 대비 ",(p.characterAdjustedRefillConversion>=0?"+":"")+(100*p.characterAdjustedRefillConversion).toFixed(1),"%p"]}),
+(0,s.jsx)("em",{className:"mx-def",children:"킬로 화살·궁을 돌려받은 뒤 죽기 전에 또 킬한 비율."})]})]}),
 (0,s.jsxs)("div",{className:"mx-body",children:[
 (0,s.jsxs)("div",{className:"mx-radarbox",children:[
 (0,s.jsxs)("div",{className:"mx-radartitle",children:[
@@ -869,7 +928,8 @@ hcMxRadar(vals)]}),
 return(0,s.jsxs)("div",{className:"mx-metric",children:[
 (0,s.jsxs)("small",{children:[d.raw,(0,s.jsx)("b",{className:"mx-grade",children:hcMxGrade(vals[i])})]}),
 (0,s.jsx)("strong",{children:hcMxFmt(p[d.k],d.f)}),
-(0,s.jsxs)("span",{children:[vals[i].toFixed(0),"백분위"]})]},d.k)})})]}),
+(0,s.jsxs)("span",{children:[vals[i].toFixed(0),"백분위"]}),
+(0,s.jsx)("em",{className:"mx-def",children:d.d})]},d.k)})})]}),
 (0,s.jsxs)("div",{className:"mx-tags",children:[
 (0,s.jsx)("span",{className:"mx-tag mx-tag-"+p.commentTone,children:p.commentLabel}),
 p.playstyleTags.map(function(t){
