@@ -70,6 +70,15 @@ function hcAnRounds(stats, kills) {
 			size[recs[j].win] = (size[recs[j].win] || 0) + 1;
 		}
 		if (!(size[0] > 0) || !(size[1] > 0)) continue;
+		// 교전 참여 로그(딜을 넣은 라운드). 데이터팩이 이 기능을 갖추기 전 경기에는 없다 —
+		// 없으면 eng 가 null 이 되고 아래 판정이 통째로 옛 방식(킬로그만)으로 되돌아간다.
+		var engByRound = new Map();
+		if (kills[i].eng) for (j = 0; j < kills[i].eng.length; j++) {
+			var er = kills[i].eng[j], em = new Map(), q;
+			if (!er || !er.e) continue;
+			for (q = 0; q < er.e.length; q++) if (team.has(er.e[q][0])) em.set(er.e[q][0], er.e[q][1]);
+			if (em.size) engByRound.set(er.r, em);
+		}
 		var rounds = new Map(), ev = kills[i].kills;
 		for (j = 0; j < ev.length; j++) {
 			var e = ev[j];
@@ -87,7 +96,7 @@ function hcAnRounds(stats, kills) {
 			else if (dead[1] >= size[1] && dead[0] < size[0]) winner = 0;
 			else if (dead[0] !== dead[1]) winner = dead[0] < dead[1] ? 0 : 1;
 			else winner = last;
-			out.push({ game: gn, round: rno, ev: list, team: team, size: size, winner: winner, recs: recs });
+			out.push({ game: gn, round: rno, ev: list, team: team, size: size, winner: winner, recs: recs, eng: engByRound.get(rno) || null });
 		});
 	}
 	return out;
@@ -134,6 +143,7 @@ function hcAnBlank(nick) {
 		refillOpp: 0, refillConv: 0, refillArrow: 0, refillSkill: 0, refillMelee: 0,
 		collapseKills: 0, garbageKills: 0, highLeverageKills: 0,
 		lateEntryRounds: 0, firstInvolvementSum: 0, firstInvolvementRounds: 0,
+		engageRounds: 0, engRounds: 0,
 		clutchOpp: 0, clutchWins: 0, clutchKills: 0,
 		preKills: 0, postKills: 0, preRounds: 0, postRounds: 0,
 		killWpa: 0, deathWpa: 0, charRounds: new Map(), charGames: new Map(), charKills: new Map(), charLogGames: new Map()
@@ -179,6 +189,7 @@ function hcAnalyze(stats, kills) {
 			var pp = get(R.recs[j].nickname);
 			if (!seenMatch.has(hcAnKey(R.game, R.recs[j].nickname))) { seenMatch.set(hcAnKey(R.game, R.recs[j].nickname), 1); pp.logMatches++; }
 			pp.logRounds++;
+			if (R.eng) pp.engRounds++;
 			if (R.round <= 6) pp.preRounds++; else pp.postRounds++;
 			var ch = charMap.get(hcAnKey(R.game, R.recs[j].nickname));
 			if (ch) {
@@ -228,11 +239,19 @@ function hcAnalyze(stats, kills) {
 			if (mv.first < 0) mv.first = j;
 			if (mv.died < 0) mv.died = j;
 		}
+		// 딜을 넣었으면 킬·데스가 없어도 교전에 참여한 것이다. 옛 판정은 킬로그에 이름이
+		// 없다는 이유만으로 이런 라운드를 통째로 '늦은 합류'로 깔았다(아래 마지막 줄).
+		// touch 로 mine 에 올리기만 한다 — first 는 -1 그대로라 킬 순서 기반 지표는 안 건드린다.
+		if (R.eng) R.eng.forEach(function (tick, nick) {
+			var m = touch(nick);
+			if (m.eng === undefined) m.eng = tick;
+		});
 		// 라운드 단위 집계
 		var self = R;
 		mine.forEach(function (m, nick) {
 			var p2 = get(nick), myTeam = R.team.get(nick);
 			if (m.k > 0) { p2.killRounds++; if (m.k >= 2) p2.multiKillRounds++; }
+			if (m.eng !== undefined) p2.engageRounds++;
 			if (m.first >= 0) {
 				p2.firstInvolvementRounds++;
 				p2.firstInvolvementSum += n > 1 ? m.first / (n - 1) : 0;
@@ -259,7 +278,9 @@ function hcAnalyze(stats, kills) {
 			// 첫 킬을 낸 뒤 그 라운드에서 죽었나
 			if (m.kIdx.length && m.kIdx[0].i === 0 && m.died > 0) p2.openingReDeaths++;
 		});
-		// 참여 안 한 라운드도 '늦은 합류'로 센다
+		// 참여 안 한 라운드도 '늦은 합류'로 센다.
+		// mine 에는 킬·데스를 낸 사람에 더해 위에서 올린 '딜만 넣은 사람'도 들어 있으므로,
+		// 참여 로그가 있는 경기에서는 교전 흔적이 정말 하나도 없는 라운드만 여기 걸린다.
 		for (j = 0; j < R.recs.length; j++) if (!mine.has(R.recs[j].nickname)) get(R.recs[j].nickname).lateEntryRounds++;
 		// 클러치 — 원본 분석기의 정의를 역산해 맞춘 것이다.
 		//   기회: 우리 팀에 나 혼자 남고 상대가 "정확히 2명"인 순간(라운드·팀당 1회)
@@ -374,6 +395,8 @@ function hcReportAll(stats, kills) {
 				garbageKillShare: hcRpDiv(p.garbageKills, K),
 				highLeverageKillShare: hcRpDiv(p.highLeverageKills, K),
 				lateEntryRate: hcRpDiv(p.lateEntryRounds, R),
+				engageRate: hcRpDiv(p.engageRounds, p.engRounds),
+				engRounds: p.engRounds,
 				avgFirstInvolvementPosition: hcRpDiv(p.firstInvolvementSum, p.firstInvolvementRounds),
 				clutchOpportunities: p.clutchOpp, clutchWins: p.clutchWins,
 				clutchRate: hcRpDiv(p.clutchWins, p.clutchOpp),
@@ -554,9 +577,11 @@ function hcRpDiagnosis(o) {
 	if (o.logRounds >= 60) cands.push({
 		key: "late", bad: o.lateEntryRate, tone: o.lateEntryRate > .5 ? "bad" : "warn",
 		title: "팀 싸움에 빨리 들어가기",
-		finding: "팀원 3명이 쓰러진 다음에야 싸우기 시작한 라운드가 " + pct(o.lateEntryRate) + "%입니다.",
+		finding: "딜 한 번 넣지 못했거나, 팀원 3명이 쓰러진 다음에야 싸우기 시작한 라운드가 " + pct(o.lateEntryRate) + "%입니다.",
 		action: "팀원 두 명이 쓰러지기 전에 첫 화살을 쓰세요. 다 죽은 뒤의 킬보다 지금 돕는 킬이 더 중요합니다.",
-		evidence: "확인한 교전 라운드 " + o.logRounds + "개", label: "팀 싸움 합류가 늦음"
+		evidence: o.engRounds >= 20
+			? "확인한 교전 라운드 " + o.logRounds + "개 · 그중 " + o.engRounds + "개는 딜 기록이 있어 킬이 없어도 참여로 셉니다"
+			: "확인한 교전 라운드 " + o.logRounds + "개", label: "팀 싸움 합류가 늦음"
 	});
 	if (o.refillOpportunities >= 30) cands.push({
 		key: "refill", bad: -o.characterAdjustedRefillConversion, tone: o.characterAdjustedRefillConversion < -.05 ? "bad" : "warn",
