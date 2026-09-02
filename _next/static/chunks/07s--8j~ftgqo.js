@@ -506,12 +506,27 @@ function hcReportAll(stats, kills) {
 		o.forecastHigh = hcRpClamp(o.forecastWinRate + half, 1, 99);
 		o.analysisGames = o.totalGames;
 	});
-	// 육각 차트 6지표의 백분위 기준 풀
-	var pools = {};
-	for (var di = 0; di < _MXDEFS.length; di++) {
-		var key = _MXDEFS[di].k;
+	// 백분위 기준 풀. 육각 6지표 + 역할·강점 판정에 쓰는 지표들.
+	// 절대 경계값을 박으면 서버 메타가 바뀔 때마다 손봐야 하므로 전부 상대값으로 읽는다.
+	var pools = {}, poolKeys = [], di;
+	for (di = 0; di < _MXDEFS.length; di++) poolKeys.push(_MXDEFS[di].k);
+	poolKeys = poolKeys.concat(["kpr", "kd", "winRate", "roleAdjusted", "openingRate",
+		"tradeKillShare", "clutchRate", "roundImpactRate", "chainConversionRate",
+		"highLeverageKillShare", "garbageKillShare", "collapseKillShare", "openingReDeathRate",
+		"openingDeathRate", "deathTradedRate",
+		"arrowKillShare", "skillKillShare", "meleeKillShare", "arrowDeathShare",
+		"refillConversionRate", "wpaPerRound"]);
+	for (di = 0; di < poolKeys.length; di++) {
+		var key = poolKeys[di];
+		if (pools[key]) continue;
 		pools[key] = pool.map(function (o) { return o[key]; }).sort(function (a, b) { return a - b; });
 	}
+	// 진단 함수는 o 하나만 받으므로 필요한 백분위를 미리 담아 둔다.
+	out.forEach(function (o) {
+		var pc = {}, q;
+		for (q = 0; q < poolKeys.length; q++) pc[poolKeys[q]] = hcRpPercentile(pools[poolKeys[q]], o[poolKeys[q]]);
+		o._pct = pc;
+	});
 	var ga = 0, gs = 0, gm = 0;
 	chars.forEach(function (L) { ga += L.a; gs += L.s; gm += L.m; });
 	var gt = ga + gs + gm || 1;
@@ -597,27 +612,88 @@ function hcRpTags(o, luck) {
 function hcRpDiagnosis(o) {
 	var pct = function (v) { return Math.round(v * 100); }, items = [];
 
-	// 1) 역할
-	var lead = o.characterAdjustedOpeningRate > .015;
-	items.push({
-		kind: "role", tone: "info",
-		title: lead ? "잘 맞는 역할" : "자주 하는 역할",
-		finding: lead ? "앞에서 먼저 들어가 적의 시선을 끄는 역할이 잘 맞습니다." : "여러 상황에 맞춰 싸우는 편입니다.",
-		action: lead ? "혼자 너무 멀리 가지 말고, 바로 뒤에서 팀원이 화살을 쏠 수 있을 때 들어가세요."
-			: "가장 많이 한 캐릭터의 좋은 거리와 싸움 순서를 먼저 익히세요.",
+	// 1) 역할 — 서버 전체와 견줘 가장 두드러진 축 하나를 고른다.
+	//    절대 경계 대신 백분위를 쓰므로 메타가 바뀌어도 문구가 따라 움직인다.
+	var rc = o._pct || {}, top = function (v) { return Math.max(1, Math.round(100 - v)); };
+	var roles = [
+		{ key: "openingRate", p: rc.openingRate, ok: o.openingKills >= 10, title: "먼저 여는 역할",
+			finding: "라운드의 첫 킬을 내는 비율이 서버 상위 " + top(rc.openingRate) + "%입니다.",
+			action: "먼저 여는 사람은 죽는 것도 먼저입니다. 팀원이 따라올 수 있는 자리에서 여세요." },
+		{ key: "tradeKillShare", p: rc.tradeKillShare, ok: o.logKills >= 40, title: "받아치는 역할",
+			finding: "팀원을 잡은 상대를 곧바로 되갚는 킬이 서버 상위 " + top(rc.tradeKillShare) + "%입니다.",
+			action: "먼저 열기보다 두 번째로 들어갈 때 강합니다. 팀원이 여는 순간 시야에 들어가 있으세요." },
+		{ key: "highLeverageKillShare", p: rc.highLeverageKillShare, ok: o.logKills >= 40, title: "박빙을 가르는 역할",
+			finding: "인원이 팽팽할 때 내는 킬의 비중이 서버 상위 " + top(rc.highLeverageKillShare) + "%입니다.",
+			action: "이 구간에서 강하니, 수가 맞을 때 아끼지 말고 궁과 화살을 쓰세요." },
+		{ key: "clutchRate", p: rc.clutchRate, ok: o.clutchOpportunities >= 10, title: "끝을 맡는 역할",
+			finding: "혼자 남은 상황을 뒤집는 비율이 서버 상위 " + top(rc.clutchRate) + "%입니다.",
+			action: "마지막까지 살아 있는 게 강점입니다. 중반에 무리해서 그 상황 자체를 없애지 마세요." },
+		{ key: "roundImpactRate", p: rc.roundImpactRate, ok: o.logRounds >= 60, title: "꾸준히 관여하는 역할",
+			finding: "킬을 하나라도 낸 라운드의 비율이 서버 상위 " + top(rc.roundImpactRate) + "%입니다.",
+			action: "빠지는 라운드가 적은 게 강점입니다. 한 번에 크게 내려 하지 말고 지금 리듬을 유지하세요." },
+		{ key: "chainConversionRate", p: rc.chainConversionRate, ok: o.logKills >= 40, title: "몰아치는 역할",
+			finding: "한 라운드에 둘 이상 잡는 비율이 서버 상위 " + top(rc.chainConversionRate) + "%입니다.",
+			action: "첫 킬 뒤가 강합니다. 킬 직후 자리를 바꿔 두 번째를 노릴 각을 미리 잡아 두세요." },
+		{ key: "lateEntryRate", p: 100 - (rc.lateEntryRate === undefined ? 50 : rc.lateEntryRate), ok: o.logRounds >= 60,
+			title: "먼저 닿는 역할",
+			finding: "팀 싸움에 늦게 붙는 라운드가 서버에서 가장 적은 축입니다.",
+			action: "합류가 빠른 만큼 혼자 닿는 일도 잦습니다. 도착 순서보다 함께 도착하는지를 보세요." },
+		{ key: "garbageKillShare", p: rc.garbageKillShare, ok: o.logKills >= 40, title: "기운 판을 굳히는 역할",
+			finding: "이미 앞선 상황에서 마무리하는 킬의 비중이 서버 상위 " + top(rc.garbageKillShare) + "%입니다.",
+			action: "정리는 확실합니다. 다만 승부가 갈리기 전에 한 번 더 관여하면 판 자체가 쉬워집니다." },
+		{ key: "collapseKillShare", p: rc.collapseKillShare, ok: o.logKills >= 40, title: "무너진 뒤를 버티는 역할",
+			finding: "팀이 밀린 뒤에도 킬을 만들어 내는 비중이 서버 상위 " + top(rc.collapseKillShare) + "%입니다.",
+			action: "끝까지 싸우는 건 강점이지만, 그 전에 한 명이라도 살렸으면 안 왔을 상황입니다." }
+	];
+	var pick = null;
+	for (var ri = 0; ri < roles.length; ri++) {
+		var rr = roles[ri];
+		if (!rr.ok || rr.p === undefined || rr.p < 75) continue;
+		if (!pick || rr.p > pick.p) pick = rr;
+	}
+	var roleKey = pick ? pick.key : null;
+
+	// 1-2) 무엇으로 죽이는지 — 위 역할과 축이 달라 따로 낸다. 먼저 정해 두는 이유는 아래 폴백 때문이다.
+	var wpick = null;
+	if (o.logKills >= 60) {
+		var wp = [
+			{ p: rc.arrowKillShare, title: "화살로 푸는 유형",
+				finding: "킬의 " + pct(o.arrowKillShare) + "%가 화살입니다. 서버에서 화살 비중 상위 " + top(rc.arrowKillShare) + "%입니다.",
+				action: "각을 먼저 잡는 싸움이 잘 맞습니다. 상대가 붙기 전에 쏠 자리를 미리 정해 두세요." },
+			{ p: rc.skillKillShare, title: "스킬로 푸는 유형",
+				finding: "킬의 " + pct(o.skillKillShare) + "%가 스킬입니다. 서버에서 스킬 비중 상위 " + top(rc.skillKillShare) + "%입니다.",
+				action: "쿨타임이 곧 화력입니다. 스킬이 도는 시점에 싸움을 걸고, 빠졌으면 물러나세요." },
+			{ p: rc.meleeKillShare, title: "붙어서 푸는 유형",
+				finding: "킬의 " + pct(o.meleeKillShare) + "%가 근접입니다. 서버에서 근접 비중 상위 " + top(rc.meleeKillShare) + "%입니다.",
+				action: "거리를 좁히는 순간이 승부입니다. 도주기를 남겨 두고 들어가세요." }
+		];
+		for (var wi = 0; wi < wp.length; wi++) if (wp[wi].p !== undefined && wp[wi].p >= 80 && (!wpick || wp[wi].p > wpick.p)) wpick = wp[wi];
+	}
+	// 교전 역할이 뚜렷하지 않은데 무기 성향은 뚜렷하면, "치우치지 않는다"는 폴백이
+	// 바로 아래 "근접 비중 상위 3%" 와 어긋난다 — 그럴 땐 폴백을 넣지 않는다.
+	if (pick) items.push({
+		kind: "role", tone: "info", title: pick.title, finding: pick.finding, action: pick.action,
 		evidence: "주력 캐릭터: " + o._topNames
 	});
+	else if (!wpick) items.push({
+		kind: "role", tone: "info", title: "자주 하는 역할",
+		finding: "한쪽으로 치우치지 않고 여러 상황에 맞춰 싸우는 편입니다.",
+		action: "가장 많이 한 캐릭터의 좋은 거리와 싸움 순서를 먼저 익히세요.",
+		evidence: "주력 캐릭터: " + o._topNames
+	});
+	if (wpick) items.push({ kind: "role", tone: "info", title: wpick.title, finding: wpick.finding,
+		action: wpick.action, evidence: "확인한 킬 " + o.logKills + "회" });
 
 	// 2) 고칠 점 후보 — 나쁜 순으로 최대 2개
 	var cands = [];
-	if (o.logDeaths >= 30) cands.push({
+	if (o.logDeaths >= 30 && rc.deathTradedRate <= 55) cands.push({
 		key: "trade", bad: .5 - o.deathTradedRate, tone: o.deathTradedRate < .18 ? "bad" : "warn",
 		title: "혼자 죽는 싸움 줄이기",
 		finding: "내가 죽은 뒤 팀원이 바로 되갚아 준 비율은 " + pct(o.deathTradedRate) + "%입니다.",
 		action: "팀원 한 명과 같은 적을 보세요. 내가 죽어도 팀원이 바로 쏠 수 있는 거리에서 싸우세요.",
 		evidence: "확인한 데스 " + o.logDeaths + "회", label: "혼자 죽는 싸움 많음"
 	});
-	if (o.logRounds >= 60) cands.push({
+	if (o.logRounds >= 60 && rc.lateEntryRate >= 45) cands.push({
 		key: "late", bad: o.lateEntryRate, tone: o.lateEntryRate > .5 ? "bad" : "warn",
 		title: "팀 싸움에 빨리 들어가기",
 		finding: "딜 한 번 넣지 못했거나, 팀원 3명이 쓰러진 다음에야 싸우기 시작한 라운드가 " + pct(o.lateEntryRate) + "%입니다.",
@@ -634,28 +710,28 @@ function hcRpDiagnosis(o) {
 		evidence: "같은 캐릭터 평균보다 " + Math.abs(Math.round(o.characterAdjustedRefillConversion * 1000) / 10) + "%p "
 			+ (o.characterAdjustedRefillConversion < 0 ? "낮음" : "높음"), label: "킬 다음 행동 필요"
 	});
-	if (o.logRounds >= 60) cands.push({
+	if (o.logRounds >= 60 && rc.openingDeathRate >= 55) cands.push({
 		key: "firstdeath", bad: o.openingDeathRate * 3, tone: o.openingDeathRate > .1 ? "bad" : "warn",
 		title: "첫 번째로 죽지 않기",
 		finding: "라운드에서 가장 먼저 죽은 비율은 " + (Math.round(o.openingDeathRate * 1000) / 10) + "%입니다.",
 		action: "매번 같은 길로 먼저 가지 마세요. 팀원이 바로 도와줄 수 있을 때만 앞에 서세요.",
 		evidence: "확인한 라운드 " + o.logRounds + "개", label: "첫 킬 뒤 무리함"
 	});
-	if (o.openingKills >= 10) cands.push({
+	if (o.openingKills >= 10 && rc.openingConversionRate <= 50) cands.push({
 		key: "opening", bad: .65 - o.openingConversionRate, tone: o.openingConversionRate < .5 ? "bad" : "warn",
 		title: "첫 킬 지키기",
 		finding: "첫 킬을 만든 뒤 라운드를 이긴 비율은 " + pct(o.openingConversionRate) + "%입니다.",
 		action: "첫 킬을 했으면 바로 또 나가지 마세요. 팀원 옆에서 남은 적을 기다리세요.",
 		evidence: "확인 가능한 라운드 " + o.openingKills + "개", label: "첫 킬 뒤 무리함"
 	});
-	if (o.logRounds >= 60) cands.push({
+	if (o.logRounds >= 60 && rc.roundImpactRate <= 45) cands.push({
 		key: "impact", bad: .55 - o.roundImpactRate, tone: o.roundImpactRate < .35 ? "bad" : "warn",
 		title: "싸움에 더 자주 참여하기",
 		finding: "킬을 하나라도 만든 라운드는 전체의 " + pct(o.roundImpactRate) + "%입니다.",
 		action: "화살을 너무 오래 아끼지 마세요. 팀 싸움이 시작되면 한 발은 꼭 사용하세요.",
 		evidence: "확인한 라운드 " + o.logRounds + "개", label: "싸움 영향이 부족함"
 	});
-	if (o.logKills >= 40) cands.push({
+	if (o.logKills >= 40 && rc.collapseKillShare >= 55) cands.push({
 		key: "collapse", bad: o.collapseKillShare * 2, tone: o.collapseKillShare > .18 ? "bad" : "warn",
 		title: "늦게 얻는 킬 줄이기",
 		finding: "우리 팀이 크게 밀린 뒤에 얻은 킬이 전체 킬의 " + pct(o.collapseKillShare) + "%입니다.",
@@ -707,46 +783,137 @@ function hcRpDiagnosis(o) {
 		action: "빗나갈 각도에서 먼저 쏘지 마세요. 상대가 멈추거나 착지하는 순간까지 기다렸다 쏘는 편이 낫습니다.",
 		evidence: "확인한 발사 " + o.bowShots + "회", label: "화살 명중률 낮음"
 	});
+	// 킬은 잘 내는데 판을 못 이기는 경우. 두 백분위의 격차로 본다.
+	if (o.logRounds >= 60 && rc.kd !== undefined && rc.kd - rc.winRate >= 25) cands.push({
+		key: "statwin", bad: (rc.kd - rc.winRate) / 100, tone: rc.kd - rc.winRate >= 40 ? "bad" : "warn",
+		title: "스탯보다 승리 챙기기",
+		finding: "K/D 는 전체 상위 " + top(rc.kd) + "%인데 승률은 상위 " + top(rc.winRate) + "%에 그칩니다.",
+		action: "이길 수 있는 싸움과 이겨도 판이 안 바뀌는 싸움을 구분하세요. 수가 밀릴 때는 킬보다 생존이 승리에 가깝습니다.",
+		evidence: "확인한 라운드 " + o.logRounds + "개", label: "스탯 대비 승률 낮음"
+	});
+	// 이미 갈린 판에서만 킬이 몰리는 경우 — collapse(밀린 뒤)와 방향이 반대다.
+	if (o.logKills >= 60 && rc.garbageKillShare >= 80) cands.push({
+		key: "garbage", bad: (rc.garbageKillShare - 60) / 120, tone: rc.garbageKillShare >= 90 ? "bad" : "warn",
+		title: "이긴 뒤 말고 갈리기 전에",
+		finding: "이미 크게 앞선 뒤에 얻은 킬이 전체 킬의 " + pct(o.garbageKillShare) + "%입니다.",
+		action: "승부가 갈린 다음의 킬은 판을 바꾸지 않습니다. 수가 맞을 때 한 번 더 개입하세요.",
+		evidence: "확인한 킬 " + o.logKills + "회", label: "갈린 뒤 킬 편중"
+	});
+	// 팽팽한 국면에 기여가 적은 경우
+	if (o.logKills >= 60 && rc.highLeverageKillShare !== undefined && rc.highLeverageKillShare <= 25) cands.push({
+		key: "leverage", bad: (30 - rc.highLeverageKillShare) / 100, tone: rc.highLeverageKillShare <= 15 ? "bad" : "warn",
+		title: "팽팽할 때 한 명 더",
+		finding: "인원이 비슷한 국면에서 내는 킬의 비중이 서버 하위 " + Math.max(1, Math.round(rc.highLeverageKillShare)) + "%입니다.",
+		action: "수가 맞을 때 궁과 화살을 아끼지 마세요. 그 구간의 킬 하나가 갈린 뒤의 킬 셋보다 큽니다.",
+		evidence: "확인한 킬 " + o.logKills + "회", label: "승부처 기여 부족"
+	});
+	// 첫 킬을 내고도 그 라운드에 되죽는 경우
+	if (o.openingKills >= 15 && rc.openingReDeathRate >= 75) cands.push({
+		key: "openredeath", bad: (rc.openingReDeathRate - 50) / 100, tone: rc.openingReDeathRate >= 88 ? "bad" : "warn",
+		title: "첫 킬 내고 되죽지 않기",
+		finding: "라운드 첫 킬을 낸 뒤 그 라운드에서 죽는 비율이 " + pct(o.openingReDeathRate) + "%입니다.",
+		action: "첫 킬 직후가 가장 위험합니다. 잡자마자 같은 자리에서 다음 상대를 보지 말고 한 번 빠지세요.",
+		evidence: "첫 킬 " + o.openingKills + "회", label: "첫 킬 뒤 되죽음"
+	});
 	cands.sort(function (a, b) { return b.bad - a.bad; });
-	var picks = cands.filter(function (c) { return c.bad > 0; }).slice(0, 2);
+	var picks = cands.filter(function (c) { return c.bad > 0; }).slice(0, 3);
 
-	// 3) 잘하는 점 / 총평
-	var strength = null;
-	if (o.characterAdjustedWpa > 0 && o.wpaPercentile >= 60) strength = {
-		kind: "strength", tone: "good", title: "승리에 도움이 되는 싸움",
+	// 3) 잘하는 점 — 조건을 만족하는 걸 모두 모아 두드러진 순으로 최대 2개 낸다.
+	//    예전에는 else-if 체인이라 아무리 잘해도 한 줄만 나왔다.
+	var sc = [];
+	// 역할로 이미 말한 축은 강점에서 건너뛴다 — 안 그러면 같은 지표를 두 번 칭찬한다
+	// ("몰아치는 역할" + "한 번 열면 몰아치는 힘" 처럼).
+	var addS = function (key, cond, s, obj) {
+		if (!cond || (key && key === roleKey)) return;
+		obj.kind = "strength"; obj.tone = "good"; obj.s = s; sc.push(obj);
+	};
+
+	addS("characterAdjustedWpa", o.characterAdjustedWpa > 0 && o.wpaPercentile >= 60, o.wpaPercentile, {
+		title: "승리에 도움이 되는 싸움",
 		finding: "킬과 데스가 라운드 승리에 준 영향이 같은 캐릭터 평균보다 좋습니다.",
 		action: "잘 이긴 싸움의 거리와 타이밍을 기억하고 같은 방식으로 반복하세요.",
 		evidence: "라운드당 평균 대비 +" + (Math.round(o.characterAdjustedWpa * 1000) / 10) + "%p · 전체 상위 " + (100 - o.wpaPercentile) + "%"
-	};
-	else if (o.characterAdjustedRefillConversion > 0 && o.refillPercentile >= 60) strength = {
-		kind: "strength", tone: "good", title: "킬을 다음 킬로 잇는 힘",
-		finding: "킬로 돌려받은 화살과 궁극기를 다음 킬로 이어 가는 힘을 봅니다.",
+	});
+	addS("characterAdjustedRefillConversion", o.characterAdjustedRefillConversion > 0 && o.refillPercentile >= 60, o.refillPercentile, {
+		title: "킬을 다음 킬로 잇는 힘",
+		finding: "킬로 돌려받은 화살과 궁극기를 다음 킬로 이어 갑니다.",
 		action: "첫 킬 뒤 자리를 바꾸고, 새 화살과 궁극기로 다음 적을 노리세요.",
 		evidence: "연쇄율 " + pct(o.refillConversionRate) + "% · 같은 캐릭터 평균 대비 +" + (Math.round(o.characterAdjustedRefillConversion * 1000) / 10) + "%p"
-	};
-	else if (o.openingConversionRate >= .6 && o.openingKills >= 20) strength = {
-		kind: "strength", tone: "good", title: "첫 킬을 승리로 바꾸는 힘",
-		finding: "먼저 한 명을 잡은 뒤 그 라운드를 끝까지 이기는 힘을 봅니다.",
+	});
+	addS("openingConversionRate", o.openingConversionRate >= .6 && o.openingKills >= 20, rc.openingConversionRate || 60, {
+		title: "첫 킬을 승리로 바꾸는 힘",
+		finding: "먼저 한 명을 잡은 뒤 그 라운드를 끝까지 이깁니다.",
 		action: "첫 킬 뒤에는 무리하지 말고 팀과 함께 남은 적을 막으세요.",
 		evidence: "첫 킬 뒤 승리 " + pct(o.openingConversionRate) + "% · " + o.openingKills + "라운드"
-	};
-	else if (o.charTopShare >= .4 && o.charTopWinDelta >= .1 && o.charTopGames >= 20 && o.charRestGames >= 20) strength = {
-		kind: "strength", tone: "good", title: "잘 맞는 주력 캐릭터",
+	});
+	addS("charTop", o.charTopShare >= .4 && o.charTopWinDelta >= .1 && o.charTopGames >= 20 && o.charRestGames >= 20, 70 + o.charTopWinDelta * 100, {
+		title: "잘 맞는 주력 캐릭터",
 		finding: "주력인 " + o.charTopName + " 승률이 나머지 캐릭터보다 확실히 높습니다.",
 		action: "이 캐릭터가 강한 맵과 싸움 거리를 기억해 두고, 고를 수 있을 때 계속 고르세요.",
 		evidence: o.charTopName + " " + pct(o.charTopWinRate) + "% (" + o.charTopGames + "판) vs 나머지 " + pct(o.charRestWinRate) + "%"
-	};
-	if (!picks.length) strength = strength || {
+	});
+	addS("roleAdjusted", rc.roleAdjusted >= 65 && o.logRounds >= 60, rc.roleAdjusted, {
+		title: "캐릭터가 낼 수 있는 것보다 더 냄",
+		finding: "라운드당 킬이 같은 캐릭터를 쓴 사람들 평균의 " + o.roleAdjusted.toFixed(2) + "배입니다.",
+		action: "지금 쓰는 캐릭터가 손에 맞습니다. 새 캐릭터를 늘리기보다 이 폭을 더 깊게 파세요.",
+		evidence: "보정 화력 전체 상위 " + top(rc.roleAdjusted) + "% · 라운드 " + o.logRounds + "개"
+	});
+	addS("deathTradedRate", rc.deathTradedRate >= 65 && o.logDeaths >= 60, rc.deathTradedRate, {
+		title: "혼자 죽지 않는 자리 잡기",
+		finding: "내가 죽어도 팀원이 곧바로 되갚아 주는 비율이 " + pct(o.deathTradedRate) + "%로 높습니다.",
+		action: "팀과 붙어 싸우는 습관이 이미 있습니다. 인원이 갈릴 때도 그 거리를 유지하세요.",
+		evidence: "데스 교환 전체 상위 " + top(rc.deathTradedRate) + "% · 데스 " + o.logDeaths + "회"
+	});
+	addS("clutchRate", o.clutchOpportunities >= 10 && rc.clutchRate >= 65, rc.clutchRate, {
+		title: "불리한 수를 뒤집는 힘",
+		finding: "혼자 남아 둘을 상대하는 상황에서 " + pct(o.clutchRate) + "%를 뒤집었습니다.",
+		action: "그 상황에서 서두르지 않는 게 강점입니다. 한 명씩 떼어 만나는 자리로 계속 유도하세요.",
+		evidence: "기회 " + o.clutchOpportunities + "회 중 " + o.clutchWins + "회 성공"
+	});
+	addS("chainConversionRate", rc.chainConversionRate >= 65 && o._raw && o._raw.killRounds >= 30, rc.chainConversionRate, {
+		title: "한 번 열면 몰아치는 힘",
+		finding: "킬을 낸 라운드 중 " + pct(o.chainConversionRate) + "%에서 둘 이상 잡았습니다.",
+		action: "첫 킬 뒤가 강하니, 킬 직후 물러나지 말고 다음 각을 미리 잡아 두세요.",
+		evidence: "연속 처치 전체 상위 " + top(rc.chainConversionRate) + "%"
+	});
+	addS("arrowDeathShare", o.logDeaths >= 100 && o._gDeathMix && o.arrowDeathShare <= o._gDeathMix.a - .05, 100 - rc.arrowDeathShare, {
+		title: "화살을 잘 피하는 자리",
+		finding: "화살에 죽은 비율이 " + pct(o.arrowDeathShare) + "%로 서버 평균 " + pct(o._gDeathMix.a) + "%보다 낮습니다.",
+		action: "엄폐를 잘 쓰고 있습니다. 그 습관을 스킬 사거리 안에서도 그대로 쓰세요.",
+		evidence: "확인한 데스 " + o.logDeaths + "회"
+	});
+	addS("bowAccuracy", o.bowShots >= 200 && o._gBowAcc > 0 && o.bowAccuracy >= o._gBowAcc * 1.25, 90, {
+		title: "화살을 아껴 쏘는 눈",
+		finding: "쏜 화살 중 " + pct(o.bowAccuracy) + "%가 킬로 이어졌습니다. 서버 평균은 " + pct(o._gBowAcc) + "%입니다.",
+		action: "각이 설 때만 쏘는 판단이 좋습니다. 화살이 남을 때도 그 기준을 낮추지 마세요.",
+		evidence: "확인한 발사 " + o.bowShots + "회"
+	});
+	addS("highLeverageKillShare", rc.highLeverageKillShare >= 65 && o.logKills >= 60, rc.highLeverageKillShare, {
+		title: "팽팽할 때 강함",
+		finding: "인원이 비슷한 국면에서 내는 킬의 비중이 서버 상위 " + top(rc.highLeverageKillShare) + "%입니다.",
+		action: "승부가 갈리는 구간에 이미 잘 개입합니다. 이 구간에 궁을 남겨 두세요.",
+		evidence: "확인한 킬 " + o.logKills + "회"
+	});
+	addS("lateEntryRate", o.logRounds >= 60 && rc.lateEntryRate !== undefined && rc.lateEntryRate <= 35, 100 - rc.lateEntryRate, {
+		title: "팀 싸움에 빨리 닿음",
+		finding: "팀원이 쓰러진 뒤에야 싸움에 끼는 라운드가 서버에서 가장 적은 축입니다.",
+		action: "합류는 이미 빠릅니다. 도착 순서보다 팀과 같이 도착하는지를 보세요.",
+		evidence: "확인한 교전 라운드 " + o.logRounds + "개"
+	});
+	sc.sort(function (x, y) { return y.s - x.s; });
+	var strengths = sc.slice(0, 2);
+	if (!picks.length && !strengths.length) strengths.push({
 		kind: "strength", tone: "good", title: "지금처럼 이어 가기",
 		finding: "평균보다 크게 나쁜 핵심 지표가 보이지 않습니다.",
 		action: "한 번에 새로운 것을 많이 바꾸지 말고, 잘 되는 캐릭터와 싸움 거리를 계속 사용하세요.",
 		evidence: "개인 실력 지수 " + o.score.toFixed(1) + "점"
-	};
-	if (strength) items.push(strength);
+	});
+	var strength = strengths[0] || null;
+	if (strengths.length) strengths.forEach(function (x) { items.push(x); });
 	else items.push({
 		kind: "summary", tone: "neutral", title: "지금 상태",
 		finding: "잘하는 점보다 먼저 고칠 점이 더 뚜렷하게 보입니다.",
-		action: "아래에 적힌 두 가지를 한꺼번에 하지 말고, 첫 번째부터 한 게임씩 연습하세요.",
+		action: "아래에 적힌 것을 한꺼번에 하지 말고, 첫 번째부터 한 게임씩 연습하세요.",
 		evidence: "개인 실력 지수 " + o.score.toFixed(1) + "점"
 	});
 	picks.forEach(function (c, i) {
