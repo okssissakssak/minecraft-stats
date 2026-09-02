@@ -580,7 +580,9 @@ function hcRpTags(o, luck) {
 	// 1v2 를 다 잡아내는 건 드물다 — 원본 분포도 중앙값 13%, 최대 37% 다.
 	if (o.clutchRate >= .25 && o.clutchOpportunities >= 10) t.push("클러치력 높음");
 	if (o.postSwitchKpr > o.preSwitchKpr * 1.25 && o.preSwitchKpr > 0) t.push("후반 스탯 편중");
-	if (luck) { if (luck.pct >= 70) t.push("매칭주작 수혜자"); else if (luck.pct <= 30) t.push("매칭주작 피해자"); }
+	// 팀운(카드에 뜨는 그 값) 기준. hcLuckOf 는 5판부터 값을 주지만 5판짜리 등급은 크게 흔들려
+	// 태그로 박기엔 이르다 — 예전 hcLuckMM 과 같은 10판 기준을 유지한다.
+	if (luck && luck.games >= 10) { if (luck.pct >= 70) t.push("매칭주작 수혜자"); else if (luck.pct <= 30) t.push("매칭주작 피해자"); }
 
 	if (o.charTopShare >= .6 && o.charTopGames >= 20) t.push("원챔형");
 	else if (o.charCount >= 40) t.push("다캐릭형");
@@ -772,7 +774,7 @@ function hcReportOf(nick, stats, kills, meta, luck) {
 	o.topCharacters = o.noLog ? [] : hcRpTopChars(o, meta, all.chars, all.gmix);
 	o._topNames = o.topCharacters.map(function (c) { return c.name; }).join("·") || "-";
 	o.playstyleTags = o.noLog ? [] : hcRpTags(o, luck);
-	if (luck && o.noLog) { if (luck.pct >= 70) o.playstyleTags.push("매칭주작 수혜자"); else if (luck.pct <= 30) o.playstyleTags.push("매칭주작 피해자"); }
+	if (luck && o.noLog && luck.games >= 10) { if (luck.pct >= 70) o.playstyleTags.push("매칭주작 수혜자"); else if (luck.pct <= 30) o.playstyleTags.push("매칭주작 피해자"); }
 	o.diagnosisItems = o.noLog ? [] : hcRpDiagnosis(o);
 	return o;
 }
@@ -844,8 +846,8 @@ var pc=pv.length?lo/pv.length*100:50,
 lb=_MXLV[pc<10?0:pc<30?1:pc<70?2:pc<90?3:4];
 return{avg:avg,games:n,good:good,bad:bad,pct:pc,label:lb.label,tone:lb.tone}}
 
-/* 티어 기반 매칭 운 — 매칭주작 수혜자/피해자 태그 전용.
-   "아군이 잘했나"(위)와 "매칭이 기울었나"(이쪽)는 다른 이야기라 따로 둔다. */
+/* 티어 기반 매칭 운. 지금은 어디서도 쓰지 않는다 — 매칭주작 태그가 팀운(hcLuckOf)으로 옮겨 갔다.
+   "아군이 잘했나"(위)와 "매칭이 기울었나"(이쪽)는 여전히 다른 값이라 되돌릴 때를 위해 남겨 둔다. */
 var _MXMM=null,_MXMMP=null;
 function hcLuckMM(nick,a){
 if(!_MXMM||_MXMM.n!==a.length){
@@ -980,7 +982,9 @@ function hcMxSection(H,eg,kills,meta){
 if(!eg||!eg.length||!kills)return null;
 var stats=hcFlatGames(eg),
 luck=hcLuckOf(H.nickname,eg),
-p=hcReportOf(H.nickname,stats,kills,meta,hcLuckMM(H.nickname,eg));
+// 매칭주작 태그는 카드에 뜨는 그 팀운을 그대로 쓴다. 예전엔 hcLuckMM(티어 격차)을 넘겼는데,
+// 두 값의 상관이 .30 뿐이라 "팀운 SS 인데 매칭주작 피해자" 같은 화면이 나왔다.
+p=hcReportOf(H.nickname,stats,kills,meta,luck);
 if(!p)return null;
 var head=(0,s.jsxs)("div",{className:"section-head profile-section-head",children:[
 (0,s.jsxs)("div",{children:[
