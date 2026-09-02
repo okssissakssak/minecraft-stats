@@ -137,6 +137,8 @@ function hcAnBlank(nick) {
 		nickname: nick, totalGames: 0, wins: 0, kills: 0, deaths: 0, tier: null, tierAt: undefined,
 		logMatches: 0, logRounds: 0, logKills: 0, logDeaths: 0,
 		arrowKills: 0, skillKills: 0, meleeKills: 0,
+		arrowDeaths: 0, skillDeaths: 0, meleeDeaths: 0,
+		bowShots: 0, bowArrowKills: 0,
 		openingKills: 0, openingDeaths: 0, openingWins: 0, openingReDeaths: 0,
 		earlyKills: 0, lateKills: 0, killRounds: 0, multiKillRounds: 0,
 		tradeKills: 0, deathsTraded: 0,
@@ -146,7 +148,8 @@ function hcAnBlank(nick) {
 		engageRounds: 0, engRounds: 0,
 		clutchOpp: 0, clutchWins: 0, clutchKills: 0,
 		preKills: 0, postKills: 0, preRounds: 0, postRounds: 0,
-		killWpa: 0, deathWpa: 0, charRounds: new Map(), charGames: new Map(), charKills: new Map(), charLogGames: new Map()
+		killWpa: 0, deathWpa: 0, charRounds: new Map(), charGames: new Map(), charKills: new Map(), charLogGames: new Map(),
+		charWins: new Map()
 	};
 }
 
@@ -160,10 +163,14 @@ function hcAnalyze(stats, kills) {
 		var r = stats[i], p = get(r.nickname);
 		p.totalGames++; p.wins += r.win ? 1 : 0;
 		p.kills += r.kill || 0; p.deaths += r.death || 0;
+		p.bowShots += r.bow || 0;
 		// 사이트가 넘겨주는 배열은 최신 경기가 앞이다(eg 는 내림차순). 순서에 기대지 말고
 		// 가장 큰 게임번호의 티어를 현재 티어로 삼는다.
 		if (p.tierAt === undefined || r.gamenumber >= p.tierAt) { p.tier = r.tier; p.tierAt = r.gamenumber; }
-		if (r.character) p.charGames.set(r.character, (p.charGames.get(r.character) || 0) + 1);
+		if (r.character) {
+			p.charGames.set(r.character, (p.charGames.get(r.character) || 0) + 1);
+			if (r.win) p.charWins.set(r.character, (p.charWins.get(r.character) || 0) + 1);
+		}
 	}
 
 	// 2) 킬로그 — 교전 지표
@@ -175,6 +182,8 @@ function hcAnalyze(stats, kills) {
 		return x;
 	};
 	for (i = 0; i < stats.length; i++) if (stats[i].character) charMap.set(hcAnKey(stats[i].gamenumber, stats[i].nickname), stats[i].character);
+	var bowSet = new Map();
+	for (i = 0; i < stats.length; i++) if (stats[i].bow > 0) bowSet.set(hcAnKey(stats[i].gamenumber, stats[i].nickname), 1);
 
 	for (i = 0; i < rounds.length; i++) {
 		var R = rounds[i], ev = R.ev, n = ev.length, alive = { 0: R.size[0], 1: R.size[1] };
@@ -212,6 +221,8 @@ function hcAnalyze(stats, kills) {
 			var vch = charMap.get(hcAnKey(R.game, e.v));
 			if (vch) cget(vch).wpa += WP(alive[vt], alive[1 - vt]) - WP(alive[vt] + 1, alive[1 - vt]);
 			if (e.t === "a") K.arrowKills++; else if (e.t === "s") K.skillKills++; else K.meleeKills++;
+			if (e.t === "a") V.arrowDeaths++; else if (e.t === "s") V.skillDeaths++; else V.meleeDeaths++;
+			if (e.t === "a" && bowSet.has(hcAnKey(R.game, e.k))) K.bowArrowKills++;
 			if (kch) {
 				var ck = K.charKills.get(kch);
 				if (!ck) { ck = { a: 0, s: 0, m: 0 }; K.charKills.set(kch, ck); }
@@ -377,6 +388,11 @@ function hcReportAll(stats, kills) {
 				arrowKillShare: hcRpDiv(p.arrowKills, K),
 				skillKillShare: hcRpDiv(p.skillKills, K),
 				meleeKillShare: hcRpDiv(p.meleeKills, K),
+				arrowDeathShare: hcRpDiv(p.arrowDeaths, D),
+				skillDeathShare: hcRpDiv(p.skillDeaths, D),
+				meleeDeathShare: hcRpDiv(p.meleeDeaths, D),
+				bowShots: p.bowShots,
+				bowAccuracy: hcRpDiv(p.bowArrowKills, p.bowShots),
 				openingKills: p.openingKills, openingWins: p.openingWins,
 				openingRate: hcRpDiv(p.openingKills, R),
 				openingConversionRate: hcRpDiv(p.openingWins, p.openingKills),
@@ -417,27 +433,47 @@ function hcReportAll(stats, kills) {
 		o.refillConversionRate = hcRpShrink(o.refillConversionRate, p.refillOpp, eRef);
 		o.characterAdjustedRefillConversion = o.refillConversionRate - eRef;
 		o.characterAdjustedOpeningRate = hcRpShrink(o.openingRate, R, eOpn) - eOpn;
+		// 캐릭터 폭. stats 전체(킬로그 없는 옛 경기 포함)로 세므로 표본이 가장 두껍다.
+		var cTot = 0, cTop = null, cTopN = 0, cwTot = 0;
+		p.charGames.forEach(function (v, k) { cTot += v; if (v > cTopN) { cTopN = v; cTop = k; } });
+		p.charWins.forEach(function (v) { cwTot += v; });
+		var cTopW = cTop ? (p.charWins.get(cTop) || 0) : 0;
+		o.charCount = p.charGames.size;
+		o.charTopName = cTop;
+		o.charTopGames = cTopN;
+		o.charRestGames = cTot - cTopN;
+		o.charTopShare = hcRpDiv(cTopN, cTot);
+		o.charTopWinRate = hcRpDiv(cTopW, cTopN);
+		o.charRestWinRate = hcRpDiv(cwTot - cTopW, cTot - cTopN);
+		o.charTopWinDelta = o.charTopWinRate - o.charRestWinRate;
 		o._den = { open: p.openingKills, death: D, round: R, clutch: p.clutchOpp };
 		out.set(nick, o);
 		if (p.logMatches >= 10) pool.push(o);
 	});
 
 	// 전역 기준선(풀 전체 합계) — 개인 표본이 얕은 비율을 여기로 당긴다.
-	var g = { ow: 0, ok: 0, dt: 0, dd: 0, le: 0, lr: 0, cw: 0, co: 0 };
+	var g = { ow: 0, ok: 0, dt: 0, dd: 0, le: 0, lr: 0, cw: 0, co: 0, ad: 0, sd: 0, md: 0, ba: 0, bs: 0 };
 	pool.forEach(function (o) {
 		var p2 = o._raw;
 		g.ow += p2.openingWins; g.ok += p2.openingKills;
 		g.dt += p2.deathsTraded; g.dd += o.logDeaths;
 		g.le += p2.lateEntryRounds; g.lr += o.logRounds;
 		g.cw += p2.clutchWins; g.co += p2.clutchOpp;
+		g.ad += p2.arrowDeaths; g.sd += p2.skillDeaths; g.md += p2.meleeDeaths;
+		g.ba += p2.bowArrowKills; g.bs += p2.bowShots;
 	});
 	var gOpen = hcRpDiv(g.ow, g.ok), gDeath = hcRpDiv(g.dt, g.dd),
 		gLate = hcRpDiv(g.le, g.lr), gClutch = hcRpDiv(g.cw, g.co);
+	// 어떻게 죽는지의 서버 기준선. 셋을 합치면 1 이라 "무엇이 유독 많은가"로만 읽어야 한다.
+	var gDeathMix = { a: hcRpDiv(g.ad, g.dd), s: hcRpDiv(g.sd, g.dd), m: hcRpDiv(g.md, g.dd) };
+	var gBowAcc = hcRpDiv(g.ba, g.bs);
 	out.forEach(function (o) {
 		o.openingConversionRate = hcRpShrink(o.openingConversionRate, o._den.open, gOpen);
 		o.deathTradedRate = hcRpShrink(o.deathTradedRate, o._den.death, gDeath);
 		o.lateEntryRate = hcRpShrink(o.lateEntryRate, o._den.round, gLate);
 		o.clutchRate = hcRpShrink(o.clutchRate, o._den.clutch, gClutch);
+		o._gDeathMix = gDeathMix;
+		o._gBowAcc = gBowAcc;
 	});
 
 	// 백분위 기준 풀 = 킬로그 10경기 이상
@@ -546,6 +582,11 @@ function hcRpTags(o, luck) {
 	if (o.postSwitchKpr > o.preSwitchKpr * 1.25 && o.preSwitchKpr > 0) t.push("후반 스탯 편중");
 	if (luck) { if (luck.pct >= 70) t.push("매칭주작 수혜자"); else if (luck.pct <= 30) t.push("매칭주작 피해자"); }
 
+	if (o.charTopShare >= .6 && o.charTopGames >= 20) t.push("원챔형");
+	else if (o.charCount >= 40) t.push("다캐릭형");
+	if (o._gDeathMix && o.logDeaths >= 100 && o.arrowDeathShare <= o._gDeathMix.a - .05) t.push("엄폐 우수");
+	if (o.bowShots >= 200 && o._gBowAcc > 0 && o.bowAccuracy >= o._gBowAcc * 1.25) t.push("명사수");
+
 	if (!t.length) t.push("균형형");
 	return t;
 }
@@ -619,6 +660,51 @@ function hcRpDiagnosis(o) {
 		action: "팀원이 싸우기 시작하면 같이 싸우세요. 혼자 마지막까지 남아서 킬을 모으는 것보다 팀을 먼저 돕는 게 좋습니다.",
 		evidence: "확인한 킬 " + o.logKills + "회", label: "후반 스탯 편중"
 	});
+	// 어떻게 죽는지 — 서버 기준선을 가장 크게 웃도는 한 가지만 짚는다.
+	// 셋을 합치면 100% 라서 여럿을 나열하면 서로 모순된 조언이 된다.
+	if (o.logDeaths >= 100 && o._gDeathMix) {
+		var gm = o._gDeathMix, dm = [
+			{ v: o.arrowDeathShare - gm.a, cur: o.arrowDeathShare, base: gm.a, name: "화살",
+				title: "화살 맞는 자리 줄이기",
+				action: "열린 길을 그대로 건너지 마세요. 벽을 끼고 돌거나, 상대가 활을 당긴 뒤 시선이 끊긴 틈에 움직이세요.",
+				label: "화살에 자주 맞음" },
+			{ v: o.skillDeathShare - gm.s, cur: o.skillDeathShare, base: gm.s, name: "스킬",
+				title: "스킬 사거리 밖에서 싸우기",
+				action: "상대 스킬이 빠진 걸 보고 들어가세요. 궁이 살아 있는 상대와 좁은 곳에서 겹치지 마세요.",
+				label: "스킬에 자주 당함" },
+			{ v: o.meleeDeathShare - gm.m, cur: o.meleeDeathShare, base: gm.m, name: "근접",
+				title: "붙는 상대 미리 떼기",
+				action: "붙는 캐릭터가 보이면 먼저 거리를 벌리세요. 도주기는 맞고 나서 쓰면 이미 늦습니다.",
+				label: "근접에 자주 잡힘" }
+		];
+		dm.sort(function (a, b) { return b.v - a.v; });
+		if (dm[0].v > .03) cands.push({
+			key: "deathmix", bad: dm[0].v * 5, tone: dm[0].v > .06 ? "bad" : "warn",
+			title: dm[0].title,
+			finding: dm[0].name + "에 죽은 비율이 " + pct(dm[0].cur) + "%입니다. 서버 평균은 " + pct(dm[0].base) + "%입니다.",
+			action: dm[0].action,
+			evidence: "확인한 데스 " + o.logDeaths + "회", label: dm[0].label
+		});
+	}
+	// 손에 익은 캐릭터와 잘 맞는 캐릭터는 다르다. 주력이 오히려 승률을 깎고 있으면 짚는다.
+	// bad 가 음수면 아래 filter 에서 저절로 빠지므로 "주력이 좋은" 경우는 여기 안 걸린다.
+	if (o.charTopShare >= .35 && o.charTopGames >= 20 && o.charRestGames >= 20) cands.push({
+		key: "charfit", bad: -o.charTopWinDelta * 4, tone: o.charTopWinDelta < -.1 ? "bad" : "warn",
+		title: "주력 캐릭터 다시 보기",
+		finding: o.charTopName + " 로 전체의 " + pct(o.charTopShare) + "%를 했는데, 그 승률 " + pct(o.charTopWinRate)
+			+ "%가 나머지 캐릭터 " + pct(o.charRestWinRate) + "%보다 낮습니다.",
+		action: "가장 많이 한 캐릭터가 가장 잘 맞는 캐릭터는 아닙니다. 승률이 높았던 쪽을 몇 판 더 잡아 보세요.",
+		evidence: "주력 " + o.charTopGames + "판 · 나머지 " + o.charRestGames + "판", label: "주력이 안 맞음"
+	});
+	// 활 명중률. 이 서버 활은 한 방이라 명중이 곧 킬이다 — 막히거나 무적에 씹힌 화살은
+	// 분자에서 빠지므로 실제 명중률보다 조금 낮게 나온다. 절대값이 아니라 서버 평균과의 비로 읽는다.
+	if (o.bowShots >= 200 && o._gBowAcc > 0) cands.push({
+		key: "bowacc", bad: (o._gBowAcc - o.bowAccuracy) * 4, tone: o.bowAccuracy < o._gBowAcc * .8 ? "bad" : "warn",
+		title: "화살 아껴 쏘기",
+		finding: "쏜 화살 중 " + pct(o.bowAccuracy) + "%가 킬로 이어졌습니다. 서버 평균은 " + pct(o._gBowAcc) + "%입니다.",
+		action: "빗나갈 각도에서 먼저 쏘지 마세요. 상대가 멈추거나 착지하는 순간까지 기다렸다 쏘는 편이 낫습니다.",
+		evidence: "확인한 발사 " + o.bowShots + "회", label: "화살 명중률 낮음"
+	});
 	cands.sort(function (a, b) { return b.bad - a.bad; });
 	var picks = cands.filter(function (c) { return c.bad > 0; }).slice(0, 2);
 
@@ -641,6 +727,12 @@ function hcRpDiagnosis(o) {
 		finding: "먼저 한 명을 잡은 뒤 그 라운드를 끝까지 이기는 힘을 봅니다.",
 		action: "첫 킬 뒤에는 무리하지 말고 팀과 함께 남은 적을 막으세요.",
 		evidence: "첫 킬 뒤 승리 " + pct(o.openingConversionRate) + "% · " + o.openingKills + "라운드"
+	};
+	else if (o.charTopShare >= .4 && o.charTopWinDelta >= .1 && o.charTopGames >= 20 && o.charRestGames >= 20) strength = {
+		kind: "strength", tone: "good", title: "잘 맞는 주력 캐릭터",
+		finding: "주력인 " + o.charTopName + " 승률이 나머지 캐릭터보다 확실히 높습니다.",
+		action: "이 캐릭터가 강한 맵과 싸움 거리를 기억해 두고, 고를 수 있을 때 계속 고르세요.",
+		evidence: o.charTopName + " " + pct(o.charTopWinRate) + "% (" + o.charTopGames + "판) vs 나머지 " + pct(o.charRestWinRate) + "%"
 	};
 	if (!picks.length) strength = strength || {
 		kind: "strength", tone: "good", title: "지금처럼 이어 가기",
