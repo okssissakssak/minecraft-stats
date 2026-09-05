@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-19 17:40:03",
-  "count": 146,
+  "updated": "2026-09-06 00:17:38",
+  "count": 147,
   "iconGrid": 13,
   "iconTile": 128,
   "characters": [
@@ -1901,6 +1901,19 @@
       ],
       "summary": "룰루는 요정 픽스와 함께 아군을 지원하고 적을 성가시게 만듭니다",
       "model": "dor:char/lulu/wand"
+    },
+    {
+      "name": "묘객",
+      "id": 148,
+      "difficulty": "★★★",
+      "color": "#FFAA00",
+      "keywords": [
+        "결투가",
+        "기동력",
+        "자가회복"
+      ],
+      "summary": "레이피어의 간격을 지키며 싸우고, 노린 상대를 끝까지 물고 늘어집니다.",
+      "model": "dor:char/puss/rapier"
     }
   ]
 }
