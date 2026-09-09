@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-09",
+  "updated": "2026-09-09 23:23:04",
   "count": 148,
   "iconGrid": 13,
   "iconTile": 128,
@@ -1919,7 +1919,7 @@
       "name": "죽음",
       "id": 149,
       "difficulty": "★★",
-      "color": "#FF4444",
+      "color": "#AA0000",
       "keywords": [
         "결투가",
         "지역 장악",
