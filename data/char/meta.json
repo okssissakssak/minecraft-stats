@@ -1918,14 +1918,14 @@
     {
       "name": "죽음",
       "id": 149,
-      "difficulty": "★★★",
+      "difficulty": "★★",
       "color": "#AA0000",
       "keywords": [
-        "추격",
         "결투가",
-        "군중 제어"
+        "지역 장악",
+        "적 처형"
       ],
-      "summary": "죽음은 멀어지는 적을 추격하고, 불의 고리에서 도망친 적에게 더 강해집니다.",
+      "summary": "누구도 죽음을 피할 수 없습니다.",
       "model": "dor:char/death/sickle_right"
     }
   ]
