@@ -1,6 +1,6 @@
 {
-  "updated": "2026-09-06 00:17:38",
-  "count": 147,
+  "updated": "2026-09-09",
+  "count": 148,
   "iconGrid": 13,
   "iconTile": 128,
   "characters": [
@@ -1914,8 +1914,19 @@
       ],
       "summary": "레이피어의 간격을 지키며 싸우고, 노린 상대를 끝까지 물고 늘어집니다.",
       "model": "dor:char/puss/rapier"
+    },
+    {
+      "name": "죽음",
+      "id": 149,
+      "difficulty": "★★★",
+      "color": "#AA0000",
+      "keywords": [
+        "추격",
+        "결투가",
+        "군중 제어"
+      ],
+      "summary": "죽음은 멀어지는 적을 추격하고, 불의 고리에서 도망친 적에게 더 강해집니다.",
+      "model": "dor:char/death/sickle_right"
     }
   ]
 }
-
-
