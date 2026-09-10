@@ -15,7 +15,7 @@
       "type": "패시브",
       "name": "신속한 이동",
       "desc": "5초동안 피해를 입지 않으면 이동속도가 증가한다.",
-      "detail": "이동속도 10% 증가",
+      "detail": "이동속도 15% 증가",
       "typeColor": "#55FF55",
       "nameColor": "#FFFFFF"
     },
