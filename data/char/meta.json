@@ -1,6 +1,6 @@
 {
-  "updated": "2026-09-09 23:23:04",
-  "count": 148,
+  "updated": "2026-09-11 20:54:57",
+  "count": 149,
   "iconGrid": 13,
   "iconTile": 128,
   "characters": [
@@ -1927,6 +1927,19 @@
       ],
       "summary": "누구도 죽음을 피할 수 없습니다.",
       "model": "dor:char/death/sickle_right"
+    },
+    {
+      "name": "제천대성",
+      "id": 150,
+      "difficulty": "★",
+      "color": "#FFAA00",
+      "keywords": [
+        "기본공격",
+        "내구",
+        "교란"
+      ],
+      "summary": "제천대성은 여의봉과 분신으로 상대를 압박합니다.",
+      "model": "dor:char/wukong/jingubang"
     }
   ]
 }
