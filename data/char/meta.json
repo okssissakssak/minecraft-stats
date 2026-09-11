@@ -1,6 +1,6 @@
 {
-  "updated": "2026-09-11 20:54:57",
-  "count": 149,
+  "updated": "2026-09-12 08:15:43",
+  "count": 150,
   "iconGrid": 13,
   "iconTile": 128,
   "characters": [
@@ -1901,6 +1901,19 @@
       ],
       "summary": "룰루는 요정 픽스와 함께 아군을 지원하고 적을 성가시게 만듭니다",
       "model": "dor:char/lulu/wand"
+    },
+    {
+      "name": "감시자",
+      "id": 147,
+      "difficulty": "★★",
+      "color": "#FFFFFF",
+      "keywords": [
+        "원거리",
+        "정찰",
+        "교란"
+      ],
+      "summary": "감시자는 벽 너머로 눈을 보내 전장을 살피고, 시야를 빼앗아 적을 무력하게 만듭니다",
+      "model": "dor:char/watcher/gun"
     },
     {
       "name": "장화신은고양이",
