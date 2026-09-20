@@ -354,7 +354,7 @@ function hcAnalyze(stats, kills) {
    합성 지표의 계수는 원본 HTML 산출물 55명분을 역산해 맞췄다:
      score        = 0.3*WPA백분위 + 0.5*연쇄백분위 + 0.2*화력백분위 를 다시 백분위화
      performance  = round(score*0.2 + 0.5)  (1~21 티어 포인트)
-     skill        = round(0.8*performance + 0.2*실제티어)
+     skill        = performance  (실제 티어를 섞지 않는다)
      forecast     = 0.1414*score + 42.73,  구간 폭 = 14.25 - 0.103*confidence
      effective    = n/(n+81)*107,  confidence = 0.584*effective + 12          */
 
@@ -522,7 +522,7 @@ function hcReportAll(stats, kills) {
 		o.confidence = Math.round(hcRpClamp(.584 * o.effectiveGames + 12, 5, 99));
 		o.performancePoint = hcRpClamp(Math.round(o.score * .2 + .5), 1, 21);
 		o.performanceTier = hcRpTierName(o.performancePoint);
-		o.skillPoint = hcRpClamp(Math.round(.8 * o.performancePoint + .2 * o.actualPoint), 1, 21);
+		o.skillPoint = o.performancePoint;
 		o.skillTier = hcRpTierName(o.skillPoint);
 		o.gap = o.skillPoint - o.actualPoint;
 		var band = hcRpClamp(Math.round((100 - o.confidence) / 22), 1, 5);
@@ -1226,7 +1226,7 @@ return(0,s.jsxs)(s.Fragment,{children:[head,
 (0,s.jsx)("small",{children:"실제 / 추정 티어"}),
 hcMxTier(p.actualPoint,p.actualTier,!0),
 (0,s.jsxs)("span",{children:["추정 ",p.skillTier," · ",p.skillLowTier,"–",p.skillHighTier]}),
-(0,s.jsx)("em",{className:"mx-def",children:"실제는 최근 경기의 티어, 추정은 교전 지표로 역산한 티어. 뒤 범위는 표본에 따른 오차 구간."})]}),
+(0,s.jsx)("em",{className:"mx-def",children:"실제는 최근 경기의 티어, 추정은 개인 실력 지수만으로 계산한 성과 티어. 뒤 범위는 표본에 따른 오차 구간."})]}),
 (0,s.jsxs)("div",{children:[
 (0,s.jsx)("small",{children:"기대 승률"}),
 (0,s.jsxs)("strong",{children:[p.forecastWinRate.toFixed(1),"%"]}),
