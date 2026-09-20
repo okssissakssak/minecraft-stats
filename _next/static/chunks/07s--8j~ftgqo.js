@@ -51,6 +51,22 @@ var _MXAN = null;
 
 function hcAnKey(g, n) { return g + "|" + n; }
 
+// 첫 피해·킬·데스 중 가장 이른 틱을 합류 시점으로 사용한다.
+// 처치 시각이 없는 과거/혼합 라운드는 순서를 만들지 않고 평가에서 제외한다.
+function hcAnEntryLate(R, nick, m) {
+	if (!R.entryTimed) return null;
+	var at = m && m.first >= 0 ? R.ev[m.first].tick : Infinity;
+	if (m && m.eng !== undefined) at = Math.min(at, m.eng);
+	if (at === Infinity) return true;
+	var fallen = 0, team = R.team.get(nick);
+	for (var i = 0; i < R.ev.length; i++) {
+		// 같은 틱은 선후를 확정할 수 없으므로 늦었다고 판정하지 않는다.
+		if (R.ev[i].tick >= at) break;
+		if (R.team.get(R.ev[i].v) === team) fallen++;
+	}
+	return fallen >= 3;
+}
+
 /* 라운드별 이벤트 + 팀 구성. 무거우니 한 번만 만들고 캐시한다. */
 function hcAnRounds(stats, kills) {
 	var byGame = new Map(), i, r;
@@ -70,13 +86,16 @@ function hcAnRounds(stats, kills) {
 			size[recs[j].win] = (size[recs[j].win] || 0) + 1;
 		}
 		if (!(size[0] > 0) || !(size[1] > 0)) continue;
-		// 교전 참여 로그(딜을 넣은 라운드). 데이터팩이 이 기능을 갖추기 전 경기에는 없다 —
-		// 없으면 eng 가 null 이 되고 아래 판정이 통째로 옛 방식(킬로그만)으로 되돌아간다.
+		// 첫 가한 피해 시각. 기록이 없으면 킬·데스 시각만 합류 후보로 사용한다.
 		var engByRound = new Map();
 		if (kills[i].eng) for (j = 0; j < kills[i].eng.length; j++) {
 			var er = kills[i].eng[j], em = new Map(), q;
 			if (!er || !er.e) continue;
-			for (q = 0; q < er.e.length; q++) if (team.has(er.e[q][0])) em.set(er.e[q][0], er.e[q][1]);
+			for (q = 0; q < er.e.length; q++) {
+				var en = er.e[q][0], et = er.e[q][1];
+				if (!team.has(en) || !Number.isInteger(et) || et < 0) continue;
+				if (!em.has(en) || et < em.get(en)) em.set(en, et);
+			}
 			if (em.size) engByRound.set(er.r, em);
 		}
 		var rounds = new Map(), ev = kills[i].kills;
@@ -96,7 +115,10 @@ function hcAnRounds(stats, kills) {
 			else if (dead[1] >= size[1] && dead[0] < size[0]) winner = 0;
 			else if (dead[0] !== dead[1]) winner = dead[0] < dead[1] ? 0 : 1;
 			else winner = last;
-			out.push({ game: gn, round: rno, ev: list, team: team, size: size, winner: winner, recs: recs, eng: engByRound.get(rno) || null });
+			var entryTimed = list.every(function (e, ix) {
+				return Number.isInteger(e.tick) && e.tick >= 0 && (!ix || e.tick >= list[ix - 1].tick);
+			});
+			out.push({ game: gn, round: rno, ev: list, team: team, size: size, winner: winner, recs: recs, eng: engByRound.get(rno) || null, entryTimed: entryTimed });
 		});
 	}
 	return out;
@@ -144,7 +166,8 @@ function hcAnBlank(nick) {
 		tradeKills: 0, deathsTraded: 0,
 		refillOpp: 0, refillConv: 0, refillArrow: 0, refillSkill: 0, refillMelee: 0,
 		collapseKills: 0, garbageKills: 0, highLeverageKills: 0,
-		lateEntryRounds: 0, firstInvolvementSum: 0, firstInvolvementRounds: 0,
+		lateEntryRounds: 0, entryTimedRounds: 0, entryTimedMatches: 0,
+		firstInvolvementSum: 0, firstInvolvementRounds: 0,
 		engageRounds: 0, engRounds: 0,
 		clutchOpp: 0, clutchWins: 0, clutchKills: 0,
 		preKills: 0, postKills: 0, preRounds: 0, postRounds: 0,
@@ -198,6 +221,11 @@ function hcAnalyze(stats, kills) {
 			var pp = get(R.recs[j].nickname);
 			if (!seenMatch.has(hcAnKey(R.game, R.recs[j].nickname))) { seenMatch.set(hcAnKey(R.game, R.recs[j].nickname), 1); pp.logMatches++; }
 			pp.logRounds++;
+			if (R.entryTimed) {
+				pp.entryTimedRounds++;
+				var entryKey = "timed|" + hcAnKey(R.game, R.recs[j].nickname);
+				if (!seenMatch.has(entryKey)) { seenMatch.set(entryKey, 1); pp.entryTimedMatches++; }
+			}
 			if (R.eng) pp.engRounds++;
 			if (R.round <= 6) pp.preRounds++; else pp.postRounds++;
 			var ch = charMap.get(hcAnKey(R.game, R.recs[j].nickname));
@@ -251,7 +279,7 @@ function hcAnalyze(stats, kills) {
 			if (mv.died < 0) mv.died = j;
 		}
 		// 딜을 넣었으면 킬·데스가 없어도 교전에 참여한 것이다. 옛 판정은 킬로그에 이름이
-		// 없다는 이유만으로 이런 라운드를 통째로 '늦은 합류'로 깔았다(아래 마지막 줄).
+		// 없어도 첫 피해 시각으로 합류 순서를 판단할 수 있다.
 		// touch 로 mine 에 올리기만 한다 — first 는 -1 그대로라 킬 순서 기반 지표는 안 건드린다.
 		if (R.eng) R.eng.forEach(function (tick, nick) {
 			var m = touch(nick);
@@ -260,16 +288,12 @@ function hcAnalyze(stats, kills) {
 		// 라운드 단위 집계
 		var self = R;
 		mine.forEach(function (m, nick) {
-			var p2 = get(nick), myTeam = R.team.get(nick);
+			var p2 = get(nick);
 			if (m.k > 0) { p2.killRounds++; if (m.k >= 2) p2.multiKillRounds++; }
 			if (m.eng !== undefined) p2.engageRounds++;
 			if (m.first >= 0) {
 				p2.firstInvolvementRounds++;
 				p2.firstInvolvementSum += n > 1 ? m.first / (n - 1) : 0;
-				// '늦은 합류' = 내가 처음 관여하기 전에 이미 아군 3명이 쓰러져 있었나
-				var fallen = 0;
-				for (var z = 0; z < m.first; z++) if (R.team.get(ev[z].v) === myTeam) fallen++;
-				if (fallen >= 3) p2.lateEntryRounds++;
 			}
 			// 킬 보상 연쇄: 킬로 화살·궁을 돌려받은 뒤 "죽기 전에" 또 킬했나
 			for (var q = 0; q < m.kIdx.length; q++) {
@@ -289,10 +313,11 @@ function hcAnalyze(stats, kills) {
 			// 첫 킬을 낸 뒤 그 라운드에서 죽었나
 			if (m.kIdx.length && m.kIdx[0].i === 0 && m.died > 0) p2.openingReDeaths++;
 		});
-		// 참여 안 한 라운드도 '늦은 합류'로 센다.
-		// mine 에는 킬·데스를 낸 사람에 더해 위에서 올린 '딜만 넣은 사람'도 들어 있으므로,
-		// 참여 로그가 있는 경기에서는 교전 흔적이 정말 하나도 없는 라운드만 여기 걸린다.
-		for (j = 0; j < R.recs.length; j++) if (!mine.has(R.recs[j].nickname)) get(R.recs[j].nickname).lateEntryRounds++;
+		// 시간 정보가 완전한 라운드만 분자·분모에 넣는다. 미참여도 같은 기준으로 센다.
+		for (j = 0; j < R.recs.length; j++) {
+			var entryNick = R.recs[j].nickname;
+			if (hcAnEntryLate(R, entryNick, mine.get(entryNick)) === true) get(entryNick).lateEntryRounds++;
+		}
 		// 클러치 — 원본 분석기의 정의를 역산해 맞춘 것이다.
 		//   기회: 우리 팀에 나 혼자 남고 상대가 "정확히 2명"인 순간(라운드·팀당 1회)
 		//   승리: 그 뒤 남은 둘을 내가 다 잡고 라운드도 이겼을 때
@@ -410,7 +435,8 @@ function hcReportAll(stats, kills) {
 				collapseKillShare: hcRpDiv(p.collapseKills, K),
 				garbageKillShare: hcRpDiv(p.garbageKills, K),
 				highLeverageKillShare: hcRpDiv(p.highLeverageKills, K),
-				lateEntryRate: hcRpDiv(p.lateEntryRounds, R),
+				entryTimedRounds: p.entryTimedRounds, entryTimedMatches: p.entryTimedMatches,
+				lateEntryRate: p.entryTimedRounds > 0 ? hcRpDiv(p.lateEntryRounds, p.entryTimedRounds) : null,
 				engageRate: hcRpDiv(p.engageRounds, p.engRounds),
 				engRounds: p.engRounds,
 				avgFirstInvolvementPosition: hcRpDiv(p.firstInvolvementSum, p.firstInvolvementRounds),
@@ -457,11 +483,13 @@ function hcReportAll(stats, kills) {
 		var p2 = o._raw;
 		g.ow += p2.openingWins; g.ok += p2.openingKills;
 		g.dt += p2.deathsTraded; g.dd += o.logDeaths;
-		g.le += p2.lateEntryRounds; g.lr += o.logRounds;
+		if (o.entryTimedMatches >= 10) { g.le += p2.lateEntryRounds; g.lr += o.entryTimedRounds; }
 		g.cw += p2.clutchWins; g.co += p2.clutchOpp;
 		g.ad += p2.arrowDeaths; g.sd += p2.skillDeaths; g.md += p2.meleeDeaths;
 		g.ba += p2.bowArrowKills; g.bs += p2.bowShots;
 	});
+	// 새 시간 표본 10판을 채운 비교군이 없을 때는 수집된 시간 표본 전체를 기준선으로 쓴다.
+	if (!g.lr) out.forEach(function (o) { g.le += o._raw.lateEntryRounds; g.lr += o.entryTimedRounds; });
 	var gOpen = hcRpDiv(g.ow, g.ok), gDeath = hcRpDiv(g.dt, g.dd),
 		gLate = hcRpDiv(g.le, g.lr), gClutch = hcRpDiv(g.cw, g.co);
 	// 어떻게 죽는지의 서버 기준선. 셋을 합치면 1 이라 "무엇이 유독 많은가"로만 읽어야 한다.
@@ -470,7 +498,7 @@ function hcReportAll(stats, kills) {
 	out.forEach(function (o) {
 		o.openingConversionRate = hcRpShrink(o.openingConversionRate, o._den.open, gOpen);
 		o.deathTradedRate = hcRpShrink(o.deathTradedRate, o._den.death, gDeath);
-		o.lateEntryRate = hcRpShrink(o.lateEntryRate, o._den.round, gLate);
+		if (o.entryTimedRounds > 0) o.lateEntryRate = hcRpShrink(o.lateEntryRate, o.entryTimedRounds, gLate);
 		o.clutchRate = hcRpShrink(o.clutchRate, o._den.clutch, gClutch);
 		o._gDeathMix = gDeathMix;
 		o._gBowAcc = gBowAcc;
@@ -519,12 +547,16 @@ function hcReportAll(stats, kills) {
 	for (di = 0; di < poolKeys.length; di++) {
 		var key = poolKeys[di];
 		if (pools[key]) continue;
-		pools[key] = pool.map(function (o) { return o[key]; }).sort(function (a, b) { return a - b; });
+		var keyPool = key === "lateEntryRate" ? pool.filter(function (o) { return o.entryTimedMatches >= 10; }) : pool;
+		pools[key] = keyPool.map(function (o) { return o[key]; }).sort(function (a, b) { return a - b; });
 	}
 	// 진단 함수는 o 하나만 받으므로 필요한 백분위를 미리 담아 둔다.
 	out.forEach(function (o) {
 		var pc = {}, q;
-		for (q = 0; q < poolKeys.length; q++) pc[poolKeys[q]] = hcRpPercentile(pools[poolKeys[q]], o[poolKeys[q]]);
+		for (q = 0; q < poolKeys.length; q++) {
+			var pk = poolKeys[q];
+			if (o[pk] !== null && pools[pk].length) pc[pk] = hcRpPercentile(pools[pk], o[pk]);
+		}
 		o._pct = pc;
 	});
 	var ga = 0, gs = 0, gm = 0;
@@ -587,7 +619,7 @@ function hcRpTags(o, luck) {
 
 	if (o.openingRate >= .069) t.push("우선교전 우위");
 	if (o.openingConversionRate >= .65 && o.openingKills >= 15) t.push("선취 굳히기 우수");
-	if (o.lateEntryRate <= .33) t.push("척후 교전형");
+	if (o.entryTimedRounds >= 60 && o._pct.lateEntryRate !== undefined && o.lateEntryRate <= .33) t.push("척후 교전형");
 	if (o.tradeKillShare >= .21) t.push("트레이드형");
 	if (o.chainConversionRate >= .55) t.push("연속 처치형");
 	if (o.refillPercentile >= 70) t.push("자원 연쇄 우수");
@@ -634,7 +666,7 @@ function hcRpDiagnosis(o) {
 		{ key: "chainConversionRate", p: rc.chainConversionRate, ok: o.logKills >= 40, title: "몰아치는 역할",
 			finding: "한 라운드에 둘 이상 잡는 비율이 서버 상위 " + top(rc.chainConversionRate) + "%입니다.",
 			action: "첫 킬 뒤가 강합니다. 킬 직후 자리를 바꿔 두 번째를 노릴 각을 미리 잡아 두세요." },
-		{ key: "lateEntryRate", p: 100 - (rc.lateEntryRate === undefined ? 50 : rc.lateEntryRate), ok: o.logRounds >= 60,
+		{ key: "lateEntryRate", p: 100 - (rc.lateEntryRate === undefined ? 50 : rc.lateEntryRate), ok: o.entryTimedRounds >= 60,
 			title: "먼저 닿는 역할",
 			finding: "팀 싸움에 늦게 붙는 라운드가 서버에서 가장 적은 축입니다.",
 			action: "합류가 빠른 만큼 혼자 닿는 일도 잦습니다. 도착 순서보다 함께 도착하는지를 보세요." },
@@ -693,14 +725,12 @@ function hcRpDiagnosis(o) {
 		action: "팀원 한 명과 같은 적을 보세요. 내가 죽어도 팀원이 바로 쏠 수 있는 거리에서 싸우세요.",
 		evidence: "확인한 데스 " + o.logDeaths + "회", label: "혼자 죽는 싸움 많음"
 	});
-	if (o.logRounds >= 60 && rc.lateEntryRate >= 45) cands.push({
+	if (o.entryTimedRounds >= 60 && rc.lateEntryRate >= 45) cands.push({
 		key: "late", bad: o.lateEntryRate, tone: o.lateEntryRate > .5 ? "bad" : "warn",
 		title: "팀 싸움에 빨리 들어가기",
-		finding: "딜 한 번 넣지 못했거나, 팀원 3명이 쓰러진 다음에야 싸우기 시작한 라운드가 " + pct(o.lateEntryRate) + "%입니다.",
+		finding: "피해·킬·데스 기록이 없거나, 첫 피해·킬·데스보다 아군 3명의 사망이 먼저였던 라운드가 " + pct(o.lateEntryRate) + "%입니다.",
 		action: "팀원 두 명이 쓰러지기 전에 첫 화살을 쓰세요. 다 죽은 뒤의 킬보다 지금 돕는 킬이 더 중요합니다.",
-		evidence: o.engRounds >= 20
-			? "확인한 교전 라운드 " + o.logRounds + "개 · 그중 " + o.engRounds + "개는 딜 기록이 있어 킬이 없어도 참여로 셉니다"
-			: "확인한 교전 라운드 " + o.logRounds + "개", label: "팀 싸움 합류가 늦음"
+		evidence: "첫 피해와 처치 시각을 비교한 " + o.entryTimedRounds + "라운드", label: "팀 싸움 합류가 늦음"
 	});
 	if (o.refillOpportunities >= 30) cands.push({
 		key: "refill", bad: -o.characterAdjustedRefillConversion, tone: o.characterAdjustedRefillConversion < -.05 ? "bad" : "warn",
@@ -894,11 +924,11 @@ function hcRpDiagnosis(o) {
 		action: "승부가 갈리는 구간에 이미 잘 개입합니다. 이 구간에 궁을 남겨 두세요.",
 		evidence: "확인한 킬 " + o.logKills + "회"
 	});
-	addS("lateEntryRate", o.logRounds >= 60 && rc.lateEntryRate !== undefined && rc.lateEntryRate <= 35, 100 - rc.lateEntryRate, {
+	addS("lateEntryRate", o.entryTimedRounds >= 60 && rc.lateEntryRate !== undefined && rc.lateEntryRate <= 35, 100 - rc.lateEntryRate, {
 		title: "팀 싸움에 빨리 닿음",
 		finding: "팀원이 쓰러진 뒤에야 싸움에 끼는 라운드가 서버에서 가장 적은 축입니다.",
 		action: "합류는 이미 빠릅니다. 도착 순서보다 팀과 같이 도착하는지를 보세요.",
-		evidence: "확인한 교전 라운드 " + o.logRounds + "개"
+		evidence: "첫 피해와 처치 시각을 비교한 " + o.entryTimedRounds + "라운드"
 	});
 	sc.sort(function (x, y) { return y.s - x.s; });
 	var strengths = sc.slice(0, 2);
@@ -1108,14 +1138,15 @@ var _MXDEFS=[
 {k:"deathTradedRate",l:"데스 교환",raw:"데스 교환",high:1,f:"pct",
  d:"내가 죽은 뒤 곧바로 팀원이 내 킬러를 잡아 준 비율."},
 {k:"lateEntryRate",l:"합류 속도",raw:"교전 합류 속도",high:0,f:"pct",
- d:"아군 3명이 쓰러진 뒤에야 싸움에 낀 라운드 비율. 낮을수록 좋아 차트에서는 뒤집어 표시한다."}];
+ d:"첫 피해를 주거나 킬·데스를 기록하기 전에 아군 3명이 사망했거나, 참여 기록이 없는 라운드 비율. 동시 발생은 늦음에서 제외하며 낮을수록 좋다."}];
 function hcMxQ(all,o,d){
 var pool=all.pools[d.k];
+if(d.k==="lateEntryRate"&&(o[d.k]===null||!pool||!pool.length))return null;
 if(!pool||!pool.length)return 50;
 var r=hcRpPercentile(pool,o[d.k])/100;
 return 100*(d.high?r:1-r)}
-function hcMxGrade(v){return v>=99?"SS+":v>=95?"SS":v>=90?"S+":v>=80?"S":v>=70?"A+":v>=60?"A":v>=50?"B+":v>=40?"B":v>=30?"C":v>=20?"D":v>=10?"E":"F"}
-function hcMxFmt(v,f){return"ratio"===f?v.toFixed(2)+"×":"delta"===f?(v>=0?"+":"")+(100*v).toFixed(1)+"%p":(100*v).toFixed(1)+"%"}
+function hcMxGrade(v){return v===null?"—":v>=99?"SS+":v>=95?"SS":v>=90?"S+":v>=80?"S":v>=70?"A+":v>=60?"A":v>=50?"B+":v>=40?"B":v>=30?"C":v>=20?"D":v>=10?"E":"F"}
+function hcMxFmt(v,f){return v===null?"기록 대기":"ratio"===f?v.toFixed(2)+"×":"delta"===f?(v>=0?"+":"")+(100*v).toFixed(1)+"%p":(100*v).toFixed(1)+"%"}
 function hcMxImg(p){return p>=21?"/tier/star.png":p>=18?"/tier/neth.png":p>=15?"/tier/dia.png":p>=12?"/tier/ameth.png":p>=9?"/tier/gold.png":p>=6?"/tier/silver.png":"/tier/bronze.png"}
 function hcMxTier(pt,label,big){
 return(0,s.jsxs)("span",{className:"mx-tier"+(big?" mx-tier-lg":""),children:[
@@ -1126,14 +1157,14 @@ function hcMxRadar(vals){
 return(0,s.jsxs)("svg",{viewBox:"0 0 340 332",role:"img","aria-label":"핵심 지표 육각 차트",children:[
 [25,50,75,100].map(function(g){return(0,s.jsx)("polygon",{className:"mx-grid",points:_MXDEFS.map(function(x,i){return hcMxPt(i,g).join(",")}).join(" ")},"g"+g)}),
 _MXDEFS.map(function(x,i){var q=hcMxPt(i,100);return(0,s.jsx)("line",{className:"mx-axis",x1:170,y1:170,x2:q[0],y2:q[1]},"a"+i)}),
-(0,s.jsx)("polygon",{className:"mx-area",points:vals.map(function(v,i){return hcMxPt(i,v).join(",")}).join(" ")}),
-vals.map(function(v,i){var q=hcMxPt(i,v);return(0,s.jsx)("circle",{className:"mx-dot",cx:q[0],cy:q[1],r:4},"d"+i)}),
+(0,s.jsx)("polygon",{className:"mx-area",points:vals.map(function(v,i){return v===null?null:hcMxPt(i,v).join(",")}).filter(function(v){return v!==null}).join(" ")}),
+vals.map(function(v,i){if(v===null)return null;var q=hcMxPt(i,v);return(0,s.jsx)("circle",{className:"mx-dot",cx:q[0],cy:q[1],r:4},"d"+i)}),
 _MXDEFS.map(function(d,i){
 var a=-Math.PI/2+i*Math.PI/3,x=170+Math.cos(a)*134,y=170+Math.sin(a)*132,
 an=Math.abs(x-170)<10?"middle":x<170?"end":"start";
 return(0,s.jsxs)("g",{children:[
 (0,s.jsx)("text",{className:"mx-lb",x:x,y:y,textAnchor:an,children:d.l}),
-(0,s.jsx)("text",{className:"mx-vl",x:x,y:y+14,textAnchor:an,children:hcMxGrade(vals[i])+" · "+vals[i].toFixed(0)+"%"})]},"l"+i)})]})}
+(0,s.jsx)("text",{className:"mx-vl",x:x,y:y+14,textAnchor:an,children:vals[i]===null?"평가 대기":hcMxGrade(vals[i])+" · "+vals[i].toFixed(0)+"%"})]},"l"+i)})]})}
 function hcMxKind(it){return"role"===it.kind?"내 역할":"summary"===it.kind?"전체 상태":"strength"===it.kind?"잘하는 점":0===it.title.indexOf("먼저:")?"먼저 고칠 점":"다음에 고칠 점"}
 /* 제목의 "먼저:" / "그다음:" 은 위 배지가 이미 말하고 있다. 중복이라 떼고 쓴다. */
 function hcMxTitle(it){return it.title.replace(/^(먼저|그다음)\s*:\s*/,"")}
@@ -1216,7 +1247,8 @@ hcMxRadar(vals)]}),
 return(0,s.jsxs)("div",{className:"mx-metric",children:[
 (0,s.jsxs)("small",{children:[d.raw,(0,s.jsx)("b",{className:"mx-grade",children:hcMxGrade(vals[i])})]}),
 (0,s.jsx)("strong",{children:hcMxFmt(p[d.k],d.f)}),
-(0,s.jsxs)("span",{children:[vals[i].toFixed(0),"백분위"]}),
+(0,s.jsx)("span",{children:vals[i]===null?(p[d.k]===null?"시간이 기록된 새 경기부터 평가":"비교 표본 수집 중"):vals[i].toFixed(0)+"백분위"}),
+(d.k==="lateEntryRate"?(0,s.jsx)("span",{children:"평가 "+p.entryTimedRounds+"라운드 · 시간 정보 없는 "+(p.logRounds-p.entryTimedRounds)+"라운드 제외"}):null),
 (0,s.jsx)("em",{className:"mx-def",children:d.d})]},d.k)})})]}),
 (0,s.jsxs)("div",{className:"mx-tags",children:[
 (0,s.jsx)("span",{className:"mx-tag mx-tag-"+p.commentTone,children:p.commentLabel}),
