@@ -1,6 +1,6 @@
 {
-  "updated": "2026-09-28 18:00:42",
-  "count": 150,
+  "updated": "2026-09-29 01:35:36",
+  "count": 151,
   "iconGrid": 13,
   "iconTile": 128,
   "characters": [
@@ -1953,6 +1953,19 @@
       ],
       "summary": "제천대성은 여의봉과 분신으로 상대를 압박합니다.",
       "model": "dor:char/wukong/jingubang"
+    },
+    {
+      "name": "아처",
+      "id": 152,
+      "difficulty": "★★",
+      "color": "#FFAA00",
+      "keywords": [
+        "원거리",
+        "기본공격",
+        "결투가"
+      ],
+      "summary": "아처는 화살을 바꿔 적을 공략하고, 연속 명중과 유도 사격으로 표적을 쓰러뜨립니다.",
+      "model": "dor:char/archer/crossbow"
     }
   ]
 }
