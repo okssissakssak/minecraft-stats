@@ -1,6 +1,6 @@
 {
-  "updated": "2026-09-29 01:35:36",
-  "count": 151,
+  "updated": "2026-09-29 23:58:47",
+  "count": 152,
   "iconGrid": 13,
   "iconTile": 128,
   "characters": [
@@ -1953,6 +1953,19 @@
       ],
       "summary": "제천대성은 여의봉과 분신으로 상대를 압박합니다.",
       "model": "dor:char/wukong/jingubang"
+    },
+    {
+      "name": "수도승",
+      "id": 151,
+      "difficulty": "★★",
+      "color": "#FFAA00",
+      "keywords": [
+        "원거리",
+        "아군 지원",
+        "아군 회복"
+      ],
+      "summary": "수도승은 구슬로 적을 공격하고 조화와 부조화로 전황을 기울입니다",
+      "model": "dor:char/monk/wp"
     },
     {
       "name": "아처",
