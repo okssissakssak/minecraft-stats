@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-14 03:37:03",
-  "count": 153,
+  "updated": "2026-11-08 15:00:27",
+  "count": 156,
   "iconGrid": 13,
   "iconTile": 128,
   "characters": [
@@ -1992,6 +1992,45 @@
       ],
       "summary": "레인걸은 구름을 모아 우산을 펼치고 접으며 근거리와 원거리를 오갑니다",
       "model": "dor:char/raingirl/umbrella_closed"
+    },
+    {
+      "name": "파티걸",
+      "id": 154,
+      "difficulty": "★★",
+      "color": "#7AFF45",
+      "keywords": [
+        "원거리",
+        "기동력",
+        "지역 장악"
+      ],
+      "summary": "파티걸은 총과 샷건을 바꿔 들고 미러볼로 총알을 퍼뜨려 적을 공략합니다",
+      "model": null
+    },
+    {
+      "name": "방화광",
+      "id": 155,
+      "difficulty": "★★",
+      "color": "#FF4931",
+      "keywords": [
+        "지속 피해",
+        "군중 제어",
+        "기동력"
+      ],
+      "summary": "방화광은 화염방사기로 적을 불태우고 기름지대에 불을 붙여 전장을 장악합니다",
+      "model": null
+    },
+    {
+      "name": "전승자",
+      "id": 156,
+      "difficulty": "★★★",
+      "color": "#47B5FF",
+      "keywords": [
+        "성장형",
+        "교란",
+        "지역 장악"
+      ],
+      "summary": "전승자는 결계로 적을 공격하고, 처치할수록 칼에 각인을 새겨 강해집니다",
+      "model": null
     }
   ]
 }
